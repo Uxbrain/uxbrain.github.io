@@ -245,6 +245,26 @@ class App {
     return id;
   }
 
+  levenshteinDistance(a, b) {
+    const m = a.length, n = b.length;
+    const dp = Array(n + 1).fill(0).map(() => Array(m + 1).fill(0));
+    for (let i = 0; i <= m; i++) dp[0][i] = i;
+    for (let j = 0; j <= n; j++) dp[j][0] = j;
+    for (let j = 1; j <= n; j++) {
+      for (let i = 1; i <= m; i++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        dp[j][i] = Math.min(dp[j - 1][i] + 1, dp[j][i - 1] + 1, dp[j - 1][i - 1] + cost);
+      }
+    }
+    return dp[n][m];
+  }
+
+  isSimilar(a, b) {
+    const dist = this.levenshteinDistance(a, b);
+    const maxLen = Math.max(a.length, b.length);
+    return dist <= Math.ceil(maxLen * 0.3);
+  }
+
   assistantAnswer(query) {
     const s = this.state;
     const q = query.toLowerCase().trim();
@@ -254,15 +274,16 @@ class App {
     const QS = this.ig.QUESTIONS;
     const wordRe = (term) => new RegExp('(^|[^a-z0-9])' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z0-9]|$)', 'i');
     const bestMatch = (list, termOf) => {
-      let exact = null, word = null, sub = null;
+      let exact = null, word = null, sub = null, fuzzy = null;
       list.forEach((item) => {
         const term = termOf(item).toLowerCase();
         if (!term) return;
         if (term === q) { if (!exact || term.length > termOf(exact).length) exact = item; return; }
         if (wordRe(term).test(q) || (q.length > 3 && wordRe(q).test(term))) { if (!word || term.length > termOf(word).length) word = item; return; }
-        if ((q.length > 3 && term.includes(q)) || q.includes(term)) { if (!sub || term.length > termOf(sub).length) sub = item; }
+        if ((q.length > 3 && term.includes(q)) || q.includes(term)) { if (!sub || term.length > termOf(sub).length) sub = item; return; }
+        if (q.length > 2 && this.isSimilar(q, term)) { if (!fuzzy || term.length > termOf(fuzzy).length) fuzzy = item; }
       });
-      return exact || word || sub;
+      return exact || word || sub || fuzzy;
     };
     let topicHit = bestMatch(ORDER.map((id) => TOPICS[id]), (t) => t.title);
     if (topicHit) return { text: topicHit.def + ' — ' + (topicHit.why || ''), linkTopicId: topicHit.id, linkLabel: topicHit.title };
@@ -272,7 +293,7 @@ class App {
     if (topicDef) return { text: topicDef.def + ' — ' + (topicDef.why || ''), linkTopicId: topicDef.id, linkLabel: topicDef.title };
     const ques = QS.find((x) => x.q.toLowerCase().includes(q) && q.length > 4);
     if (ques) return { text: 'Interview Q' + ques.n + ': ' + ques.q + '\n\nApproach: ' + ques.a };
-    return { text: 'I couldn’t find that exactly. Try a concept name (e.g. “Kano model”), a term (e.g. “RICE”), or open Search from the sidebar. You can also search everything with ⌘K.' };
+    return { text: 'I couldn't find that exactly. Try a concept name (e.g. "Kano model"), a term (e.g. "RICE"), or open Search from the sidebar. You can also search everything with ⌘K.' };
   }
 
   assistantSend(query) {
@@ -337,7 +358,7 @@ class App {
     const C = 2 * Math.PI * 15;
     const dash = (total ? (done / total) * C : 0).toFixed(1) + ' ' + C.toFixed(1);
     return `<aside class="dos-sidebar" data-screen-label="Sidebar">
-      <div class="dos-sidebar-logo"><img src="assets/logo-white.png" alt="DesignOS"></div>
+      <button class="dos-sidebar-logo" aria-label="Go to Dashboard" data-act="${this.act(() => this.goSection('dashboard'))}"><img src="assets/logo-white.png" alt="DesignOS"></button>
       <nav aria-label="Sections">${items}</nav>
       <div class="dos-sidebar-foot">
         <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform:rotate(-90deg)">
