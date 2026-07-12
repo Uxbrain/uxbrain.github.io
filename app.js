@@ -93,7 +93,7 @@ class App {
       readingRead: saved.readingRead || {},
       assistantOpen: false, assistantInput: '', assistantTyping: false,
       assistantMsgs: saved.assistantMsgs && saved.assistantMsgs.length ? saved.assistantMsgs : [
-        { role: 'bot', text: 'Hi! I'm your Study Buddy. Ask me to explain any concept, define a term, or find an interview question - try the chips below.' },
+        { role: 'bot', text: 'Hi! I am your Study Buddy. Ask me to explain any concept, define a term, or find an interview question - try the chips below.' },
       ],
       sheetId: null,
       glossQ: '',
