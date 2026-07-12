@@ -305,12 +305,33 @@ class App {
     const msgs = this.state.assistantMsgs.concat([{ role: 'user', text: query }]);
     this.setState({ assistantMsgs: msgs, assistantInput: '', assistantTyping: true });
     this.scrollAssistantDown();
-    setTimeout(() => {
-      const ans = this.assistantAnswer(query);
-      const botMsg = { role: 'bot', text: ans.text, linkTopicId: ans.linkTopicId, linkLabel: ans.linkLabel };
+
+    this.callChatbotAPI(query);
+  }
+
+  callChatbotAPI(query) {
+    const apiUrl = process.env.CHATBOT_API_URL || 'http://localhost:3000';
+
+    fetch(`${apiUrl}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const botMsg = { role: 'bot', text: data.text };
       this.persist({ assistantMsgs: this.state.assistantMsgs.concat([botMsg]), assistantTyping: false });
       this.scrollAssistantDown();
-    }, 650);
+    })
+    .catch(err => {
+      console.warn('API call failed, falling back to local search:', err);
+      setTimeout(() => {
+        const ans = this.assistantAnswer(query);
+        const botMsg = { role: 'bot', text: ans.text, linkTopicId: ans.linkTopicId, linkLabel: ans.linkLabel };
+        this.persist({ assistantMsgs: this.state.assistantMsgs.concat([botMsg]), assistantTyping: false });
+        this.scrollAssistantDown();
+      }, 500);
+    });
   }
 
   scrollAssistantDown() {
