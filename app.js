@@ -310,7 +310,7 @@ class App {
   }
 
   callChatbotAPI(query) {
-    const apiUrl = process.env.CHATBOT_API_URL || 'http://localhost:3000';
+    const apiUrl = window.CHATBOT_API_URL || 'http://localhost:3000';
 
     fetch(`${apiUrl}/chat`, {
       method: 'POST',
