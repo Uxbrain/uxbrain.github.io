@@ -252,27 +252,52 @@ class App {
     const ORDER = this.data.TOPIC_ORDER;
     const GLOSS = this.glossData.GLOSSARY;
     const QS = this.ig.QUESTIONS;
-    const wordRe = (term) => new RegExp('(^|[^a-z0-9])' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z0-9]|$)', 'i');
-    const bestMatch = (list, termOf) => {
-      let exact = null, word = null, sub = null;
-      list.forEach((item) => {
-        const term = termOf(item).toLowerCase();
-        if (!term) return;
-        if (term === q) { if (!exact || term.length > termOf(exact).length) exact = item; return; }
-        if (wordRe(term).test(q) || (q.length > 3 && wordRe(q).test(term))) { if (!word || term.length > termOf(word).length) word = item; return; }
-        if ((q.length > 3 && term.includes(q)) || q.includes(term)) { if (!sub || term.length > termOf(sub).length) sub = item; }
-      });
-      return exact || word || sub;
+
+    const wordRe = (term) => new RegExp(‘(^|[^a-z0-9])’ + term.replace(/[.*+?^${}()|[\]\\]/g, ‘\\$&’) + ‘([^a-z0-9]|$)’, ‘i’);
+
+    const score = (haystack, needle) => {
+      if (!haystack || !needle) return -1;
+      const h = haystack.toLowerCase();
+      if (h === needle) return 1000;
+      if (h.startsWith(needle)) return 500;
+      if (h.includes(needle)) return 100;
+      if (wordRe(needle).test(h)) return 80;
+      return -1;
     };
-    let topicHit = bestMatch(ORDER.map((id) => TOPICS[id]), (t) => t.title);
-    if (topicHit) return { text: topicHit.def + ' — ' + (topicHit.why || ''), linkTopicId: topicHit.id, linkLabel: topicHit.title };
-    const g = bestMatch(GLOSS, (x) => x.term);
-    if (g) return { text: g.term + ': ' + g.def, linkTopicId: g.linkTopic && TOPICS[g.linkTopic] ? g.linkTopic : null, linkLabel: g.linkTopic && TOPICS[g.linkTopic] ? TOPICS[g.linkTopic].title : '' };
-    const topicDef = ORDER.map((id) => TOPICS[id]).find((t) => q.length > 3 && (t.title + ' ' + t.def).toLowerCase().includes(q));
-    if (topicDef) return { text: topicDef.def + ' — ' + (topicDef.why || ''), linkTopicId: topicDef.id, linkLabel: topicDef.title };
-    const ques = QS.find((x) => x.q.toLowerCase().includes(q) && q.length > 4);
-    if (ques) return { text: 'Interview Q' + ques.n + ': ' + ques.q + '\n\nApproach: ' + ques.a };
-    return { text: 'I couldn’t find that exactly. Try a concept name (e.g. “Kano model”), a term (e.g. “RICE”), or open Search from the sidebar. You can also search everything with ⌘K.' };
+
+    // Search topics by title, definition, why section, and blocks
+    let bestTopic = null, bestScore = -1;
+    ORDER.forEach((id) => {
+      const t = TOPICS[id];
+      if (!t) return;
+      let s = Math.max(score(t.title, q), score(t.def, q), score(t.why, q));
+      if (t.blocks) t.blocks.forEach((b) => { if (b.text) s = Math.max(s, score(b.text, q)); if (b.items) b.items.forEach((item) => { s = Math.max(s, score(item, q)); }); });
+      if (s > bestScore) { bestTopic = t; bestScore = s; }
+    });
+    if (bestTopic && bestScore > 50) return { text: bestTopic.def + ‘ — ‘ + (bestTopic.why || ‘’), linkTopicId: bestTopic.id, linkLabel: bestTopic.title };
+
+    // Search glossary
+    let bestGloss = null, glossScore = -1;
+    GLOSS.forEach((g) => {
+      const s = Math.max(score(g.term, q), score(g.def, q));
+      if (s > glossScore) { bestGloss = g; glossScore = s; }
+    });
+    if (bestGloss && glossScore > 50) return { text: bestGloss.term + ‘: ‘ + bestGloss.def, linkTopicId: bestGloss.linkTopic && TOPICS[bestGloss.linkTopic] ? bestGloss.linkTopic : null, linkLabel: bestGloss.linkTopic && TOPICS[bestGloss.linkTopic] ? TOPICS[bestGloss.linkTopic].title : ‘’ };
+
+    // Search interview questions
+    const ques = QS.find((x) => q.length > 2 && (score(x.q, q) > 50 || score(x.a, q) > 50));
+    if (ques) return { text: ‘Interview Q’ + ques.n + ‘: ‘ + ques.q + ‘\n\nApproach: ‘ + ques.a };
+
+    // Helpful suggestions
+    const hints = [
+      ‘Try searching for “design thinking”, “user research”, or “usability”.’,
+      ‘Ask about specific frameworks like “Jobs to be Done”, “Design Sprint”, or “Kano model”.’,
+      ‘Search for methods: “A/B testing”, “card sorting”, “wireframing”.’,
+      ‘Try UX laws: “Fitts law”, “Hicks law”, or “Miller\’s law”.’,
+      ‘Search for roles: “Product manager”, “Design leader”, or “Researcher”.’
+    ];
+    const hint = hints[Math.floor(Math.random() * hints.length)];
+    return { text: ‘I didn\’t find that exactly. ‘ + hint + ‘ Or use Search (⌘K) to browse all ‘ + ORDER.length + ‘ design concepts.’ };
   }
 
   assistantSend(query) {
@@ -685,11 +710,30 @@ class App {
   }
 }
 
+function setupScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  setTimeout(() => {
+    document.querySelectorAll('[data-dos-cardlink], .dos-card, .stat-tile').forEach((el) => {
+      el.classList.add('dos-scroll-fade');
+      observer.observe(el);
+    });
+  }, 100);
+}
+
 function main() {
   const app = new App();
   window.__dos = app;
   app.render();
   app.bumpStreak();
+  setupScrollAnimations();
 
   const mq = window.matchMedia('(max-width: 920px)');
   mq.addEventListener('change', () => app.setState({ isMobile: mq.matches }));

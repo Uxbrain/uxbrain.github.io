@@ -101,8 +101,57 @@ a { color: inherit; }
 
 @keyframes dosPop { 0% { transform: scale(.96); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 @keyframes dosBlink { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+@keyframes dosSlideUp { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes dosFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes dosFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+@keyframes dosPulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+@keyframes dosShimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+@keyframes dosSlideDown { 0% { transform: translateY(-20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes dosGlowPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(14,143,110,.5); } 70% { box-shadow: 0 0 0 8px rgba(14,143,110,0); } }
+
 .dos-typing span { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--ink2); margin:0 2px; animation: dosBlink 1.2s infinite; }
 .dos-typing span:nth-child(2){ animation-delay:.2s; } .dos-typing span:nth-child(3){ animation-delay:.4s; }
+
+/* Premium animations */
+.dos-page { animation: dosSlideUp .5s cubic-bezier(.16,.1,.3,1); }
+main.dos-main > * { animation: dosFadeIn .6s ease-out; }
+[data-dos-cardlink] { animation: dosSlideUp .4s cubic-bezier(.16,.1,.3,1) backwards; }
+[data-dos-cardlink]:nth-child(1) { animation-delay: 0ms; }
+[data-dos-cardlink]:nth-child(2) { animation-delay: 80ms; }
+[data-dos-cardlink]:nth-child(3) { animation-delay: 160ms; }
+[data-dos-cardlink]:nth-child(n+4) { animation-delay: 240ms; }
+
+/* Scroll animations */
+.dos-scroll-fade { opacity: 0; transform: translateY(20px); transition: opacity .6s ease-out, transform .6s ease-out; }
+.dos-scroll-fade.visible { opacity: 1; transform: translateY(0); }
+
+/* Enhanced interactions */
+button, [role="button"], [data-act] { position: relative; }
+button:not(:disabled):active, [role="button"]:active, [data-act]:active { transform: scale(.98); }
+
+/* Card enhancements */
+.dos-card, .dos-card-16 { transition: all .2s ease-out; }
+.dos-card:hover, .dos-card-16:hover { border-color: var(--accent-line); box-shadow: 0 2px 12px rgba(0,0,0,.05); }
+
+/* Loading state */
+.dos-loading {
+  animation: dosShimmer 2s infinite;
+  background: linear-gradient(90deg, var(--surface) 0%, rgba(255,255,255,.5) 50%, var(--surface) 100%);
+  background-size: 1000px 100%;
+}
+
+/* Success feedback */
+.dos-success { animation: dosPulse .6s ease-out; }
+
+/* Floating element */
+.dos-float { animation: dosFloat 3s ease-in-out infinite; }
+
+/* Glow pulse on interactive */
+.dos-glow-pulse { animation: dosGlowPulse 2s infinite; }
+
+/* Enhanced text */
+.dos-h1, .dos-h1-lg { animation: dosSlideDown .6s cubic-bezier(.16,.1,.3,1); }
+
 @media (prefers-reduced-motion: reduce) { .dos * { transition: none !important; animation: none !important; } }
 
 /* ---------- header ---------- */
@@ -177,8 +226,17 @@ table.dos-table td { padding: 12px 16px; border-bottom: 1px solid var(--border);
 .dos-search-box { width: 100%; max-width: 560px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,.10), 0 4px 6px rgba(0,0,0,.05); overflow: hidden; }
 .dos-mobilenav-scrim { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.4); display: flex; align-items: flex-end; }
 
-.dos-assistant-fab { position: fixed; right: 24px; bottom: 24px; z-index: 45; width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow: var(--shadow1); display: flex; align-items: center; justify-content: center; }
-.dos-assistant-panel { position: fixed; right: 24px; bottom: 92px; z-index: 46; width: 360px; max-width: calc(100vw - 32px); height: 520px; max-height: calc(100vh - 130px); background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow1); display: flex; flex-direction: column; overflow: hidden; animation: dosPop .2s ease-out; }
+.dos-assistant-fab { position: fixed; right: 24px; bottom: 24px; z-index: 45; width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow: var(--shadow1); display: flex; align-items: center; justify-content: center; transition: all .3s cubic-bezier(.2,.9,.4,1); font-size: 24px; color: white; }
+.dos-assistant-fab:hover { transform: scale(1.12); box-shadow: 0 8px 24px rgba(14,143,110,.35); }
+.dos-assistant-fab:active { transform: scale(1.04); }
+.dos-assistant-panel { position: fixed; right: 24px; bottom: 92px; z-index: 46; width: 360px; max-width: calc(100vw - 32px); height: 520px; max-height: calc(100vh - 130px); background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow1); display: flex; flex-direction: column; overflow: hidden; animation: dosPop .3s cubic-bezier(.16,.1,.3,1); }
+
+/* Assistant messages */
+.dos-assistant-msg { padding: 12px 16px; margin: 8px 0; border-radius: 12px; word-wrap: break-word; animation: dosSlideUp .4s ease-out; }
+.dos-assistant-msg.bot { background: var(--accent-soft); color: var(--ink); border-left: 3px solid var(--accent); }
+.dos-assistant-msg.user { background: var(--accent); color: white; margin-left: 40px; }
+.dos-assistant-msg a { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: underline; }
+.dos-assistant-msg.user a { color: white; }
 
 @media print {
   #dos-root > *:not(main), .dos-header, [data-no-print="true"], .dos-assistant-fab { display: none !important; }
