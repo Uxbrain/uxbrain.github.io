@@ -93,7 +93,7 @@ class App {
       readingRead: saved.readingRead || {},
       assistantOpen: false, assistantInput: '', assistantTyping: false,
       assistantMsgs: saved.assistantMsgs && saved.assistantMsgs.length ? saved.assistantMsgs : [
-        { role: 'bot', text: 'Hi! I’m your Study Buddy. Ask me to explain any concept, define a term, or find an interview question — try the chips below.' },
+        { role: 'bot', text: 'Hi! I’m your Study Buddy. Ask me to explain any concept, define a term, or find an interview question - try the chips below.' },
       ],
       sheetId: null,
       glossQ: '',
@@ -200,7 +200,7 @@ class App {
     const n = name.toLowerCase().replace(/’/g, "'").replace(/[()]/g, '').trim();
     const t = ORDER.find((id) => {
       const title = TOPICS[id].title.toLowerCase().replace(/’/g, "'").replace(/[()]/g, '').trim();
-      return title === n || title.indexOf(n) === 0 || n.indexOf(title.split(' — ')[0]) === 0 || n.indexOf(title) !== -1 || title.indexOf(n) !== -1;
+      return title === n || title.indexOf(n) === 0 || n.indexOf(title.split(' - ')[0]) === 0 || n.indexOf(title) !== -1 || title.indexOf(n) !== -1;
     });
     if (t) return t;
     const g = this.glossData.GLOSSARY.find((x) => x.term.toLowerCase().replace(/’/g, "'").trim() === n);
@@ -274,7 +274,7 @@ class App {
       if (t.blocks) t.blocks.forEach((b) => { if (b.text) s = Math.max(s, score(b.text, q)); if (b.items) b.items.forEach((item) => { s = Math.max(s, score(item, q)); }); });
       if (s > bestScore) { bestTopic = t; bestScore = s; }
     });
-    if (bestTopic && bestScore > 50) return { text: bestTopic.def + ‘ — ‘ + (bestTopic.why || ‘’), linkTopicId: bestTopic.id, linkLabel: bestTopic.title };
+    if (bestTopic && bestScore > 50) return { text: bestTopic.def + ‘ - ‘ + (bestTopic.why || ‘’), linkTopicId: bestTopic.id, linkLabel: bestTopic.title };
 
     // Search glossary
     let bestGloss = null, glossScore = -1;
