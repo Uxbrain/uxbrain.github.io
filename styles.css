@@ -12,15 +12,15 @@ html, body { background: #FAFAF9; }
   --accent: #0E8F6E;
   --accent-2: #2F6BFE;
   --on-accent: #FFFFFF;
-  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
-  --accent-line: color-mix(in srgb, var(--accent) 30%, transparent);
+  --accent-soft: rgba(14,143,110,.1);
+  --accent-line: rgba(14,143,110,.3);
   --gold: #B7791F;
   --success: #12885E; --warn: #B7791F; --warn-soft: rgba(183,121,31,.1); --error: #C0392B;
   --serif: 'Inter', system-ui, sans-serif;
   --display: 'Inter', system-ui, sans-serif;
   --prose-font: 'Inter', system-ui, sans-serif;
   --shadow1: 0 1px 2px rgba(20,20,22,.04), 0 8px 20px -8px rgba(20,20,22,.10);
-  --glow: 0 1px 2px rgba(20,20,22,.05), 0 10px 24px -8px color-mix(in srgb, var(--accent) 24%, transparent);
+  --glow: 0 1px 2px rgba(20,20,22,.05), 0 10px 24px -8px rgba(14,143,110,.24);
   --pad-card: 22px; --row-h: 52px;
   --r-font: 1; --r-lh: 1; --r-measure: 720px;
   --sidebar: #14151A; --sidebar-ink: #8A8B92; --sidebar-active-bg: #FFFFFF; --sidebar-active-ink: #14151A;
@@ -32,7 +32,7 @@ html, body { background: #FAFAF9; }
   --ink: #2A2116; --ink2: #6E6252; --border: #EAE0CF;
   --accent: #B0722A; --accent-2: #7A9E5E; --nav-bg: #FFFDF9;
   --sidebar: #221B10; --sidebar-ink: #A99878; --sidebar-active-bg: #F3E9D6; --sidebar-active-ink: #221B10;
-  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-soft: rgba(176,114,42,.12);
 }
 .dark {
   --bg: #0C0D0D; --surface: #17181A; --surface-alt: #1E1F22;
@@ -77,7 +77,7 @@ a { color: inherit; }
 
 [data-dos-nav] { transition: background .2s cubic-bezier(.2,.9,.4,1), color .2s ease-out; color: var(--sidebar-ink); position: relative; display: flex; align-items: center; gap: 13px; width: 100%; padding: 0 13px; height: 44px; border-radius: 12px; font-size: 14px; font-weight: 500; background: transparent; border: none; cursor: pointer; text-align: left; }
 [data-dos-nav]:hover { background: rgba(255,255,255,.08); color: #fff; }
-[data-dos-nav][data-active="true"] { background: var(--accent) !important; color: #fff !important; box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--accent) 60%, transparent); }
+[data-dos-nav][data-active="true"] { background: var(--accent) !important; color: #fff !important; box-shadow: 0 6px 16px -4px rgba(14,143,110,.6); }
 [data-dos-nav][data-active="true"] svg { color: #fff; }
 [data-dos-nav] svg { flex: none; }
 
