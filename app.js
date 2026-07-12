@@ -93,7 +93,7 @@ class App {
       readingRead: saved.readingRead || {},
       assistantOpen: false, assistantInput: '', assistantTyping: false,
       assistantMsgs: saved.assistantMsgs && saved.assistantMsgs.length ? saved.assistantMsgs : [
-        { role: 'bot', text: 'Hi! I’m your Study Buddy. Ask me to explain any concept, define a term, or find an interview question - try the chips below.' },
+        { role: 'bot', text: 'Hi! I'm your Study Buddy. Ask me to explain any concept, define a term, or find an interview question - try the chips below.' },
       ],
       sheetId: null,
       glossQ: '',
@@ -197,13 +197,13 @@ class App {
 
   findTopicByName(name) {
     const TOPICS = this.data.TOPICS, ORDER = this.data.TOPIC_ORDER;
-    const n = name.toLowerCase().replace(/’/g, "'").replace(/[()]/g, '').trim();
+    const n = name.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
     const t = ORDER.find((id) => {
-      const title = TOPICS[id].title.toLowerCase().replace(/’/g, "'").replace(/[()]/g, '').trim();
+      const title = TOPICS[id].title.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
       return title === n || title.indexOf(n) === 0 || n.indexOf(title.split(' - ')[0]) === 0 || n.indexOf(title) !== -1 || title.indexOf(n) !== -1;
     });
     if (t) return t;
-    const g = this.glossData.GLOSSARY.find((x) => x.term.toLowerCase().replace(/’/g, "'").trim() === n);
+    const g = this.glossData.GLOSSARY.find((x) => x.term.toLowerCase().replace(/'/g, "'").trim() === n);
     return g && g.linkTopic && TOPICS[g.linkTopic] ? g.linkTopic : null;
   }
 
@@ -253,7 +253,7 @@ class App {
     const GLOSS = this.glossData.GLOSSARY;
     const QS = this.ig.QUESTIONS;
 
-    const wordRe = (term) => new RegExp(‘(^|[^a-z0-9])’ + term.replace(/[.*+?^${}()|[\]\\]/g, ‘\\$&’) + ‘([^a-z0-9]|$)’, ‘i’);
+    const wordRe = (term) => new RegExp('(^|[^a-z0-9])' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z0-9]|$)', 'i');
 
     const score = (haystack, needle) => {
       if (!haystack || !needle) return -1;
@@ -274,7 +274,7 @@ class App {
       if (t.blocks) t.blocks.forEach((b) => { if (b.text) s = Math.max(s, score(b.text, q)); if (b.items) b.items.forEach((item) => { s = Math.max(s, score(item, q)); }); });
       if (s > bestScore) { bestTopic = t; bestScore = s; }
     });
-    if (bestTopic && bestScore > 50) return { text: bestTopic.def + ‘ - ‘ + (bestTopic.why || ‘’), linkTopicId: bestTopic.id, linkLabel: bestTopic.title };
+    if (bestTopic && bestScore > 50) return { text: bestTopic.def + ' - ' + (bestTopic.why || ''), linkTopicId: bestTopic.id, linkLabel: bestTopic.title };
 
     // Search glossary
     let bestGloss = null, glossScore = -1;
@@ -282,22 +282,22 @@ class App {
       const s = Math.max(score(g.term, q), score(g.def, q));
       if (s > glossScore) { bestGloss = g; glossScore = s; }
     });
-    if (bestGloss && glossScore > 50) return { text: bestGloss.term + ‘: ‘ + bestGloss.def, linkTopicId: bestGloss.linkTopic && TOPICS[bestGloss.linkTopic] ? bestGloss.linkTopic : null, linkLabel: bestGloss.linkTopic && TOPICS[bestGloss.linkTopic] ? TOPICS[bestGloss.linkTopic].title : ‘’ };
+    if (bestGloss && glossScore > 50) return { text: bestGloss.term + ': ' + bestGloss.def, linkTopicId: bestGloss.linkTopic && TOPICS[bestGloss.linkTopic] ? bestGloss.linkTopic : null, linkLabel: bestGloss.linkTopic && TOPICS[bestGloss.linkTopic] ? TOPICS[bestGloss.linkTopic].title : '' };
 
     // Search interview questions
     const ques = QS.find((x) => q.length > 2 && (score(x.q, q) > 50 || score(x.a, q) > 50));
-    if (ques) return { text: ‘Interview Q’ + ques.n + ‘: ‘ + ques.q + ‘\n\nApproach: ‘ + ques.a };
+    if (ques) return { text: 'Interview Q' + ques.n + ': ' + ques.q + '\n\nApproach: ' + ques.a };
 
     // Helpful suggestions
     const hints = [
-      ‘Try searching for “design thinking”, “user research”, or “usability”.’,
-      ‘Ask about specific frameworks like “Jobs to be Done”, “Design Sprint”, or “Kano model”.’,
-      ‘Search for methods: “A/B testing”, “card sorting”, “wireframing”.’,
-      ‘Try UX laws: “Fitts law”, “Hicks law”, or “Miller\’s law”.’,
-      ‘Search for roles: “Product manager”, “Design leader”, or “Researcher”.’
+      'Try searching for "design thinking", "user research", or "usability".',
+      'Ask about specific frameworks like "Jobs to be Done", "Design Sprint", or "Kano model".',
+      'Search for methods: "A/B testing", "card sorting", "wireframing".',
+      'Try UX laws: "Fitts law", "Hicks law", or "Miller\'s law".',
+      'Search for roles: "Product manager", "Design leader", or "Researcher".'
     ];
     const hint = hints[Math.floor(Math.random() * hints.length)];
-    return { text: ‘I didn\’t find that exactly. ‘ + hint + ‘ Or use Search (⌘K) to browse all ‘ + ORDER.length + ‘ design concepts.’ };
+    return { text: 'I didn\'t find that exactly. ' + hint + ' Or use Search (⌘K) to browse all ' + ORDER.length + ' design concepts.' };
   }
 
   assistantSend(query) {
@@ -386,7 +386,7 @@ class App {
       </button><div style="font-family:var(--serif);font-size:17px;font-weight:700">DesignOS</div>` : ''}
       <button class="dos-search-btn" data-act="${this.act(() => this.openSearch())}">
         <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="flex:none"><circle cx="8" cy="8" r="5.5"></circle><line x1="12.5" y1="12.5" x2="15.5" y2="15.5"></line></svg>
-        <span>Search topics…</span>
+        <span>Search topics...</span>
         <span class="dos-kbd">⌘K</span>
       </button>
       <div style="flex:1"></div>
@@ -488,7 +488,7 @@ class App {
           <label style="display:flex;align-items:center;justify-content:space-between;font-size:13px;cursor:pointer"><span>Reduce motion</span><input type="checkbox" ${s.readerReduceMotion ? 'checked' : ''} data-act="${this.act(() => this.persist({ readerReduceMotion: !s.readerReduceMotion }))}" style="width:18px;height:18px"></label>
           <button class="dos-btn-outline" data-act="${this.act(() => this.setState({ readerFocusMode: true, readerPanelOpen: false }))}">Enter distraction-free mode</button>
         </div>
-        <p style="font-size:12px;color:var(--ink2);line-height:1.5">These settings apply across every reading page and are remembered on this device. On a topic page, use “Read aloud” and “Highlight page” in the topic toolbar, and the notes field to jot your own thoughts.</p>
+        <p style="font-size:12px;color:var(--ink2);line-height:1.5">These settings apply across every reading page and are remembered on this device. On a topic page, use "Read aloud" and "Highlight page" in the topic toolbar, and the notes field to jot your own thoughts.</p>
         <div style="display:flex;gap:8px;border-top:1px solid var(--border);padding-top:14px">
           <button class="dos-btn-outline" style="flex:1" data-act="${this.act(() => this.exportJSON())}">Export progress</button>
           <label class="dos-btn-outline" style="flex:1;text-align:center;display:flex;align-items:center;justify-content:center">Import<input type="file" accept="application/json" id="import-json-input" style="display:none"></label>
@@ -508,7 +508,7 @@ class App {
       const bg = m.role === 'user' ? 'var(--accent)' : 'var(--surface-alt)';
       const color = m.role === 'user' ? 'var(--on-accent)' : 'var(--ink)';
       const radius = m.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px';
-      const link = m.linkTopicId ? `<button data-act="${this.act(() => { this.setState({ assistantOpen: false }); this.openTopic(m.linkTopicId); })}" style="display:block;margin-top:6px;background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0">Open “${esc(m.linkLabel)}” →</button>` : '';
+      const link = m.linkTopicId ? `<button data-act="${this.act(() => { this.setState({ assistantOpen: false }); this.openTopic(m.linkTopicId); })}" style="display:block;margin-top:6px;background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0">Open "${esc(m.linkLabel)}" →</button>` : '';
       return `<div style="align-self:${align};max-width:85%;background:${bg};color:${color};padding:10px 14px;border-radius:${radius};font-size:14px;line-height:1.5;white-space:pre-wrap">${esc(m.text)}${link}</div>`;
     }).join('');
     const typing = s.assistantTyping ? `<div class="dos-typing" style="align-self:flex-start;background:var(--surface-alt);padding:12px 14px;border-radius:14px 14px 14px 4px"><span></span><span></span><span></span></div>` : '';
@@ -524,7 +524,7 @@ class App {
       <div id="dos-assistant-scroll" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">${msgs}${typing}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px">${chips}</div>
       <form id="assistant-form" style="display:flex;gap:8px;padding:12px;border-top:1px solid var(--border)">
-        <input id="assistant-input" value="${esc(s.assistantInput)}" placeholder="Ask me anything…" style="flex:1;height:42px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);font-size:14px">
+        <input id="assistant-input" value="${esc(s.assistantInput)}" placeholder="Ask me anything..." style="flex:1;height:42px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);font-size:14px">
         <button type="submit" aria-label="Send" style="width:42px;height:42px;flex:none;border-radius:12px;border:none;background:var(--accent);color:var(--on-accent);cursor:pointer;display:flex;align-items:center;justify-content:center">
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 10l14-6-6 14-2-6z"></path></svg>
         </button>
@@ -543,7 +543,7 @@ class App {
       <span style="font-size:12px;color:var(--ink2)">${esc(TOPICS[id].bookLabel)} · ${esc(TOPICS[id].chapter)}</span>
     </button>`).join('');
     const noResults = q && results.length === 0;
-    return `${rows}${noResults ? `<div style="padding:24px;text-align:center;font-size:14px;color:var(--ink2)">No matches for “${esc(s.q)}.” Try Search from the sidebar for the full concept index.</div>` : ''}`;
+    return `${rows}${noResults ? `<div style="padding:24px;text-align:center;font-size:14px;color:var(--ink2)">No matches for "${esc(s.q)}." Try Search from the sidebar for the full concept index.</div>` : ''}`;
   }
 
   renderSearchModal() {
@@ -553,7 +553,7 @@ class App {
       <div role="dialog" aria-label="Search" data-stop="1" class="dos-search-box">
         <div style="display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border)">
           <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--ink2)" stroke-width="1.5" aria-hidden="true" style="flex:none"><circle cx="8" cy="8" r="5.5"></circle><line x1="12.5" y1="12.5" x2="15.5" y2="15.5"></line></svg>
-          <input id="dos-search-input" type="text" value="${esc(s.q)}" placeholder="Search topics, laws, concepts…" style="flex:1;height:52px;border:none;outline:none;background:transparent;color:var(--ink);font-size:16px">
+          <input id="dos-search-input" type="text" value="${esc(s.q)}" placeholder="Search topics, laws, concepts..." style="flex:1;height:52px;border:none;outline:none;background:transparent;color:var(--ink);font-size:16px">
           <span class="dos-kbd">esc</span>
         </div>
         <div id="dos-search-results" style="max-height:50vh;overflow:auto;padding:8px">${this.searchResultsHtml()}</div>
