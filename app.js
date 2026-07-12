@@ -297,7 +297,7 @@ class App {
       'Search for roles: "Product manager", "Design leader", or "Researcher".'
     ];
     const hint = hints[Math.floor(Math.random() * hints.length)];
-    return { text: 'I didn\'t find that exactly. ' + hint + ' Or use Search (⌘K) to browse all ' + ORDER.length + ' design concepts.' };
+    return { text: 'I didn\'t find that exactly. ' + hint + ' Or use Search (Cmd+K) to browse all ' + ORDER.length + ' design concepts.' };
   }
 
   assistantSend(query) {
@@ -387,7 +387,7 @@ class App {
       <button class="dos-search-btn" data-act="${this.act(() => this.openSearch())}">
         <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="flex:none"><circle cx="8" cy="8" r="5.5"></circle><line x1="12.5" y1="12.5" x2="15.5" y2="15.5"></line></svg>
         <span>Search topics...</span>
-        <span class="dos-kbd">⌘K</span>
+        <span class="dos-kbd">Cmd+K</span>
       </button>
       <div style="flex:1"></div>
       ${!s.isMobile ? `<div style="font-size:13px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap">${planPct}% through your plan</div>` : ''}
@@ -426,12 +426,12 @@ class App {
       <div data-stop="1" style="position:absolute;top:64px;right:24px;width:320px;max-width:calc(100vw - 32px);max-height:calc(100vh - 88px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow1);padding:20px;display:flex;flex-direction:column;gap:18px">
         <div class="dos-eyebrow">Reading settings</div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Text size</span><span id="lbl-font-scale">${s.readerFontScale}×</span></div>
-          <input id="range-font-scale" type="range" min="0.8" max="1.6" step="0.05" value="${s.readerFontScale}" data-range="readerFontScale" data-unit="×" style="width:100%">
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Text size</span><span id="lbl-font-scale">${s.readerFontScale}x</span></div>
+          <input id="range-font-scale" type="range" min="0.8" max="1.6" step="0.05" value="${s.readerFontScale}" data-range="readerFontScale" data-unit="x" style="width:100%">
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Line spacing</span><span id="lbl-line-height">${s.readerLh}×</span></div>
-          <input id="range-line-height" type="range" min="0.85" max="1.6" step="0.05" value="${s.readerLh}" data-range="readerLh" data-unit="×" style="width:100%">
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Line spacing</span><span id="lbl-line-height">${s.readerLh}x</span></div>
+          <input id="range-line-height" type="range" min="0.85" max="1.6" step="0.05" value="${s.readerLh}" data-range="readerLh" data-unit="x" style="width:100%">
         </div>
         <div>
           <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Column width</span><span id="lbl-measure">${s.readerMeasure}px</span></div>
@@ -508,7 +508,7 @@ class App {
       const bg = m.role === 'user' ? 'var(--accent)' : 'var(--surface-alt)';
       const color = m.role === 'user' ? 'var(--on-accent)' : 'var(--ink)';
       const radius = m.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px';
-      const link = m.linkTopicId ? `<button data-act="${this.act(() => { this.setState({ assistantOpen: false }); this.openTopic(m.linkTopicId); })}" style="display:block;margin-top:6px;background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0">Open "${esc(m.linkLabel)}" →</button>` : '';
+      const link = m.linkTopicId ? `<button data-act="${this.act(() => { this.setState({ assistantOpen: false }); this.openTopic(m.linkTopicId); })}" style="display:block;margin-top:6px;background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0">Open "${esc(m.linkLabel)}" -></button>` : '';
       return `<div style="align-self:${align};max-width:85%;background:${bg};color:${color};padding:10px 14px;border-radius:${radius};font-size:14px;line-height:1.5;white-space:pre-wrap">${esc(m.text)}${link}</div>`;
     }).join('');
     const typing = s.assistantTyping ? `<div class="dos-typing" style="align-self:flex-start;background:var(--surface-alt);padding:12px 14px;border-radius:14px 14px 14px 4px"><span></span><span></span><span></span></div>` : '';
@@ -519,7 +519,7 @@ class App {
       <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--accent),var(--accent-2))">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><rect x="4" y="5" width="16" height="13" rx="5"></rect><circle cx="9" cy="11" r="1.2" fill="#fff" stroke="none"></circle><circle cx="15" cy="11" r="1.2" fill="#fff" stroke="none"></circle></svg>
         <div style="flex:1"><div style="font-family:var(--display);font-weight:600;font-size:15px;color:#fff">Study Buddy</div><div style="font-size:11px;color:rgba(255,255,255,.8)">Ask about any concept, term, or question</div></div>
-        <button aria-label="Close" data-act="${this.act(() => this.setState({ assistantOpen: false }))}" style="width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.2);color:#fff;cursor:pointer;font-size:16px">✕</button>
+        <button aria-label="Close" data-act="${this.act(() => this.setState({ assistantOpen: false }))}" style="width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.2);color:#fff;cursor:pointer;font-size:16px">X</button>
       </div>
       <div id="dos-assistant-scroll" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">${msgs}${typing}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px">${chips}</div>
@@ -540,7 +540,7 @@ class App {
     const results = pool.slice(0, 8);
     const rows = results.map((id) => `<button data-dos-row data-act="${this.act(() => { this.setState({ searchOpen: false }); this.openTopic(id); })}" style="display:flex;flex-direction:column;gap:2px;width:100%;padding:10px 12px;border:none;border-radius:8px;background:transparent;cursor:pointer;text-align:left;color:var(--ink)">
       <span style="font-size:15px;font-weight:500">${esc(TOPICS[id].title)}</span>
-      <span style="font-size:12px;color:var(--ink2)">${esc(TOPICS[id].bookLabel)} · ${esc(TOPICS[id].chapter)}</span>
+      <span style="font-size:12px;color:var(--ink2)">${esc(TOPICS[id].bookLabel)} - ${esc(TOPICS[id].chapter)}</span>
     </button>`).join('');
     const noResults = q && results.length === 0;
     return `${rows}${noResults ? `<div style="padding:24px;text-align:center;font-size:14px;color:var(--ink2)">No matches for "${esc(s.q)}." Try Search from the sidebar for the full concept index.</div>` : ''}`;
@@ -612,7 +612,7 @@ class App {
       ${this.renderSearchModal()}
       ${this.renderMobileNav()}
       <div id="dos-warmth-overlay" class="warmth-overlay" style="background:#FF9900;opacity:${(s.readerWarmth / 100 * 0.35).toFixed(2)}"></div>
-      ${s.readerFocusMode ? `<button data-act="${this.act(() => this.setState({ readerFocusMode: false }))}" style="position:fixed;top:16px;right:16px;z-index:60;height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow1)">✕ Exit distraction-free mode</button>` : ''}
+      ${s.readerFocusMode ? `<button data-act="${this.act(() => this.setState({ readerFocusMode: false }))}" style="position:fixed;top:16px;right:16px;z-index:60;height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow1)">X Exit distraction-free mode</button>` : ''}
     `;
 
     this.wireEvents(root);
