@@ -55,7 +55,7 @@ const server = http.createServer(async (req, res) => {
       const systemPrompt = `You are a helpful study buddy for a design learning platform with 1,590 product design concepts. Help users understand design concepts clearly and concisely. If asked about a specific design topic, explain it in 2-3 sentences with practical examples. Be encouraging and friendly.`;
 
       const groqRequest = {
-        model: 'mixtral-8x7b-32768',
+        model: 'llama-3.1-70b-versatile',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: query }
