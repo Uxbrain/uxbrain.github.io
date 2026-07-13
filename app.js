@@ -312,6 +312,13 @@ class App {
   callChatbotAPI(query) {
     const apiUrl = window.CHATBOT_API_URL || 'http://localhost:3000';
 
+    const useLocalFallback = () => {
+      const ans = this.assistantAnswer(query);
+      const botMsg = { role: 'bot', text: ans.text, linkTopicId: ans.linkTopicId, linkLabel: ans.linkLabel };
+      this.persist({ assistantMsgs: this.state.assistantMsgs.concat([botMsg]), assistantTyping: false });
+      this.scrollAssistantDown();
+    };
+
     fetch(`${apiUrl}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -319,18 +326,20 @@ class App {
     })
     .then(res => res.json())
     .then(data => {
-      const botMsg = { role: 'bot', text: data.text };
-      this.persist({ assistantMsgs: this.state.assistantMsgs.concat([botMsg]), assistantTyping: false });
-      this.scrollAssistantDown();
+      // The API only "succeeds" when it returns real text. A JSON error body
+      // (e.g. 502 with { error }) still resolves here, so guard on data.text.
+      if (data && typeof data.text === 'string' && data.text.trim()) {
+        const botMsg = { role: 'bot', text: data.text };
+        this.persist({ assistantMsgs: this.state.assistantMsgs.concat([botMsg]), assistantTyping: false });
+        this.scrollAssistantDown();
+      } else {
+        console.warn('API returned no answer, falling back to local search:', data && data.error);
+        useLocalFallback();
+      }
     })
     .catch(err => {
       console.warn('API call failed, falling back to local search:', err);
-      setTimeout(() => {
-        const ans = this.assistantAnswer(query);
-        const botMsg = { role: 'bot', text: ans.text, linkTopicId: ans.linkTopicId, linkLabel: ans.linkLabel };
-        this.persist({ assistantMsgs: this.state.assistantMsgs.concat([botMsg]), assistantTyping: false });
-        this.scrollAssistantDown();
-      }, 500);
+      setTimeout(useLocalFallback, 300);
     });
   }
 
