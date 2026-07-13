@@ -33,13 +33,19 @@ const server = http.createServer(async (req, res) => {
   req.on('data', chunk => body += chunk);
   req.on('end', async () => {
     try {
+      console.log('=== Chat request received ===');
+      console.log('API Key set:', !!GROQ_API_KEY);
+      console.log('API Key preview:', GROQ_API_KEY ? GROQ_API_KEY.substring(0, 10) + '...' : 'NOT SET');
+
       if (!GROQ_API_KEY) {
+        console.error('ERROR: GROQ_API_KEY not configured');
         res.writeHead(500);
         res.end(JSON.stringify({ error: 'GROQ_API_KEY not configured' }));
         return;
       }
 
       const { query } = JSON.parse(body);
+      console.log('Query:', query);
       if (!query) {
         res.writeHead(400);
         res.end(JSON.stringify({ error: 'Missing query' }));
