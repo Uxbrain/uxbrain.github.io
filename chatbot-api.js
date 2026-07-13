@@ -80,12 +80,21 @@ const server = http.createServer(async (req, res) => {
         groqRes.on('end', () => {
           try {
             const result = JSON.parse(data);
+            console.log('Groq response status:', groqRes.statusCode);
+            console.log('Groq response:', JSON.stringify(result, null, 2));
+            if (result.error) {
+              console.error('Groq API error:', result.error);
+              res.writeHead(500);
+              res.end(JSON.stringify({ error: 'Groq API error: ' + JSON.stringify(result.error) }));
+              return;
+            }
             const answer = result.choices?.[0]?.message?.content || 'I could not generate a response.';
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ text: answer }));
           } catch (e) {
+            console.error('Parse error:', e.message);
             res.writeHead(500);
-            res.end(JSON.stringify({ error: 'Failed to parse Groq response' }));
+            res.end(JSON.stringify({ error: 'Failed to parse Groq response: ' + e.message }));
           }
         });
       });
