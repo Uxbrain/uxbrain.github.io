@@ -1,6 +1,6 @@
 import { esc } from '../app.js';
 
-const TABS = [['bank', 'Question Bank'], ['drill', 'Drill Mode'], ['critique', 'App Critique'], ['whiteboard', 'Whiteboard'], ['rubrics', 'Rubrics'], ['anchors', 'Anchor Stories'], ['portfolio', 'Portfolio Builder']];
+const TABS = [['bank', 'Question Bank'], ['drill', 'Drill Mode'], ['critique', 'App Critique'], ['whiteboard', 'Whiteboard'], ['rubrics', 'Company Loops'], ['anchors', 'Anchor Stories'], ['portfolio', 'Portfolio Builder']];
 const WB_CRITERIA_LABELS = ['Framing', 'User specificity', 'Prioritization', 'Flows', 'Metrics', 'Trade-offs'];
 
 function renderTabs(app) {
@@ -148,21 +148,51 @@ function renderWhiteboard(app) {
 function renderRubrics(app) {
   const IG = app.ig;
   const R = IG.RUBRICS;
+  const bar = IG.BAR_2026;
+  const sal = IG.SALARY_BENGALURU;
+  const companyCard = (c) => `<div class="dos-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <div style="font-family:var(--serif);font-size:20px;font-weight:600">${esc(c.name)}</div>
+      <span style="font-size:11px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:2px 8px">${esc(c.tag)}</span>
+    </div>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:10px">${c.loop.map((st) => `<li style="font-size:13px;color:var(--ink2)">→ ${esc(st)}</li>`).join('')}</ul>
+    <p style="font-size:13px;margin-top:10px;line-height:1.5">${esc(c.weights)}</p>
+    <p style="font-size:13px;color:var(--ink2);margin-top:6px">${esc(c.levels)}</p>
+  </div>`;
   return `<div style="display:flex;flex-direction:column;gap:16px">
+    <p style="font-size:14px;color:var(--ink2)">The interview loop is standardized across the industry; the named rounds are the differentiators. Six global bars and five Indian product leaders — the exact structure and what each one actually weights.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
-      <div class="dos-card">
-        <div style="font-family:var(--serif);font-size:20px;font-weight:600">Google</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:10px">${R.google.loop.map((st) => `<li style="font-size:13px;color:var(--ink2)">→ ${esc(st)}</li>`).join('')}</ul>
-        <p style="font-size:13px;margin-top:10px">${esc(R.google.weights)}</p>
-        <p style="font-size:13px;color:var(--ink2);margin-top:6px">${esc(R.google.levels)}</p>
+      ${R.companies.map(companyCard).join('')}
+    </div>
+
+    <div style="border:1px solid var(--accent);background:var(--accent-soft,rgba(0,0,0,.02));border-radius:12px;padding:20px">
+      <div class="dos-callout-label" style="color:var(--accent)">How the bar shifted in 2026</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px">${bar.shifted.map((x) => `<li style="font-size:14px;color:var(--ink);line-height:1.5">• ${esc(x)}</li>`).join('')}</ul>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <div style="border:1px solid var(--error);background:var(--warn-soft);border-radius:12px;padding:20px">
+        <div class="dos-callout-label" style="color:var(--error)">Portfolio red flags to avoid</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px">${bar.redFlags.map((x) => `<li style="font-size:13px;color:var(--ink);line-height:1.5">✕ ${esc(x)}</li>`).join('')}</ul>
       </div>
       <div class="dos-card">
-        <div style="font-family:var(--serif);font-size:20px;font-weight:600">Meta</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:10px">${R.meta.loop.map((st) => `<li style="font-size:13px;color:var(--ink2)">→ ${esc(st)}</li>`).join('')}</ul>
-        <p style="font-size:13px;margin-top:10px">${esc(R.meta.weights)}</p>
-        <p style="font-size:13px;color:var(--ink2);margin-top:6px">${esc(R.meta.levels)}</p>
+        <div class="dos-callout-label" style="color:var(--accent)">Seniority signals interviewers look for</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px">${bar.signals.map((x) => `<li style="font-size:13px;color:var(--ink);line-height:1.5">✓ ${esc(x)}</li>`).join('')}</ul>
       </div>
     </div>
+
+    <div class="dos-card">
+      <div class="dos-callout-label" style="color:var(--accent)">Salary — Bengaluru senior (levels.fyi / 6figr, ranges not guarantees)</div>
+      <div style="display:flex;flex-direction:column;gap:0;margin-top:8px">
+        ${sal.rows.map((r) => `<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid var(--border)">
+          <div style="font-size:14px;font-weight:600;color:var(--ink);flex:1 1 160px">${esc(r.label)}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap">${esc(r.comp)}</div>
+          <div style="font-size:12px;color:var(--ink2);flex:1 1 100%;text-align:left">${esc(r.note)}</div>
+        </div>`).join('')}
+      </div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:12px">${sal.notes.map((n) => `<li style="font-size:13px;color:var(--ink2);line-height:1.5">— ${esc(n)}</li>`).join('')}</ul>
+    </div>
+
     <div style="border:1px solid var(--error);background:var(--warn-soft);border-radius:12px;padding:20px">
       <div class="dos-callout-label" style="color:var(--error)">Fail signals — their debrief language</div>
       <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${R.failSignals.map((f) => `<li style="font-size:14px;color:var(--ink)">${esc(f)}</li>`).join('')}</ul>

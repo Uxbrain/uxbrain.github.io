@@ -254,7 +254,96 @@ export const RUBRICS = {
     weights: 'Weights product thinking and metrics more than pixel craft — every project story must connect to impact.',
     levels: 'IC4 (mid) / IC5 (senior) / IC6 (staff).',
   },
+  // Full 2026 company-loop set. Rendered as cards in the Gym → Company Loops tab.
+  companies: [
+    { name: 'Google', tag: 'Global', loop: ['Recruiter screen', 'Portfolio review call', 'Onsite: portfolio panel + whiteboard/design challenge + hiring manager + Team Fit & "Googleyness"', 'Hiring committee (decides hire AND level)', 'Team matching (1–6 months)'],
+      weights: 'Portfolio panel probes clarity of thought, end-to-end ownership, handling complexity, and how decisions scale. Values craft — motion, visuals, prototypes. App-critique example reported: critique Google Maps.',
+      levels: 'L4 mid / L5 senior / L6 staff — committee sets the level; L5 needs demonstrated end-to-end ownership + measurable outcomes.' },
+    { name: 'Meta', tag: 'Global', loop: ['Recruiter screen', 'Portfolio screen', 'App critique', 'Onsite: deeper past-work + app critique + problem-solving + behavioral', 'Product Sense with AI round'],
+      weights: 'Originated the product-sense interview; five documented criteria drive scoring. App critique tests elevating a product — explain WHY, never list UI elements. New AI round: apply AI in product thinking and critically evaluate AI outputs. ~90% screened out at resume/portfolio.',
+      levels: 'IC4 mid / IC5 senior / IC6 staff. Interviewed only by senior/staff designers and managers.' },
+    { name: 'OpenAI', tag: 'Global', loop: ['Recruiter (~25% pass)', 'Portfolio presentation to ~10-person panel (~25% pass)', '1:1 portfolio follow-up — probes missteps vs. constraints (speed, latency, scalability)', 'Whiteboarding', 'App critique', 'Behavioral'],
+      weights: 'Craft-obsessed and execution-focused; AI-product work is weighted. A strong presenter "can show one image and talk about it for five minutes off the cuff." Avoid outdated patterns (extensive personas, ethnographic setup, redlines). Example prompt: "Design an AI product that helps you discover books."',
+      levels: 'Leveling and product-area fit are determined during the loop, not pre-decided.' },
+    { name: 'Microsoft', tag: 'Global', loop: ['Recruiter screen', 'Phone / hiring-manager screen', 'Onsite loop of 4–6 (product design, execution, behavioral)', '"As Appropriate" round — targets your weakest earlier signal'],
+      weights: 'Many teams SKIP the app critique — technical depth is shown almost entirely in the portfolio. The "as-ap" round with the HM/senior leader is the real decision point. Culture pillars: Growth Mindset, Customer Obsession, Diversity & Inclusion, One Microsoft.',
+      levels: 'Team usually known before the loop. Prep 8–10 STAR stories including 2+ failure stories.' },
+    { name: 'Amazon', tag: 'Global', loop: ['Application + assessments', 'Phone screen', 'Loop of 4–6 (60 min): portfolio review + interactive exercise + behavioral on the 16 Leadership Principles', 'Bar Raiser — external interviewer with veto power'],
+      weights: 'Each interviewer owns 2–3 Leadership Principles and takes near-verbatim notes — give quotable, quantified evidence. Bar Raiser ensures you clear >50% of current role-holders. Answer in STAR-L (add Learning); 80% should be what YOU did. Cover the customer AND the technical problem.',
+      levels: 'At L6+, prepare two conflict examples. A hire cannot happen without the Bar Raiser’s thumbs-up.' },
+    { name: 'Apple', tag: 'Global', loop: ['Recruiter (design-savvy)', 'Hiring manager', 'Design challenge (team-specific)', 'Team / panel interviews', 'Behavioral / culture — assessed by everyone, no dedicated round'],
+      weights: 'No standardized loop — each team designs its own. Deep dives on design process/philosophy and Apple-ecosystem familiarity. "It’s not enough to do good work; you’ve got to do it the Apple way." Marcom roles quiz on 3D tools (Blender, Unity, AR).',
+      levels: 'Team-dependent; culture described as hierarchical.' },
+    { name: 'Flipkart', tag: 'India', loop: ['TA call + designer screening', 'Portfolio presentation (1 hr, panel of 2–4)', 'Design Thinking round (1–1.5 hr, open-ended problem solved with the interviewer)', 'Product Thinking round (1 hr, design + product, metrics orientation)', 'Hiring manager', 'HR / culture'],
+      weights: 'Mission: "shaping the online shopping experience for the next billion" — Bharat/scale/tier-2 context. Design-challenge brief: empathize, write up your thinking, make assumptions where there’s no data, and show the five design-thinking phases.',
+      levels: 'Portfolio round assesses storytelling, craft, collaboration, ownership, and articulation of decisions.' },
+    { name: 'Swiggy', tag: 'India', loop: ['Portfolio round', 'Take-home written brief — deliberately "beyond pixels"', 'Behavioral-reasoning focus'],
+      weights: 'The brief asks you to "read between the lines" and articulate WHY people make abstract statements — NOT to produce a solution. Tests human-insight reasoning over pixel-pushing. Three-sided marketplace thinking (customer, restaurant, delivery partner).',
+      levels: 'Highest-paying of the Indian five for designers (levels.fyi).' },
+    { name: 'Razorpay', tag: 'India', loop: ['Recruiter / HR screen', 'Design challenge / case-study presentation (take-home, ~2-day window)', 'Cross-functional interview (PMs + engineers)', 'Final interview (senior leadership / design lead — aspirations + values)'],
+      weights: 'Fintech domain awareness — payment flows, unit economics (MDR, success rates). Focus on process, trade-offs, impact. "Yes you can" growth mindset. Difficulty rated 4/5; a strong IIT-hiring preference is reported.',
+      levels: 'Product Designer II and up; ₹27.2L → Lead ₹45.4L band.' },
+    { name: 'Freshworks', tag: 'India', loop: ['HR screening', 'Take-home design task (realistic SaaS problem — new workflow or improving an interface)', 'Portfolio + live critique / brainstorming session'],
+      weights: 'B2B SaaS — mastery of the Crayons design system (fw- components), data tables, complex dashboards, and connecting design to business metrics (ticket reduction, conversion, DAU, onboarding time, adoption, retention). ~3–4 weeks, rated highly difficult.',
+      levels: 'Requires 3+ years.' },
+    { name: 'CRED', tag: 'India', loop: ['Recruiter screen', 'Role task — high-fidelity visual / coded / interactive portfolio submission', 'Functional rounds', 'HM / values', 'Offer'],
+      weights: 'Design head’s bar: "High bar. Strong taste. Serious craft. Problem-solving is table stakes, not a differentiator." Requires an AI-native workflow, exceptional visual judgment, heavy motion design; designers prototype in code and ship production PRs. "We’ll know if it’s AI-generated."',
+      levels: 'Exact design round-sequence is not publicly documented.' },
+  ],
   productSense: ['Problem framing: clarified goals/users/business before solutions', 'User empathy: specific, non-generic insight', 'Solution quality: creative but grounded, multiple options', 'Prioritization: explicit reasoning for first/not-first', 'Metrics: unprompted success + guardrails'],
   craft: ['Flows: complete incl. unhappy paths and states', 'Interaction judgment: platform-correct, defensible deviations', 'Visual mechanics: hierarchy, spacing evidence, type discipline', 'Quality bar: details survive zoom-in'],
   failSignals: ['"Solution in search of a problem" — sketched before framing', '"Couldn’t go deep" — collapsed under the third why', '"No metrics instinct" — never volunteered measurement', '"Process theater" — recited Double Diamond without judgment', '"Portfolio ≠ interview" — couldn’t defend decisions', '"No spine" — accepted every pushback instantly', '"One-player mode" — no engineers/PMs/researchers in any story'],
+};
+
+// How the bar shifted in 2026, portfolio red flags, and the seniority signals
+// interviewers actively look for (Part D of the 2026 Body of Knowledge).
+export const BAR_2026 = {
+  shifted: [
+    'Depth over range — the market rewards depth in a specific problem space, not breadth.',
+    'AI fluency is now a scored competency, not a bonus.',
+    'Distrust of generic case studies and AI-generated portfolios ("We’ll know if it’s AI-generated" — CRED).',
+    'Decision-quality and judgment under ambiguity over process-narration.',
+    'Craft re-elevated because AI commoditizes execution.',
+  ],
+  redFlags: [
+    'Leading with polished screens before the problem is clear.',
+    'No measurable outcome (signals junior); vague "users responded positively."',
+    'Process artifacts (journey maps, discovery diagrams) dominating while the real work is buried.',
+    'Teamwork framed as solo work; vague "I led" with no specific contribution.',
+    'Scope–title mismatch — claiming Staff/Principal but every case is feature-level execution.',
+    'Concept/fantasy redesigns (Spotify, Airbnb) with no real users, constraints, or accountability.',
+    'Student projects >2 years old; work 4+ years old with nothing recent.',
+    'Generic "led end-to-end / worked cross-functionally" case studies — competing in the wrong category.',
+    'Jargon-heavy, murky writing — it correlates with murky thinking.',
+  ],
+  signals: [
+    'Large scope — owning an app, surface, or vertical',
+    'Autonomy — self-directed opportunity identification',
+    'Complexity handled',
+    'Decision-quality made explicit',
+    'Driving the conversation',
+    'Linking data insights to design decisions; reviewing post-launch metrics',
+    '(Staff+) multiplier / systems-level work — making the product make sense as a whole',
+  ],
+};
+
+// Bengaluru senior product-designer compensation (Part E). levels.fyi / 6figr
+// self-reported medians — treat as ranges, not guarantees.
+export const SALARY_BENGALURU = {
+  rows: [
+    { label: 'Market avg — Product Designer', comp: '₹26.8L total', note: 'range ₹18L–₹42.4L (levels.fyi)' },
+    { label: 'Senior Product Designer (India)', comp: '₹20.5L–₹58.7L', note: '6figr avg ₹37.3L; top 10% >₹69.8L' },
+    { label: 'Swiggy', comp: 'median ₹41.9L', note: 'L6 ₹29.8L → L8 ₹49.2L; top ₹64.9L — highest of the Indian five' },
+    { label: 'Razorpay', comp: 'median ₹36.7L–₹39.0L', note: 'Designer ₹27.2L → Lead ₹45.4L; top ₹55.4L' },
+    { label: 'Flipkart', comp: 'median ₹28.4L', note: 'range ₹18L–₹66.3L' },
+    { label: 'CRED / Freshworks', comp: 'data gap', note: 'senior-designer levels.fyi figures not reliably available' },
+    { label: 'Global cos in Bengaluru', comp: '₹62L–₹86L median', note: 'LinkedIn ₹68.4L, Atlassian ₹62.7L, Google ~₹86L' },
+  ],
+  notes: [
+    'Comp = base + stock + bonus; negotiate at the offer/comp stage (at Google, after leveling — not earlier).',
+    'Fintech domain experience places you at the higher end of the band.',
+    'Evaluate scope over title — title inflation is rife.',
+    'India bands by experience: Senior (5–8 yrs) ₹16–34L; Lead/Manager ₹30–45L+.',
+    'Anchor to researched ranges (levels.fyi, 6figr, AmbitionBox) before naming a number.',
+  ],
 };

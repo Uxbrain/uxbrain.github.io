@@ -69,6 +69,7 @@ export const SHEETS = [
     kind: 'kv',
     rows: [
       ['Tokens', 'primitive → semantic → component; name by role not value (color-action-primary, not color-blue)'],
+      ['Standard', 'W3C DTCG Design Tokens Format Module v2025.10 (first stable, Oct 2025, 40+ orgs incl. Adobe/Google/Microsoft/Figma/Salesforce). Token adoption jumped 56% → 84% of teams in a year (zeroheight 2025)'],
       ['Spacing', 'One scale (4/8/12/16/24/32/48/64); zero off-scale values'],
       ['Type', 'One scale, 2 families max, weights before new sizes'],
       ['Components', 'Variants for finite options (size/state/type); slots for open content; rule of three before systematizing'],
