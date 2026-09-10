@@ -671,6 +671,10 @@ class App {
         }
       }
     }
+
+    // Let the interactivity layer (fx.js) re-arm scroll reveals and play a
+    // section transition. Fires after every render; fx.js decides what changed.
+    document.dispatchEvent(new CustomEvent('dos:rendered', { detail: { sec: s.route.sec, topic: s.route.topic || null } }));
   }
 
   wireEvents(root) {
@@ -780,7 +784,7 @@ function main() {
   window.__dos = app;
   app.render();
   app.bumpStreak();
-  setupScrollAnimations();
+  // scroll-reveal + transitions are handled by fx.js via the 'dos:rendered' event
 
   const mq = window.matchMedia('(max-width: 920px)');
   mq.addEventListener('change', () => app.setState({ isMobile: mq.matches }));

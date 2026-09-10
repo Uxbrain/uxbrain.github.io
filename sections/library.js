@@ -105,7 +105,7 @@ function renderTopicPage(app, cur) {
   const weightMap = { light: 300, regular: 400, bold: 600 };
   const rootStyle = `--r-font:${s.readerFontScale}; --r-lh:${s.readerLh}; --r-measure:${s.readerMeasure}px; --r-ls:${s.readerLs}; --r-ws:${s.readerWs}; --r-ps:${s.readerPs}; --r-align:${s.readerAlign}; --r-weight:${weightMap[s.readerWeight] || 400};`;
 
-  return `<article data-screen-label="Topic page" style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:24px;${rootStyle}">
+  return `<article class="dos-reader" data-screen-label="Topic page" style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:24px;${rootStyle}">
     <div class="dos-topic-progress"><div style="width:${s.readingProgress || 0}%"></div></div>
     <nav aria-label="Breadcrumb" class="dos-breadcrumb">
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">${route.book ? 'Chapter ' + route.book : 'Chapters'}</button>
@@ -118,9 +118,9 @@ function renderTopicPage(app, cur) {
       <button style="height:32px;padding:0 12px;border-radius:99px;border:1px solid ${isHighlighted ? 'var(--accent)' : 'var(--border)'};background:${isHighlighted ? 'var(--accent-soft)' : 'transparent'};color:${isHighlighted ? 'var(--accent)' : 'var(--ink2)'};font-size:12px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.persist({ topicHighlighted: Object.assign({}, s.topicHighlighted, { [cur.id]: !isHighlighted }) }))}">✎ Highlight page</button>
     </nav>
 
-    <header style="${isHighlighted ? 'background:var(--accent-soft);border-radius:12px;padding:16px;margin:-16px' : ''}">
+    <header class="dos-reader-head" style="${isHighlighted ? 'background:var(--accent-soft);border-radius:12px;padding:16px;margin:-16px' : ''}">
       <div class="dos-callout-label" style="color:var(--accent)">${esc(cur.bookLabel)}</div>
-      <h1 style="font-family:var(--serif);font-size:31px;font-weight:700;letter-spacing:-0.01em;line-height:1.2">${esc(cur.title)}</h1>
+      <h1 class="dos-reader-title" style="font-family:var(--serif);font-size:33px;font-weight:700;letter-spacing:-0.02em;line-height:1.15">${esc(cur.title)}</h1>
       <p style="font-family:var(--serif);font-size:20px;line-height:1.5;margin-top:12px"><span style="float:left;font-size:52px;line-height:0.78;font-weight:700;padding:4px 6px 0 0;color:var(--accent)">${esc(cur.def.charAt(0))}</span>${esc(cur.def.slice(1))}</p>
     </header>
 
@@ -257,7 +257,7 @@ function renderChapterView(app, chapterNum) {
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: null, topic: null }))}">Chapters</button>
       <span>/</span><span>Chapter ${chapterNum}</span>
     </nav>
-    <div>
+    <div class="dos-sticky-head">
       <h1 class="dos-h1">Chapter ${chapterNum}</h1>
       <p style="color:var(--ink2);font-size:15px;margin-top:6px">Days ${firstDay.n}–${lastDay.n} · ${esc(firstDay.phase)}${firstDay.phase !== lastDay.phase ? ' → ' + esc(lastDay.phase) : ''}</p>
     </div>
@@ -283,7 +283,7 @@ function renderChaptersHome(app) {
     </button>`;
   }).join('');
   return `<div class="dos-page">
-    <div><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">The full curriculum, organized into chapters of seven days each. Every concept links through to its full lesson where written.</p></div>
+    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">The full curriculum, organized into chapters of seven days each. Every concept links through to its full lesson where written.</p></div>
     <div class="dos-grid-cards">${cardsHtml}</div>
   </div>`;
 }
