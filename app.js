@@ -403,14 +403,19 @@ class App {
         <span class="dos-logo-word">UXbrain</span>
       </button>
       <nav aria-label="Sections">${items}</nav>
-      <div class="dos-sidebar-foot">
-        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform:rotate(-90deg)">
-          <circle cx="20" cy="20" r="15" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="4"></circle>
-          <circle cx="20" cy="20" r="15" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="${dash}"></circle>
-        </svg>
-        <div>
-          <div style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:#fff">${done} of ${total} topics</div>
-          <div style="font-size:12px;color:var(--sidebar-ink)">Overall progress</div>
+      <div style="margin-top:auto">
+        <div class="dos-sidebar-credit">
+          <a href="https://www.linkedin.com/in/kumarballari" target="_blank" rel="noopener noreferrer">by Kumar Ballari</a>
+        </div>
+        <div class="dos-sidebar-foot" style="margin-top:0">
+          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform:rotate(-90deg)">
+            <circle cx="20" cy="20" r="15" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="4"></circle>
+            <circle cx="20" cy="20" r="15" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="${dash}"></circle>
+          </svg>
+          <div>
+            <div style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:#fff">${done} of ${total} topics</div>
+            <div style="font-size:12px;color:var(--sidebar-ink)">Overall progress</div>
+          </div>
         </div>
       </div>
     </aside>`;

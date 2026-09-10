@@ -18,6 +18,21 @@
   <div style="padding: 20px; color: #999;">Initializing... (Updated: 2026-07-12 10:25 UTC)</div>
 </div>
 
+<div id="ux-intro">
+  <canvas id="ux-intro-canvas"></canvas>
+  <div class="ux-intro-inner">
+    <div class="ux-intro-eyebrow">Learn &middot; Practice &middot; Grow</div>
+    <h1 class="ux-intro-title">UXbrain</h1>
+    <p class="ux-intro-tag">A calmer path to product-design mastery.</p>
+    <button class="ux-intro-enter" id="ux-intro-enter" type="button">Enter <span aria-hidden="true">&rarr;</span></button>
+    <div class="ux-intro-hint">click anywhere to enter</div>
+  </div>
+</div>
+<script>
+  // Returning visitor within the session: drop the intro before first paint.
+  (function () { try { if (sessionStorage.getItem('uxbrain.intro.v1')) { var e = document.getElementById('ux-intro'); if (e) e.remove(); } } catch (_) {} })();
+</script>
+
 <script>
   const errorLog = [];
 
@@ -78,6 +93,8 @@
     })();
   })();
 </script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script defer src="intro.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>

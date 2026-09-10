@@ -145,6 +145,11 @@ a { color: inherit; }
 [data-dos-nav][data-active="true"]::after { height: 17px; }
 
 .dos-sidebar-foot { margin-top: auto; padding: 16px 10px 0; border-top: 1px solid rgba(255,255,255,.09); display: flex; align-items: center; gap: 12px; }
+.dos-sidebar-credit { padding: 0 10px 12px; }
+.dos-sidebar-credit a { font-size: 11.5px; color: var(--sidebar-ink); text-decoration: none; letter-spacing: .01em; transition: color .2s, opacity .2s; display: inline-flex; align-items: center; gap: 5px; }
+.dos-sidebar-credit a::after { content: '↗'; font-size: 10px; opacity: .6; transition: transform .25s cubic-bezier(.2,.9,.3,1); }
+.dos-sidebar-credit a:hover { color: #fff; }
+.dos-sidebar-credit a:hover::after { transform: translate(2px,-2px); }
 
 [data-tip] { position: relative; }
 [data-tip]:hover::after { content: attr(data-tip); position: absolute; left: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 7px; white-space: nowrap; pointer-events: none; z-index: 60; box-shadow: var(--shadow1); }
@@ -315,3 +320,31 @@ table.dos-table tbody tr:hover { background: var(--accent-soft); }
   .dos-kbd { display: none; }
   .dos-h1-lg { font-size: 34px; }
 }
+
+/* ---------- immersive intro (portal) ---------- */
+body.ux-intro-lock { overflow: hidden; }
+#ux-intro { position: fixed; inset: 0; z-index: 9500; display: flex; align-items: center; justify-content: center; overflow: hidden; opacity: 1; transform: scale(1); transition: opacity 1s ease, transform 1.2s cubic-bezier(.7,0,.25,1);
+  background:
+    radial-gradient(1200px 700px at 12% -8%, rgba(96,116,160,.22), transparent 58%),
+    radial-gradient(1000px 620px at 100% 0%, rgba(78,96,140,.18), transparent 56%),
+    radial-gradient(900px 760px at 90% 110%, rgba(140,120,180,.16), transparent 60%),
+    linear-gradient(180deg, #090A0E 0%, #06070A 100%); }
+#ux-intro.exit { opacity: 0; transform: scale(1.08); pointer-events: none; }
+#ux-intro-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ux-intro-inner { position: relative; z-index: 2; text-align: center; padding: 24px; max-width: 900px; }
+.ux-intro-eyebrow { color: rgba(200,210,230,.6); font: 600 12px/1 'Inter', system-ui, sans-serif; letter-spacing: .34em; text-transform: uppercase; opacity: 0; transform: translateY(10px); animation: uxIn .9s ease forwards .1s; }
+.ux-intro-title { font: 600 clamp(58px, 13vw, 168px)/.92 'Inter', system-ui, sans-serif; letter-spacing: -.045em; color: #fff; margin: 20px 0 0; display: flex; justify-content: center; }
+.ux-intro-title span { display: inline-block; transform: translateY(115%) rotate(7deg); opacity: 0; animation: uxLetter 1s cubic-bezier(.16,.9,.3,1) forwards; animation-delay: calc(.28s + var(--i) * .06s); }
+.ux-intro-tag { color: rgba(212,220,236,.72); font: 400 clamp(15px, 2.4vw, 21px)/1.5 'Inter', system-ui, sans-serif; margin-top: 20px; opacity: 0; transform: translateY(12px); animation: uxIn 1s ease forwards .95s; }
+.ux-intro-enter { margin-top: 36px; height: 54px; padding: 0 32px; border-radius: 99px; border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; font: 600 15px 'Inter', system-ui, sans-serif; cursor: pointer; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); display: inline-flex; align-items: center; gap: 10px; opacity: 0; transform: translateY(12px); animation: uxIn 1s ease forwards 1.15s; transition: background .25s, transform .25s, border-color .25s, box-shadow .25s; }
+.ux-intro-enter span { transition: transform .3s cubic-bezier(.2,.9,.3,1); }
+.ux-intro-enter:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.42); transform: translateY(-2px); box-shadow: 0 16px 40px -16px rgba(120,140,190,.6); }
+.ux-intro-enter:hover span { transform: translateX(5px); }
+.ux-intro-hint { margin-top: 18px; color: rgba(180,190,210,.4); font: 500 11px 'Inter', system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; opacity: 0; animation: uxIn 1s ease forwards 1.45s; }
+@keyframes uxIn { to { opacity: 1; transform: none; } }
+@keyframes uxLetter { to { transform: translateY(0) rotate(0); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  #ux-intro, #ux-intro * { animation: none !important; opacity: 1 !important; transform: none !important; }
+  #ux-intro { transition: opacity .4s ease !important; }
+}
+@media print { #ux-intro { display: none !important; } }
