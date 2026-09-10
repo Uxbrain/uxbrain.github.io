@@ -290,8 +290,17 @@ table.dos-table tbody tr:hover { background: var(--accent-soft); }
 .dos-search-box { width: 100%; max-width: 560px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--glass-brd); border-radius: 20px; box-shadow: var(--shadow-lift); overflow: hidden; animation: dosPop .28s cubic-bezier(.16,.1,.3,1); }
 .dos-mobilenav-scrim { position: fixed; inset: 0; z-index: 40; background: rgba(6,8,12,.55); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); display: flex; align-items: flex-end; }
 
+/* ---------- interactive cursor (fine-pointer only; added by inline script) ---------- */
+.dos-cursor-ring { position: fixed; top: 0; left: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(68,94,134,.6); background: transparent; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); will-change: left, top, width, height; transition: width .25s cubic-bezier(.2,.9,.3,1), height .25s cubic-bezier(.2,.9,.3,1), opacity .3s, background .25s, border-color .25s; }
+.dos-cursor-dot { position: fixed; top: 0; left: 0; width: 5px; height: 5px; border-radius: 50%; background: rgba(68,94,134,.85); pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: opacity .3s, transform .15s; }
+.dos-cursor-ring.hover { width: 54px; height: 54px; background: rgba(68,94,134,.10); border-color: rgba(68,94,134,.8); }
+.dos-cursor-ring.press { transform: translate(-50%,-50%) scale(.85); }
+#dos-root.dark ~ .dos-cursor-ring, #dos-root.amoled ~ .dos-cursor-ring { border-color: rgba(157,176,214,.7); }
+#dos-root.dark ~ .dos-cursor-ring.hover, #dos-root.amoled ~ .dos-cursor-ring.hover { background: rgba(157,176,214,.14); border-color: rgba(157,176,214,.9); }
+#dos-root.dark ~ .dos-cursor-dot, #dos-root.amoled ~ .dos-cursor-dot { background: rgba(205,214,233,.9); }
+
 @media print {
-  #dos-root > *:not(main), .dos-header, [data-no-print="true"] { display: none !important; }
+  #dos-root > *:not(main), .dos-header, [data-no-print="true"], .dos-cursor-ring, .dos-cursor-dot { display: none !important; }
   #dos-root::before { display: none !important; }
   body, html { background: #fff !important; }
 }

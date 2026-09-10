@@ -1,4 +1,4 @@
-import { esc } from '../app.js';
+import { esc, localDateStr } from '../app.js';
 import { quizStats } from './progress.js';
 
 const DYK = [
@@ -76,10 +76,10 @@ export function renderDashboard(app) {
   const last = s.lastTopicId ? TOPICS[s.lastTopicId] : null;
 
   const log = s.studyLog || [];
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = localDateStr();
   const streakDots = [];
   for (let i = 6; i >= 0; i--) {
-    const dd = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+    const dd = localDateStr(new Date(Date.now() - i * 86400000));
     streakDots.push(log.indexOf(dd) !== -1 ? 'var(--warn)' : 'rgba(0,0,0,.08)');
   }
   const streakMsg = s.streak >= 3 ? 'You’re building real momentum — keep it going.' : (s.streak > 0 ? 'Nice start. Any activity counts.' : 'Open a topic or a flashcard to start a streak.');
@@ -102,7 +102,7 @@ export function renderDashboard(app) {
   let calCells = '';
   for (let i = 0; i < first; i++) calCells += `<div></div>`;
   for (let dnum = 1; dnum <= daysIn; dnum++) {
-    const ds = new Date(y, mo, dnum).toISOString().slice(0, 10);
+    const ds = localDateStr(new Date(y, mo, dnum));
     const studied = log.indexOf(ds) !== -1;
     const isToday = ds === todayStr;
     const bg = studied ? 'var(--accent)' : 'var(--surface-alt)';

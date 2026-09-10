@@ -26,6 +26,12 @@ export function esc(str) {
   return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// Local calendar date as YYYY-MM-DD. Using toISOString() here would return the
+// UTC date, which is a day off for positive-offset timezones (e.g. IST evenings).
+export function localDateStr(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 // Order matches the user's fixed sidebar spec: Search, Dashboard, Chapters, Flashcards,
 // Interview Gym, Cheat Sheets, Progress, Reading List.
 const NAV_ITEMS = [
@@ -181,10 +187,10 @@ class App {
   }
 
   bumpStreak() {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = localDateStr();
     const log = this.state.studyLog.indexOf(today) === -1 ? this.state.studyLog.concat([today]) : this.state.studyLog;
     if (this.state.lastActiveDate === today) { if (log !== this.state.studyLog) this.persist({ studyLog: log }); return; }
-    const yest = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const yest = localDateStr(new Date(Date.now() - 86400000));
     const streak = this.state.lastActiveDate === yest ? this.state.streak + 1 : 1;
     this.persist({ lastActiveDate: today, streak, studyLog: log });
   }
@@ -669,6 +675,10 @@ class App {
     root.addEventListener('click', (e) => {
       const actEl = e.target.closest('[data-act]');
       if (!actEl) return;
+      // Form controls run their data-act on 'change'/'input', not 'click'. Firing on
+      // click would re-render and destroy the element mid-interaction — e.g. it would
+      // close the native date picker the instant you open it.
+      if (actEl.matches('input, select, textarea')) return;
       const isScrim = actEl.classList.contains('dos-modal-scrim') || actEl.classList.contains('dos-search-scrim') || actEl.classList.contains('dos-mobilenav-scrim');
       if (isScrim && e.target.closest('[data-stop]')) return; // click landed inside dialog content, not the backdrop
       const fn = this._actions.get(actEl.getAttribute('data-act'));

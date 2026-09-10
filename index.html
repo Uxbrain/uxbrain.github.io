@@ -50,7 +50,33 @@
   }, 8000);
 </script>
 <script>
-  window.CHATBOT_API_URL = 'https://mydesignos-chatbot.onrender.com';
+  // Interactive cursor: a soft ring that trails the pointer and reacts to hovers.
+  // Fine-pointer devices only (skipped on touch); additive, so the native cursor stays.
+  (function () {
+    if (!window.matchMedia || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ring = document.createElement('div'); ring.className = 'dos-cursor-ring'; ring.style.opacity = '0';
+    var dot = document.createElement('div'); dot.className = 'dos-cursor-dot'; dot.style.opacity = '0';
+    document.body.appendChild(ring); document.body.appendChild(dot);
+    var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, shown = false;
+    var SEL = 'a,button,[data-act],[role="button"],input,textarea,select,label,summary';
+    addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+      if (!shown) { shown = true; ring.style.opacity = ''; dot.style.opacity = ''; }
+    }, { passive: true });
+    addEventListener('mouseleave', function () { ring.style.opacity = '0'; dot.style.opacity = '0'; shown = false; });
+    addEventListener('mousedown', function () { ring.classList.add('press'); }, { passive: true });
+    addEventListener('mouseup', function () { ring.classList.remove('press'); }, { passive: true });
+    addEventListener('mouseover', function (e) { if (e.target.closest && e.target.closest(SEL)) ring.classList.add('hover'); }, { passive: true });
+    addEventListener('mouseout', function (e) {
+      if (e.target.closest && e.target.closest(SEL)) { var to = e.relatedTarget; if (!to || !(to.closest && to.closest(SEL))) ring.classList.remove('hover'); }
+    }, { passive: true });
+    (function loop() {
+      if (reduce) { rx = mx; ry = my; } else { rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18; }
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+  })();
 </script>
 <script type="module" src="app.js"></script>
 </body>
