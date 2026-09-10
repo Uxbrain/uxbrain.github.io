@@ -364,6 +364,21 @@ body.ux-intro-lock { overflow: hidden; }
 .dos-reader-head > p { animation: dosReaderTitle .95s cubic-bezier(.16,.9,.3,1) .08s both; }
 @keyframes dosReaderTitle { 0% { opacity: 0; transform: translateY(26px); filter: blur(6px); } 100% { opacity: 1; transform: none; filter: blur(0); } }
 
+/* ---------- chapter day card: lessons (read) vs practice (check) ---------- */
+.dos-lesson-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.dos-lesson-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px 14px; border-radius: 13px; border: 1px solid var(--card-brd); background: var(--surface-alt); color: var(--ink); cursor: pointer; transition: border-color .2s, background .2s, transform .2s cubic-bezier(.2,.9,.3,1), box-shadow .2s; }
+.dos-lesson-row:hover { border-color: var(--accent-line); background: var(--accent-soft); transform: translateX(4px); box-shadow: var(--shadow1); }
+.dos-lesson-check { width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1.5px solid var(--accent-line); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--accent); transition: background .2s, border-color .2s; }
+.dos-lesson-row.is-done .dos-lesson-check { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.dos-lesson-name { flex: 1; font-size: 15px; font-weight: 500; }
+.dos-lesson-row.is-done .dos-lesson-name { color: var(--ink2); }
+.dos-lesson-go { flex: none; font-size: 12.5px; font-weight: 600; color: var(--accent); opacity: .65; transition: opacity .2s, transform .2s cubic-bezier(.2,.9,.3,1); }
+.dos-lesson-row:hover .dos-lesson-go { opacity: 1; transform: translateX(3px); }
+.dos-task-list { margin-top: 14px; border-top: 1px solid var(--card-brd); padding-top: 12px; display: flex; flex-direction: column; gap: 3px; }
+.dos-task-check { display: flex; align-items: center; gap: 10px; padding: 5px 2px; font-size: 13.5px; line-height: 1.5; color: var(--ink2); cursor: pointer; border-radius: 8px; transition: background .15s; }
+.dos-task-check:hover { background: var(--accent-soft); }
+.dos-task-check input { width: 18px; height: 18px; flex: none; accent-color: var(--accent); cursor: pointer; }
+
 /* ---------- pinned chapter heading (scroll-driven feel) ---------- */
 .dos-sticky-head { position: sticky; top: 66px; z-index: 11; padding: 12px 14px; margin: 0 -14px 4px; border-radius: 16px;
   background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--glass-brd); }

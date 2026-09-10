@@ -1,5 +1,6 @@
 import { esc, localDateStr } from '../app.js';
 import { quizStats } from './progress.js';
+import { dayDone } from './library.js';
 
 const DYK = [
   'Users find about 85% of usability problems with just 5 test participants — research doesn’t need a big budget.',
@@ -28,7 +29,7 @@ function badgeDefs(app) {
   const cardsGraded = Object.keys(s.cardSchedule || {}).length;
   const questionsPracticed = Object.values(s.igPracticed || {}).filter(Boolean).length;
   const days = app.planDb.buildDays();
-  const daysComplete = days.filter((d) => d.tasks.every((tk) => s.dayChecks['d' + d.n + '-' + tk.id])).length;
+  const daysComplete = days.filter((d) => dayDone(app, d)).length;
   return [
     { icon: '🌱', title: 'First Steps', desc: 'Complete your first topic', val: done, goal: 1 },
     { icon: '📚', title: 'Curious Mind', desc: 'Complete 5 topics', val: done, goal: 5 },
@@ -46,10 +47,9 @@ function badgeDefs(app) {
 function renderFocus(app) {
   const s = app.state;
   const days = app.planDb.buildDays();
-  const doneOf = (d) => d.tasks.every((tk) => s.dayChecks['d' + d.n + '-' + tk.id]);
-  const doneCount = days.filter(doneOf).length;
+  const doneCount = days.filter((d) => dayDone(app, d)).length;
   const planPct = days.length ? Math.round((doneCount / days.length) * 100) : 0;
-  const focus = days.find((d) => !doneOf(d)) || days[days.length - 1];
+  const focus = days.find((d) => !dayDone(app, d)) || days[days.length - 1];
   return { planPct, focus };
 }
 

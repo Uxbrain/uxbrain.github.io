@@ -12,7 +12,7 @@ import { PORTFOLIO_ARCHETYPES } from './data/portfolio.js';
 import * as CONCEPTS_MOD from './data/concepts.js';
 
 import { renderDashboard } from './sections/dashboard.js';
-import { renderChapters } from './sections/library.js';
+import { renderChapters, dayDone } from './sections/library.js';
 import { renderFlashcards } from './sections/flashcards.js';
 import { renderGym } from './sections/gym.js';
 import { renderSheets } from './sections/sheets.js';
@@ -202,15 +202,37 @@ class App {
   }
 
   findTopicByName(name) {
+    if (!this._tbnCache) this._tbnCache = Object.create(null);
+    if (name in this._tbnCache) return this._tbnCache[name];
     const TOPICS = this.data.TOPICS, ORDER = this.data.TOPIC_ORDER;
     const n = name.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
     const t = ORDER.find((id) => {
       const title = TOPICS[id].title.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
       return title === n || title.indexOf(n) === 0 || n.indexOf(title.split(' - ')[0]) === 0 || n.indexOf(title) !== -1 || title.indexOf(n) !== -1;
     });
-    if (t) return t;
-    const g = this.glossData.GLOSSARY.find((x) => x.term.toLowerCase().replace(/'/g, "'").trim() === n);
-    return g && g.linkTopic && TOPICS[g.linkTopic] ? g.linkTopic : null;
+    let result = t || null;
+    if (!result) {
+      const g = this.glossData.GLOSSARY.find((x) => x.term.toLowerCase().replace(/'/g, "'").trim() === n);
+      result = g && g.linkTopic && TOPICS[g.linkTopic] ? g.linkTopic : null;
+    }
+    this._tbnCache[name] = result;
+    return result;
+  }
+
+  // Completion counts for the sound watcher (fx/sound). Cheap thanks to the
+  // memoized findTopicByName above.
+  completionSummary() {
+    let topics = 0;
+    const c = this.state.completed;
+    for (const k in c) if (c[k]) topics++;
+    const plan = this.planDb.buildDays();
+    let days = 0, chapters = 0;
+    for (let i = 0; i < plan.length; i++) if (dayDone(this, plan[i])) days++;
+    for (let i = 0; i < plan.length; i += 7) {
+      const grp = plan.slice(i, i + 7);
+      if (grp.length && grp.every((d) => dayDone(this, d))) chapters++;
+    }
+    return { topics, days, chapters };
   }
 
   cardDueInfo(cardId) {
@@ -627,8 +649,7 @@ class App {
 
     const s = this.state;
     const plan = this.planDb.buildDays();
-    const doneOf = (d) => d.tasks.every((tk) => s.dayChecks['d' + d.n + '-' + tk.id]);
-    const planDoneCount = plan.filter(doneOf).length;
+    const planDoneCount = plan.filter((d) => dayDone(this, d)).length;
     this._planPctCache = plan.length ? Math.round((planDoneCount / plan.length) * 100) : 0;
 
     let mainHtml = '';

@@ -179,9 +179,24 @@ export function chapterGroups(app) {
   return groups;
 }
 
-export function dayDone(app, day) {
+export function isReadTask(tk) { return tk.id.indexOf('read-') === 0; }
+
+// A lesson (read) task counts as done when its topic is marked complete in the
+// reader — OR when its legacy day-checkbox was ticked. Non-lesson tasks (quiz,
+// flashcard, apply) are ticked manually. This keeps "reading" and "marking done"
+// as one deliberate action inside the lesson, not an accidental tap on a card.
+export function taskDone(app, dayN, tk) {
   const s = app.state;
-  return day.tasks.every((tk) => s.dayChecks['d' + day.n + '-' + tk.id]);
+  if (s.dayChecks['d' + dayN + '-' + tk.id]) return true;
+  if (isReadTask(tk)) {
+    const tid = app.findTopicByName(tk.label.replace(/^Learn: /, ''));
+    if (tid) return !!s.completed[tid];
+  }
+  return false;
+}
+
+export function dayDone(app, day) {
+  return day.tasks.every((tk) => taskDone(app, day.n, tk));
 }
 
 export function renderChapters(app) {
@@ -224,22 +239,32 @@ function renderChapterView(app, chapterNum) {
   const firstDay = group.days[0], lastDay = group.days[group.days.length - 1];
 
   const daysHtml = group.days.map((day) => {
-    const concepts = conceptNamesForDay(day);
-    const conceptsHtml = concepts.map((name) => {
-      const tid = app.findTopicByName(name);
-      const done = tid && s.completed[tid];
-      return `<button style="height:32px;padding:0 12px;border-radius:99px;border:1px solid ${tid ? 'var(--accent-line)' : 'var(--border)'};background:${done ? 'var(--accent)' : (tid ? 'var(--accent-soft)' : 'var(--surface-alt)')};color:${done ? 'var(--on-accent)' : (tid ? 'var(--accent)' : 'var(--ink2)')};font-size:13px;cursor:${tid ? 'pointer' : 'default'}" data-act="${app.act(() => { if (tid) app.nav({ sec: 'library', book: chapterNum, topic: tid }, { lastTopicId: tid }); })}">${esc(name)}${tid ? (done ? ' ✓' : ' →') : ''}</button>`;
-    }).join('');
-    const tasksHtml = day.tasks.map((tk) => {
+    // Lessons: prominent rows that OPEN the reader. Marking done happens inside
+    // the lesson, so a tap here reads — it never toggles completion by accident.
+    const lessonRows = [];
+    const practiceRows = [];
+    day.tasks.forEach((tk) => {
       const key = 'd' + day.n + '-' + tk.id;
+      if (isReadTask(tk)) {
+        const name = tk.label.replace(/^Learn: /, '');
+        const tid = app.findTopicByName(name);
+        const done = taskDone(app, day.n, tk);
+        if (tid) {
+          lessonRows.push(`<button class="dos-lesson-row${done ? ' is-done' : ''}" data-act="${app.act(() => app.nav({ sec: 'library', book: chapterNum, topic: tid }, { lastTopicId: tid }))}">
+            <span class="dos-lesson-check" aria-hidden="true">${done ? '✓' : ''}</span>
+            <span class="dos-lesson-name">${esc(name)}</span>
+            <span class="dos-lesson-go">${done ? 'Read again' : 'Read'} →</span>
+          </button>`);
+          return;
+        }
+      }
+      // Non-lesson task (quiz / flashcard / apply) or a lesson without its own page:
+      // a deliberate checkbox, visually separated from the reading entry points.
       const checked = !!s.dayChecks[key];
-      return `<label style="display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:14px;line-height:1.5;cursor:pointer">
-        <input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ dayChecks: Object.assign({}, s.dayChecks, { [key]: !checked }) }))}" style="width:18px;height:18px;flex:none;margin-top:2px">
-        <span style="color:var(--ink2)">${esc(tk.label)}</span>
-      </label>`;
-    }).join('');
+      practiceRows.push(`<label class="dos-task-check"><input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ dayChecks: Object.assign({}, s.dayChecks, { [key]: !checked }) }))}"><span>${esc(tk.label)}</span></label>`);
+    });
     const complete = dayDone(app, day);
-    return `<div class="dos-card" style="border-color:${complete ? 'var(--success)' : 'var(--border)'}">
+    return `<div class="dos-card" style="border-color:${complete ? 'var(--success)' : 'var(--card-brd)'}">
       <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
         <span class="dos-eyebrow">Day ${day.n}</span>
         <span style="font-size:11px;color:var(--ink2)">${esc(day.phase)}</span>
@@ -247,8 +272,8 @@ function renderChapterView(app, chapterNum) {
         <span style="font-size:12px;color:var(--ink2);margin-left:auto">~${day.estMins} min</span>
       </div>
       <h2 style="font-family:var(--serif);font-size:19px;font-weight:600;margin-top:6px">${esc(day.theme)}</h2>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">${conceptsHtml}</div>
-      <div style="display:flex;flex-direction:column;gap:2px;margin-top:14px;border-top:1px solid var(--border);padding-top:10px">${tasksHtml}</div>
+      ${lessonRows.length ? `<div class="dos-lesson-list">${lessonRows.join('')}</div>` : ''}
+      ${practiceRows.length ? `<div class="dos-task-list"><div class="dos-eyebrow" style="font-size:10.5px;margin-bottom:2px">Practice &amp; recall</div>${practiceRows.join('')}</div>` : ''}
     </div>`;
   }).join('');
 
