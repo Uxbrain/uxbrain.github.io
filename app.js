@@ -1,6 +1,7 @@
 import * as DATA from './data/data.js';
 import * as CURRICULUM_TOPICS from './data/curriculum-topics.js';
 import * as MASTER_TOPICS from './data/master-topics.js';
+import * as SENIOR_TOPICS from './data/senior-topics.js';
 import * as SHEETS_MOD from './data/sheets.js';
 import * as GLOSS_MOD from './data/glossary.js';
 import * as CHECKLIST_MOD from './data/checklist.js';
@@ -123,8 +124,8 @@ class App {
 
     this.data = {
       ...DATA,
-      TOPICS: Object.assign({}, DATA.TOPICS, CURRICULUM_TOPICS.TOPICS, MASTER_TOPICS.TOPICS),
-      TOPIC_ORDER: DATA.TOPIC_ORDER.concat(CURRICULUM_TOPICS.TOPIC_ORDER, MASTER_TOPICS.TOPIC_ORDER),
+      TOPICS: Object.assign({}, DATA.TOPICS, CURRICULUM_TOPICS.TOPICS, MASTER_TOPICS.TOPICS, SENIOR_TOPICS.TOPICS),
+      TOPIC_ORDER: DATA.TOPIC_ORDER.concat(CURRICULUM_TOPICS.TOPIC_ORDER, MASTER_TOPICS.TOPIC_ORDER, SENIOR_TOPICS.TOPIC_ORDER),
     };
     this.sheetsData = SHEETS_MOD;
     this.glossData = GLOSS_MOD;
@@ -205,10 +206,14 @@ class App {
     if (!this._tbnCache) this._tbnCache = Object.create(null);
     if (name in this._tbnCache) return this._tbnCache[name];
     const TOPICS = this.data.TOPICS, ORDER = this.data.TOPIC_ORDER;
-    const n = name.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
-    const t = ORDER.find((id) => {
-      const title = TOPICS[id].title.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
-      return title === n || title.indexOf(n) === 0 || n.indexOf(title.split(' - ')[0]) === 0 || n.indexOf(title) !== -1 || title.indexOf(n) !== -1;
+    const norm = (s) => s.toLowerCase().replace(/'/g, "'").replace(/[()]/g, '').trim();
+    const n = norm(name);
+    // Prefer an exact title match (so a purpose-written topic wins over a thin
+    // stub whose title happens to be a prefix), then fall back to fuzzy matching.
+    let t = ORDER.find((id) => norm(TOPICS[id].title) === n);
+    if (!t) t = ORDER.find((id) => {
+      const title = norm(TOPICS[id].title);
+      return title.indexOf(n) === 0 || n.indexOf(title.split(' - ')[0]) === 0 || n.indexOf(title) !== -1 || title.indexOf(n) !== -1;
     });
     let result = t || null;
     if (!result) {
