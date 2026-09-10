@@ -175,7 +175,7 @@ class App {
         const obj = JSON.parse(reader.result);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
         window.location.reload();
-      } catch (e) { window.alert('That file could not be read as DesignOS progress JSON.'); }
+      } catch (e) { window.alert('That file could not be read as UXbrain progress JSON.'); }
     };
     reader.readAsText(file);
   }
@@ -393,8 +393,8 @@ class App {
     const dash = (total ? (done / total) * C : 0).toFixed(1) + ' ' + C.toFixed(1);
     return `<aside class="dos-sidebar" data-screen-label="Sidebar">
       <button class="dos-logo" type="button" aria-label="Go to Dashboard" data-act="${this.act(() => this.goSection('dashboard'))}">
-        <span class="dos-logo-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7" cy="9" r="4.4" stroke="currentColor" stroke-width="1.5"></circle><circle cx="12" cy="9" r="2.3" fill="currentColor"></circle></svg></span>
-        <span class="dos-logo-word">DesignOS</span>
+        <span class="dos-logo-mark" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5" opacity=".5"></circle><circle cx="12" cy="12" r="2.6" fill="currentColor"></circle><g class="dos-logo-orbit"><circle cx="12" cy="4" r="1.7" fill="currentColor"></circle></g></svg></span>
+        <span class="dos-logo-word">UXbrain</span>
       </button>
       <nav aria-label="Sections">${items}</nav>
       <div class="dos-sidebar-foot">
@@ -416,7 +416,7 @@ class App {
     return `<header class="dos-header">
       ${s.isMobile ? `<button class="dos-icon-btn" aria-label="Open navigation" data-act="${this.act(() => this.setState({ mobileNavOpen: true }))}">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><line x1="3" y1="5" x2="15" y2="5"></line><line x1="3" y1="9" x2="15" y2="9"></line><line x1="3" y1="13" x2="15" y2="13"></line></svg>
-      </button><div style="font-family:var(--serif);font-size:17px;font-weight:700">DesignOS</div>` : ''}
+      </button><div style="font-family:var(--serif);font-size:17px;font-weight:700">UXbrain</div>` : ''}
       <button class="dos-search-btn" data-act="${this.act(() => this.openSearch())}">
         <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="flex:none"><circle cx="8" cy="8" r="5.5"></circle><line x1="12.5" y1="12.5" x2="15.5" y2="15.5"></line></svg>
         <span>Search topics...</span>
