@@ -291,24 +291,32 @@ function renderChapterView(app, chapterNum) {
 }
 
 function renderChaptersHome(app) {
-  const s = app.state;
   const groups = chapterGroups(app);
-  const cardsHtml = groups.map((g) => {
+  const totalDays = groups.reduce((n, g) => n + g.days.length, 0);
+  const totalDone = groups.reduce((n, g) => n + g.days.filter((d) => dayDone(app, d)).length, 0);
+  const items = groups.map((g, i) => {
     const firstDay = g.days[0], lastDay = g.days[g.days.length - 1];
     const doneDays = g.days.filter((d) => dayDone(app, d)).length;
     const pct = Math.round((doneDays / g.days.length) * 100);
     const conceptCount = g.days.reduce((sum, d) => sum + conceptNamesForDay(d).length, 0);
-    return `<button data-dos-cardlink data-act="${app.act(() => app.nav({ sec: 'library', book: g.n, topic: null }))}" style="text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:var(--pad-card);cursor:pointer;display:flex;flex-direction:column;gap:8px;color:var(--ink)">
-      <div style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--accent-line);background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;font-weight:700;color:var(--accent)">${g.n}</div>
-      <div class="dos-eyebrow" style="color:var(--accent);margin-top:6px">Days ${firstDay.n}–${lastDay.n}</div>
-      <div style="font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.3">${esc(firstDay.phase)}</div>
-      <div style="font-size:14px;color:var(--ink2)">${conceptCount} concepts across ${g.days.length} days</div>
-      <div class="dos-progress" style="margin-top:6px"><div style="width:${pct}%"></div></div>
-      <div style="font-size:12px;font-weight:500;color:var(--ink2);margin-top:auto;padding-top:4px">${doneDays} of ${g.days.length} days complete</div>
-    </button>`;
+    const complete = pct === 100;
+    const hue = (i * 41) % 360;
+    return `<div class="dos-jn-item${complete ? ' is-done' : ''}">
+      <span class="dos-jn-node" aria-hidden="true">${complete ? '✓' : g.n}</span>
+      <button class="dos-jn-card" data-dos-cardlink data-act="${app.act(() => app.nav({ sec: 'library', book: g.n, topic: null }))}">
+        <span class="dos-jn-thumb" style="--h:${hue}"></span>
+        <span class="dos-jn-body">
+          <span class="dos-eyebrow" style="color:var(--accent)">Days ${firstDay.n}–${lastDay.n}${complete ? ' · Complete' : ''}</span>
+          <span class="dos-jn-title">${esc(firstDay.phase)}</span>
+          <span class="dos-jn-meta">${conceptCount} concepts · ${doneDays}/${g.days.length} days done</span>
+          <span class="dos-progress" style="margin-top:10px"><span class="dos-jn-bar" style="width:${pct}%"></span></span>
+        </span>
+        <span class="dos-jn-go" aria-hidden="true">→</span>
+      </button>
+    </div>`;
   }).join('');
-  return `<div class="dos-page">
-    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">The full curriculum, organized into chapters of seven days each. Every concept links through to its full lesson where written.</p></div>
-    <div class="dos-grid-cards">${cardsHtml}</div>
+  return `<div class="dos-page-mid">
+    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">Your journey — ${groups.length} chapters, ${totalDone} of ${totalDays} days complete. Follow the spine, one week at a time.</p></div>
+    <div class="dos-journey">${items}</div>
   </div>`;
 }

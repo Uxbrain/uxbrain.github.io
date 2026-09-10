@@ -429,6 +429,23 @@ body.ux-intro-lock { overflow: hidden; }
 .dos-task-check { display: flex; align-items: center; gap: 10px; padding: 5px 2px; font-size: 13.5px; line-height: 1.5; color: var(--ink2); cursor: pointer; border-radius: 8px; transition: background .15s; }
 .dos-task-check input { width: 18px; height: 18px; flex: none; accent-color: var(--accent); cursor: pointer; }
 
+/* ---------- chapters journey (spine + gradient thumbnails) ---------- */
+.dos-journey { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 6px 0 8px; }
+.dos-journey::before { content: ''; position: absolute; left: 22px; top: 30px; bottom: 30px; width: 2px; border-radius: 2px; z-index: 0; background: linear-gradient(180deg, var(--accent-line), var(--border) 45%, var(--border)); opacity: .55; }
+.dos-jn-item { position: relative; display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; }
+.dos-jn-node { position: relative; z-index: 2; width: 44px; height: 44px; margin-top: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 700; font-size: 15px; color: var(--accent); background: var(--surface); border: 1.5px solid var(--accent-line); box-shadow: var(--shadow1); transition: background .25s, color .25s, transform .25s cubic-bezier(.2,.9,.3,1); }
+.dos-jn-item.is-done .dos-jn-node { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.dos-jn-card { position: relative; display: grid; grid-template-columns: 96px 1fr auto; align-items: stretch; width: 100%; text-align: left; cursor: pointer; color: var(--ink); background: var(--card-bg); border: 1px solid var(--card-brd); border-radius: 18px; overflow: hidden; box-shadow: var(--edge), var(--shadow1); }
+.dos-jn-thumb { position: relative; align-self: stretch; min-height: 116px; overflow: hidden; background: linear-gradient(150deg, hsl(var(--h) 62% 58%), hsl(calc(var(--h) + 46) 66% 46%)); }
+.dos-jn-thumb::after { content: ''; position: absolute; inset: 0; background: radial-gradient(120% 85% at 22% 8%, rgba(255,255,255,.4), transparent 55%), linear-gradient(180deg, transparent, rgba(0,0,0,.28)); }
+.dos-jn-body { padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.dos-jn-title { font-family: var(--serif); font-size: 20px; font-weight: 600; line-height: 1.25; margin-top: 4px; }
+.dos-jn-meta { font-size: 13px; color: var(--ink2); margin-top: 4px; }
+.dos-jn-bar { display: block; height: 100%; border-radius: 99px; background: var(--prog-grad); }
+.dos-jn-go { display: flex; align-items: center; padding: 0 20px; font-size: 20px; color: var(--ink2); transition: transform .3s cubic-bezier(.2,.9,.3,1), color .2s; }
+.dos-jn-card:hover .dos-jn-go { color: var(--hover-ink); transform: translateX(4px); }
+@media (max-width: 620px) { .dos-jn-card { grid-template-columns: 74px 1fr; } .dos-jn-go { display: none; } .dos-jn-thumb { min-height: 100%; } }
+
 /* ---------- pinned chapter heading (scroll-driven feel) ---------- */
 .dos-sticky-head { position: sticky; top: 66px; z-index: 11; padding: 12px 14px; margin: 0 -14px 4px; border-radius: 16px;
   background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--glass-brd); }
