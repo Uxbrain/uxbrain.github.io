@@ -695,11 +695,20 @@ class App {
     // Apple-style shared-element page transition via the View Transitions API,
     // but only when the section/topic actually changes (never for typing or a
     // checkbox toggle). Falls back to an instant write where unsupported.
+    const firstRender = this._vtSec === undefined;
     const secChanged = this._vtSec !== s.route.sec || this._vtTopic !== (s.route.topic || null);
     this._vtSec = s.route.sec; this._vtTopic = s.route.topic || null;
     let vtReduce = false; try { vtReduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-    if (document.startViewTransition && secChanged && !this.state.readerReduceMotion && !vtReduce) {
-      try { document.startViewTransition(write); } catch (e) { write(); }
+    const canVt = document.startViewTransition && secChanged && !firstRender && !this.state.readerReduceMotion && !vtReduce && document.visibilityState !== 'hidden';
+    if (canVt) {
+      try {
+        const vt = document.startViewTransition(write);
+        // A transition can be aborted (e.g. a newer nav interrupts it); its promises
+        // then reject. Swallow them so they never surface as an unhandled rejection
+        // (which the page's error handler would turn into a full-screen error).
+        const hush = function () {};
+        if (vt) { if (vt.ready && vt.ready.then) vt.ready.then(hush, hush); if (vt.finished && vt.finished.then) vt.finished.then(hush, hush); if (vt.updateCallbackDone && vt.updateCallbackDone.then) vt.updateCallbackDone.then(hush, hush); }
+      } catch (e) { write(); }
     } else {
       write();
     }

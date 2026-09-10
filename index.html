@@ -36,18 +36,17 @@
 <script>
   const errorLog = [];
 
+  // The full-screen error box is only for catching boot failures (a blank page).
+  // Once the app is running (window.__dos), log errors but never replace the UI.
   window.addEventListener('error', (e) => {
     const msg = `ERROR: ${e.filename}:${e.lineno} - ${e.message}`;
-    errorLog.push(msg);
     console.error(msg);
-    updateErrors();
+    if (!window.__dos) { errorLog.push(msg); updateErrors(); }
   });
 
   window.addEventListener('unhandledrejection', (e) => {
-    const msg = `UNHANDLED PROMISE: ${e.reason}`;
-    errorLog.push(msg);
-    console.error(msg);
-    updateErrors();
+    console.error('UNHANDLED PROMISE:', e.reason);
+    if (!window.__dos) { errorLog.push(`UNHANDLED PROMISE: ${e.reason}`); updateErrors(); }
   });
 
   function updateErrors() {

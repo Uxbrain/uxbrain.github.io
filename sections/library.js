@@ -113,6 +113,10 @@ function renderTopicPage(app, cur) {
       <button class="dos-rail-btn" data-tip="Back to top" data-act="${app.act(() => window.scrollTo({ top: 0, behavior: 'smooth' }))}"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4,10 9,5 14,10"></polyline></svg></button>
     </div>
     <div class="dos-topic-progress"><div style="width:${s.readingProgress || 0}%"></div></div>
+    <button class="dos-back-btn" data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><polyline points="10.5,4 5.5,9 10.5,14"></polyline></svg>
+      Back to ${route.book ? 'Chapter ' + route.book : 'Chapters'}
+    </button>
     <nav aria-label="Breadcrumb" class="dos-breadcrumb">
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">${route.book ? 'Chapter ' + route.book : 'Chapters'}</button>
       <span>/</span><span>${esc(cur.title)}</span>
@@ -300,29 +304,33 @@ function renderChaptersHome(app) {
   const groups = chapterGroups(app);
   const totalDays = groups.reduce((n, g) => n + g.days.length, 0);
   const totalDone = groups.reduce((n, g) => n + g.days.filter((d) => dayDone(app, d)).length, 0);
-  const items = groups.map((g, i) => {
+  const C = 2 * Math.PI * 15; // progress-ring circumference
+  const cards = groups.map((g) => {
     const firstDay = g.days[0], lastDay = g.days[g.days.length - 1];
     const doneDays = g.days.filter((d) => dayDone(app, d)).length;
     const pct = Math.round((doneDays / g.days.length) * 100);
     const conceptCount = g.days.reduce((sum, d) => sum + conceptNamesForDay(d).length, 0);
     const complete = pct === 100;
-    const hue = (i * 41) % 360;
-    return `<div class="dos-jn-item${complete ? ' is-done' : ''}">
-      <span class="dos-jn-node" aria-hidden="true">${complete ? '✓' : g.n}</span>
-      <button class="dos-jn-card" data-dos-cardlink data-act="${app.act(() => app.nav({ sec: 'library', book: g.n, topic: null }))}">
-        <span class="dos-jn-thumb" style="--h:${hue}"></span>
-        <span class="dos-jn-body">
-          <span class="dos-eyebrow" style="color:var(--accent)">Days ${firstDay.n}–${lastDay.n}${complete ? ' · Complete' : ''}</span>
-          <span class="dos-jn-title">${esc(firstDay.phase)}</span>
-          <span class="dos-jn-meta">${conceptCount} concepts · ${doneDays}/${g.days.length} days done</span>
-          <span class="dos-progress" style="margin-top:10px"><span class="dos-jn-bar" style="width:${pct}%"></span></span>
+    const dash = (pct / 100 * C).toFixed(1) + ' ' + C.toFixed(1);
+    return `<button data-dos-cardlink class="dos-chapter-card${complete ? ' is-done' : ''}" data-act="${app.act(() => app.nav({ sec: 'library', book: g.n, topic: null }))}">
+      <div class="dos-chapter-top">
+        <span class="dos-chapter-num">${complete ? '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4,9.5 7.5,13 14,5"></polyline></svg>' : g.n}</span>
+        <span class="dos-chapter-ring" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" style="transform:rotate(-90deg)">
+            <circle cx="20" cy="20" r="15" fill="none" stroke="var(--surface-alt)" stroke-width="3.5"></circle>
+            <circle cx="20" cy="20" r="15" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="${dash}"></circle>
+          </svg>
+          <span class="dos-chapter-pct">${pct}%</span>
         </span>
-        <span class="dos-jn-go" aria-hidden="true">→</span>
-      </button>
-    </div>`;
+      </div>
+      <div class="dos-eyebrow" style="color:var(--accent);margin-top:16px">Days ${firstDay.n}–${lastDay.n}</div>
+      <h2 class="dos-chapter-title">${esc(firstDay.phase)}</h2>
+      <div class="dos-chapter-meta">${conceptCount} concepts across ${g.days.length} days</div>
+      <div class="dos-chapter-foot"><span>${doneDays} of ${g.days.length} days complete</span><span class="dos-chapter-arrow">→</span></div>
+    </button>`;
   }).join('');
-  return `<div class="dos-page-mid">
-    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">Your journey — ${groups.length} chapters, ${totalDone} of ${totalDays} days complete. Follow the spine, one week at a time.</p></div>
-    <div class="dos-journey">${items}</div>
+  return `<div class="dos-page">
+    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">${groups.length} chapters · ${totalDone} of ${totalDays} days complete. Each chapter is a focused week — open one to begin.</p></div>
+    <div class="dos-grid-cards">${cards}</div>
   </div>`;
 }

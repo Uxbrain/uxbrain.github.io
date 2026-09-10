@@ -140,8 +140,6 @@ export function renderDashboard(app) {
   }).join('');
   const badgesEarned = badgeDefs(app).filter((b) => b.val >= b.goal).length;
   const qz = quizStats(app);
-  const hr = new Date().getHours();
-  const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : hr < 21 ? 'Good evening' : 'Good night';
   const name = (s.profileName || '').trim();
 
   return `<div class="dos-page">
@@ -149,7 +147,7 @@ export function renderDashboard(app) {
       <div class="dos-hero-bg" aria-hidden="true"></div>
       <div class="dos-hero-inner">
         <div class="dos-eyebrow" style="color:rgba(255,255,255,.68)">Learn &middot; Practice &middot; Grow</div>
-        <h1 class="dos-hero-title">${greeting}${name ? `<span style="opacity:.5">, ${esc(name)}</span>` : ''}</h1>
+        <h1 class="dos-hero-title">Overview${name ? `<span style="opacity:.5">, ${esc(name)}</span>` : ''}</h1>
         <p class="dos-hero-sub">You’re <b style="color:#fff;font-weight:600">${planPct}%</b> through your plan${focus ? ' · ' + esc(focus.phase) : ''}.</p>
         <div class="dos-hero-meta">
           <label class="dos-hero-date">Start date
