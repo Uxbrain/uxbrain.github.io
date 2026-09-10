@@ -665,8 +665,8 @@ class App {
     }
 
     const root = document.getElementById('dos-root');
-    root.className = 'dos ' + this.themeClass() + ' ' + (s.readerFont === 'serif' ? 'serifprose' : 'sansprose') + (s.readerFocusMode ? ' reading-mode' : '');
-    root.innerHTML = `
+    const cls = 'dos ' + this.themeClass() + ' ' + (s.readerFont === 'serif' ? 'serifprose' : 'sansprose') + (s.readerFocusMode ? ' reading-mode' : '');
+    const html = `
       ${!s.isMobile ? this.renderSidebar() : ''}
       <div style="flex:1;min-width:0;display:flex;flex-direction:column">
         ${this.renderHeader()}
@@ -679,23 +679,30 @@ class App {
       ${s.readerFocusMode ? `<button data-act="${this.act(() => this.setState({ readerFocusMode: false }))}" style="position:fixed;top:16px;right:16px;z-index:60;height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow1)">X Exit distraction-free mode</button>` : ''}
     `;
 
-    this.wireEvents(root);
-    const importInput = document.getElementById('import-json-input');
-    if (importInput) importInput.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) this.importJSON(e.target.files[0]); });
-
-    if (focusInfo) {
-      const el = document.getElementById(focusInfo.id);
-      if (el) {
-        el.focus();
-        if (focusInfo.start != null && typeof el.setSelectionRange === 'function') {
-          try { el.setSelectionRange(focusInfo.start, focusInfo.end); } catch (e) {}
-        }
+    const write = () => {
+      root.className = cls;
+      root.innerHTML = html;
+      this.wireEvents(root);
+      const importInput = document.getElementById('import-json-input');
+      if (importInput) importInput.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) this.importJSON(e.target.files[0]); });
+      if (focusInfo) {
+        const el = document.getElementById(focusInfo.id);
+        if (el) { el.focus(); if (focusInfo.start != null && typeof el.setSelectionRange === 'function') { try { el.setSelectionRange(focusInfo.start, focusInfo.end); } catch (e) {} } }
       }
-    }
+      document.dispatchEvent(new CustomEvent('dos:rendered', { detail: { sec: s.route.sec, topic: s.route.topic || null } }));
+    };
 
-    // Let the interactivity layer (fx.js) re-arm scroll reveals and play a
-    // section transition. Fires after every render; fx.js decides what changed.
-    document.dispatchEvent(new CustomEvent('dos:rendered', { detail: { sec: s.route.sec, topic: s.route.topic || null } }));
+    // Apple-style shared-element page transition via the View Transitions API,
+    // but only when the section/topic actually changes (never for typing or a
+    // checkbox toggle). Falls back to an instant write where unsupported.
+    const secChanged = this._vtSec !== s.route.sec || this._vtTopic !== (s.route.topic || null);
+    this._vtSec = s.route.sec; this._vtTopic = s.route.topic || null;
+    let vtReduce = false; try { vtReduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (document.startViewTransition && secChanged && !this.state.readerReduceMotion && !vtReduce) {
+      try { document.startViewTransition(write); } catch (e) { write(); }
+    } else {
+      write();
+    }
   }
 
   wireEvents(root) {

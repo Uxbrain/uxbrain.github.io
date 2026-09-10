@@ -64,7 +64,8 @@
   /* ---------------- cinematic section transition ----------------------------- */
   var lastSec = null, lastTopic = null, first = true;
   function sectionTransition(sec, topic) {
-    if (reduce) { lastSec = sec; lastTopic = topic; first = false; return; }
+    // When the View Transitions API is driving page morphs, skip the CSS fallback.
+    if (reduce || document.startViewTransition) { lastSec = sec; lastTopic = topic; first = false; return; }
     var changed = !first && (sec !== lastSec || topic !== lastTopic);
     lastSec = sec; lastTopic = topic; first = false;
     if (!changed) return;
@@ -81,6 +82,22 @@
     // wait a frame so layout is settled before measuring positions
     requestAnimationFrame(function () { requestAnimationFrame(armReveal); });
   });
+
+  /* ---------------- aurora parallax (mouse + scroll + gentle drift) ---------- */
+  if (!reduce) {
+    var rootEl = document.getElementById('dos-root');
+    var atx = 0, aty = 0, amx = 0, amy = 0, asc = 0;
+    window.addEventListener('pointermove', function (e) { atx = e.clientX / window.innerWidth - 0.5; aty = e.clientY / window.innerHeight - 0.5; }, { passive: true });
+    window.addEventListener('scroll', function () { asc = window.scrollY || 0; }, { passive: true });
+    (function auroraLoop() {
+      amx += (atx - amx) * 0.045; amy += (aty - amy) * 0.045;
+      var t = performance.now() / 1000;
+      var x = amx * 32 + Math.sin(t * 0.15) * 14;
+      var y = amy * 26 + Math.cos(t * 0.12) * 10 - asc * 0.03;
+      if (rootEl) { rootEl.style.setProperty('--aurx', x.toFixed(1) + 'px'); rootEl.style.setProperty('--aury', y.toFixed(1) + 'px'); }
+      requestAnimationFrame(auroraLoop);
+    })();
+  }
 
   /* ---------------- live reading progress on the topic reader ---------------- */
   var rTick = false;

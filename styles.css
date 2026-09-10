@@ -111,8 +111,8 @@ a { color: inherit; }
 
 /* ---------- shell + aurora ground ---------- */
 #dos-root { position: relative; min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--prose-font); font-size: 16px; line-height: 1.5; display: flex; align-items: stretch; }
-/* living aurora — slowly drifts for a premium, alive backdrop */
-#dos-root::before { content: ''; position: fixed; inset: -8%; z-index: 0; pointer-events: none; background: var(--aurora); animation: dosAuroraDrift 34s ease-in-out infinite alternate; }
+/* living aurora — parallaxes with the mouse + scroll (driven by fx.js) */
+#dos-root::before { content: ''; position: fixed; inset: -10%; z-index: 0; pointer-events: none; background: var(--aurora); transform: translate3d(var(--aurx,0px), var(--aury,0px), 0) scale(1.08); }
 /* film grain overlay */
 #dos-root::after { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .03; mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -187,6 +187,16 @@ a { color: inherit; }
 /* Cinematic section transition — plays only when the section/topic changes (fx.js) */
 @keyframes dosSecEnter { 0% { opacity: 0; transform: translateY(12px) scale(.995); filter: blur(3px); } 100% { opacity: 1; transform: none; filter: blur(0); } }
 main.dos-main.dos-sec-enter > * { animation: dosSecEnter .42s cubic-bezier(.16,.9,.3,1); }
+
+/* Apple-style shared-element page transition (View Transitions API). The sidebar
+   and header are named so they morph in place while the main content crossfades. */
+@keyframes dosVtIn { from { opacity: 0; transform: translateY(14px) scale(.992); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes dosVtOut { from { opacity: 1; } to { opacity: 0; } }
+::view-transition-old(root) { animation: dosVtOut .24s ease both; }
+::view-transition-new(root) { animation: dosVtIn .46s cubic-bezier(.16,.9,.3,1) both; }
+.dos-sidebar { view-transition-name: dos-sidebar; }
+.dos-header { view-transition-name: dos-header; }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
 
 /* Scroll reveal — armed on below-the-fold cards after each render (fx.js) */
 .dos-reveal { opacity: 0; transform: translateY(32px); }
