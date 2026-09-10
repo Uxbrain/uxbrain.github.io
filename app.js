@@ -58,7 +58,7 @@ class App {
   constructor() {
     const saved = loadSaved();
     this.state = {
-      theme: saved.theme || 'light',
+      theme: saved.theme || 'dark',
       startDate: saved.startDate || null,
       route: saved.route || { sec: 'dashboard', book: null, topic: null },
       completed: saved.completed || {},
@@ -392,7 +392,10 @@ class App {
     const C = 2 * Math.PI * 15;
     const dash = (total ? (done / total) * C : 0).toFixed(1) + ' ' + C.toFixed(1);
     return `<aside class="dos-sidebar" data-screen-label="Sidebar">
-      <div class="dos-sidebar-logo"><img src="assets/logo-white.png" alt="DesignOS"></div>
+      <button class="dos-logo" type="button" aria-label="Go to Dashboard" data-act="${this.act(() => this.goSection('dashboard'))}">
+        <span class="dos-logo-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7" cy="9" r="4.4" stroke="currentColor" stroke-width="1.5"></circle><circle cx="12" cy="9" r="2.3" fill="currentColor"></circle></svg></span>
+        <span class="dos-logo-word">DesignOS</span>
+      </button>
       <nav aria-label="Sections">${items}</nav>
       <div class="dos-sidebar-foot">
         <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform:rotate(-90deg)">
@@ -636,7 +639,6 @@ class App {
       <div style="flex:1;min-width:0;display:flex;flex-direction:column">
         ${this.renderHeader()}
         ${this.renderReaderPanel()}
-        ${this.renderAssistant()}
         <main class="dos-main">${mainHtml}</main>
       </div>
       ${this.renderSearchModal()}
