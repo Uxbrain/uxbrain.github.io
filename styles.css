@@ -158,7 +158,10 @@ a { color: inherit; }
 [data-tip] { position: relative; }
 [data-tip]:hover::after { content: attr(data-tip); position: absolute; left: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 7px; white-space: nowrap; pointer-events: none; z-index: 60; box-shadow: var(--shadow1); }
 
-[data-dos-row] { transition: background .2s ease-out, color .2s; border-radius: 10px; }
+/* Rows set their resting background via --row-bg (a custom property), never the
+   background shorthand directly — an inline `background:` declaration has higher
+   specificity than any stylesheet rule and would permanently block :hover below. */
+[data-dos-row] { transition: background .2s ease-out, color .2s; border-radius: 10px; background: var(--row-bg, transparent); }
 [data-dos-row]:hover { background: var(--hover-soft); }
 [data-dos-cardlink] { transition: border-color .22s cubic-bezier(.2,.9,.4,1), box-shadow .22s ease-out, transform .22s cubic-bezier(.2,.9,.3,1); }
 [data-dos-cardlink]:hover { border-color: var(--accent-line); box-shadow: var(--shadow-lift); transform: translateY(-3px); }
@@ -253,7 +256,9 @@ button:not(:disabled):active, [role="button"]:active, [data-act]:active { transf
 .dos-btn-outline:hover { border-color: var(--accent-line); transform: translateY(-1px); box-shadow: var(--shadow1); }
 .dos-chip { height: 34px; padding: 0 15px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--ink); font-size: 13px; font-weight: 500; cursor: pointer; transition: transform .18s cubic-bezier(.2,.9,.3,1), background .2s, border-color .2s, color .2s; }
 .dos-chip:hover { background: var(--hover-soft); border-color: var(--hover-line); color: var(--hover-ink); transform: translateY(-1px); }
-.dos-pill-btn { height: 36px; padding: 0 15px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; transition: transform .18s cubic-bezier(.2,.9,.3,1), background .2s, border-color .2s; }
+/* Resting look set via custom properties, not the background/border-color
+   shorthands — an inline declaration of either would outrank :hover below. */
+.dos-pill-btn { height: 36px; padding: 0 15px; border-radius: 99px; border: 1px solid var(--pill-brd, var(--border)); background: var(--pill-bg, var(--card-bg)); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; transition: transform .18s cubic-bezier(.2,.9,.3,1), background .2s, border-color .2s; }
 .dos-pill-btn:hover { background: var(--hover-soft); border-color: var(--hover-line); color: var(--hover-ink); transform: translateY(-1px); }
 .dos-progress { position: relative; height: 8px; border-radius: 99px; background: var(--surface-alt); overflow: hidden; }
 .dos-progress > div { position: relative; height: 100%; border-radius: 99px; background: var(--prog-grad); transition: width .5s cubic-bezier(.2,.7,.3,1); overflow: hidden; }

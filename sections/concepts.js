@@ -14,13 +14,13 @@ function renderUnifiedResults(app, q) {
     cat.concepts.forEach((name) => { if (name.toLowerCase().includes(ql)) conceptHits.push({ name, cat: cat.title }); });
   });
 
-  const topicsHtml = topicHits.map((id) => `<button data-dos-row data-act="${app.act(() => app.openTopic(id))}" style="display:flex;flex-direction:column;gap:2px;width:100%;padding:12px 14px;border:none;border-radius:10px;background:transparent;cursor:pointer;text-align:left;color:var(--ink)">
+  const topicsHtml = topicHits.map((id) => `<button data-dos-row data-act="${app.act(() => app.openTopic(id))}" style="display:flex;flex-direction:column;gap:2px;width:100%;padding:12px 14px;border:none;border-radius:10px;cursor:pointer;text-align:left;color:var(--ink)">
     <span style="font-size:15px;font-weight:600">${esc(TOPICS[id].title)}</span>
     <span style="font-size:13px;color:var(--ink2)">${esc(TOPICS[id].def)}</span>
   </button>`).join('');
   const glossHtml = glossHits.map((g) => {
     const hasLink = !!(g.linkTopic && TOPICS[g.linkTopic]);
-    return `<button data-dos-row data-act="${app.act(() => { if (hasLink) app.openTopic(g.linkTopic); })}" style="display:flex;flex-direction:column;gap:2px;width:100%;padding:12px 14px;border:none;border-radius:10px;background:transparent;cursor:${hasLink ? 'pointer' : 'default'};text-align:left;color:var(--ink)">
+    return `<button data-dos-row data-act="${app.act(() => { if (hasLink) app.openTopic(g.linkTopic); })}" style="display:flex;flex-direction:column;gap:2px;width:100%;padding:12px 14px;border:none;border-radius:10px;cursor:${hasLink ? 'pointer' : 'default'};text-align:left;color:var(--ink)">
       <span style="font-size:15px;font-weight:600">${esc(g.term)}${hasLink ? ' →' : ''}</span>
       <span style="font-size:13px;color:var(--ink2)">${esc(g.def)}</span>
     </button>`;

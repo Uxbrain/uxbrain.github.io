@@ -101,7 +101,7 @@ export function renderDashboard(app) {
   recs.push({ icon: '📝', title: 'Take a topic quiz', sub: 'Test your recall in the Library', go: () => app.goSection('library') });
   recs.push({ icon: '🥊', title: 'Drill an interview question', sub: 'Two-minute timed practice', go: () => { app.state.gymTab = 'drill'; app.goSection('gym'); } });
   if (Object.keys(s.missedTopics || {}).length) recs.push({ icon: '🎯', title: 'Reinforce missed concepts', sub: Object.keys(s.missedTopics).length + ' to revisit', go: () => app.goSection('cards') });
-  const recsHtml = recs.map((rc) => `<button data-dos-row data-act="${app.act(rc.go)}" style="display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--ink);cursor:pointer">
+  const recsHtml = recs.map((rc) => `<button data-dos-row data-act="${app.act(rc.go)}" style="display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:12px;--row-bg:var(--surface);color:var(--ink);cursor:pointer">
     <span style="width:34px;height:34px;flex:none;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:16px">${rc.icon}</span>
     <span style="flex:1"><span style="display:block;font-size:14px;font-weight:600">${esc(rc.title)}</span><span style="font-size:12px;color:var(--ink2)">${esc(rc.sub)}</span></span>
     <span style="color:var(--accent);font-size:16px">→</span>

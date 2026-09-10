@@ -28,7 +28,7 @@ function renderBank(app) {
       </div>
       ${revealed ? `<p style="font-size:14px;color:var(--ink2);line-height:1.6;margin-top:10px">${esc(q.a)}</p>` : ''}
       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px">
-        <button class="dos-pill-btn" style="background:var(--accent-soft);border-color:var(--accent-line)" data-act="${app.act(() => app.setState({ igRevealed: Object.assign({}, s.igRevealed, { [q.n]: !revealed }) }))}">${revealed ? 'Hide answer' : 'Reveal'}</button>
+        <button class="dos-pill-btn" style="--pill-bg:var(--accent-soft);--pill-brd:var(--accent-line)" data-act="${app.act(() => app.setState({ igRevealed: Object.assign({}, s.igRevealed, { [q.n]: !revealed }) }))}">${revealed ? 'Hide answer' : 'Reveal'}</button>
         <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2)"><input type="checkbox" ${practiced ? 'checked' : ''} data-act="${app.act(() => app.persist({ igPracticed: Object.assign({}, s.igPracticed, { [q.n]: !practiced }) }))}">Practiced</label>
       </div>
     </div>`;

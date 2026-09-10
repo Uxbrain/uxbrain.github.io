@@ -38,7 +38,7 @@ function renderQuizPerf(app) {
     <div><div style="font-family:var(--display);font-size:28px;font-weight:700;color:var(--warn)">${review}</div><div style="font-size:12px;color:var(--ink2)">To reinforce</div></div>
   </div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
-    ${rows.map((r) => `<button data-dos-row style="display:flex;align-items:center;gap:12px;text-align:left;padding:8px 10px;border-radius:10px;background:transparent;border:none;cursor:pointer;color:var(--ink)" data-act="${app.act(() => app.openTopic(r.id))}">
+    ${rows.map((r) => `<button data-dos-row style="display:flex;align-items:center;gap:12px;text-align:left;padding:8px 10px;border-radius:10px;border:none;cursor:pointer;color:var(--ink)" data-act="${app.act(() => app.openTopic(r.id))}">
       <span style="flex:1;font-size:14px">${esc(r.title)}</span>
       <div style="width:90px;height:6px;border-radius:99px;background:var(--border);overflow:hidden"><div style="height:100%;width:${r.pct}%;background:${r.color}"></div></div>
       <span style="font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums;width:38px;text-align:right">${r.label}</span>
