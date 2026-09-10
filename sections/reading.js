@@ -6,8 +6,8 @@ export function renderReadingList(app) {
   if (!s.readingRead) s.readingRead = {};
   const rows = READING_LIST.map((rb) => {
     const read = !!s.readingRead[rb.id];
-    return `<div style="display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
-      <button aria-label="Mark as read" data-act="${app.act(() => app.persist({ readingRead: Object.assign({}, s.readingRead, { [rb.id]: !read }) }))}" style="flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid ${read ? 'var(--success)' : 'var(--border)'};background:${read ? 'var(--success)' : 'transparent'};color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;margin-top:2px">${read ? '✓' : ''}</button>
+    return `<div class="dos-card" style="display:flex;gap:16px;align-items:flex-start;padding:18px 20px">
+      <button aria-label="Mark as read" data-act="${app.act(() => app.persist({ readingRead: Object.assign({}, s.readingRead, { [rb.id]: !read }) }))}" style="flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid ${read ? 'var(--success)' : 'var(--accent-line)'};background:${read ? 'var(--success)' : 'transparent'};color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;margin-top:2px;transition:transform .2s cubic-bezier(.2,.9,.3,1)">${read ? '✓' : ''}</button>
       <div style="flex:1">
         <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
           <span class="dos-eyebrow">#${rb.priority}</span>

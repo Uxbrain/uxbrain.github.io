@@ -9,26 +9,32 @@
 
   /* ---------------- cursor 3D tilt + spotlight + magnetic buttons ------------- */
   if (fine && !reduce) {
-    var TILT = '.dos-card, .dos-card-16, .stat-tile, [data-dos-cardlink], .dos-flip-card';
+    // LEAF = a single actionable tile (the whole thing is one click target) → 3D tilt.
+    // CONTAINER = a content card that holds its own controls → calm glow, never tilt
+    // (tilting a container makes its buttons feel like they shift under the cursor).
+    var LEAF = '[data-dos-cardlink], .stat-tile.clickable, .dos-flip-card, .dos-lesson-row';
+    var CONTAINER = '.dos-card, .dos-card-16, .stat-tile';
     var MAG = '.dos-btn-primary';
-    var last = null, ticking = false, tiltEl = null, magEl = null;
+    var last = null, ticking = false, tiltEl = null, glowEl = null, magEl = null;
+    var setVars = function (el, e) { var r = el.getBoundingClientRect(); el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%'); return r; };
     var clearTilt = function () { if (tiltEl) { tiltEl.classList.remove('fx-tilt'); tiltEl.style.removeProperty('--rx'); tiltEl.style.removeProperty('--ry'); tiltEl = null; } };
+    var clearGlow = function () { if (glowEl) { glowEl.classList.remove('fx-glow'); glowEl = null; } };
     var clearMag = function () { if (magEl) { magEl.style.transform = ''; magEl = null; } };
     var proc = function () {
-      ticking = false; var e = last; if (!e) return;
-      var t = e.target, card = t.closest ? t.closest(TILT) : null, btn = t.closest ? t.closest(MAG) : null;
-      if (card !== tiltEl) { clearTilt(); tiltEl = card; if (card) card.classList.add('fx-tilt'); }
-      if (card) {
-        var r = card.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-        card.style.setProperty('--rx', ((0.5 - py) * 5).toFixed(2) + 'deg'); card.style.setProperty('--ry', ((px - 0.5) * 5).toFixed(2) + 'deg');
-      }
+      ticking = false; var e = last; if (!e || !e.target.closest) return;
+      var leaf = e.target.closest(LEAF);
+      var glow = leaf ? null : e.target.closest(CONTAINER);   // tilt the tile, else glow the container
+      var btn = e.target.closest(MAG);
+      if (leaf !== tiltEl) { clearTilt(); tiltEl = leaf; if (leaf) leaf.classList.add('fx-tilt'); }
+      if (leaf) { var r = setVars(leaf, e); leaf.style.setProperty('--rx', ((0.5 - (e.clientY - r.top) / r.height) * 5).toFixed(2) + 'deg'); leaf.style.setProperty('--ry', (((e.clientX - r.left) / r.width - 0.5) * 5).toFixed(2) + 'deg'); }
+      if (glow !== glowEl) { clearGlow(); glowEl = glow; if (glow) glow.classList.add('fx-glow'); }
+      if (glow) setVars(glow, e);
       if (btn !== magEl) { clearMag(); magEl = btn; }
-      if (btn) { var b = btn.getBoundingClientRect(); btn.style.transform = 'translate(' + ((e.clientX - (b.left + b.width / 2)) / b.width * 7).toFixed(1) + 'px,' + ((e.clientY - (b.top + b.height / 2)) / b.height * 7 - 2).toFixed(1) + 'px)'; }
+      if (btn) { var b = btn.getBoundingClientRect(); btn.style.transform = 'translate(' + ((e.clientX - (b.left + b.width / 2)) / b.width * 6).toFixed(1) + 'px,' + ((e.clientY - (b.top + b.height / 2)) / b.height * 6 - 2).toFixed(1) + 'px)'; }
     };
     document.addEventListener('pointermove', function (e) { last = e; if (!ticking) { ticking = true; requestAnimationFrame(proc); } }, { passive: true });
-    document.addEventListener('pointerleave', function () { clearTilt(); clearMag(); }, { passive: true });
-    window.addEventListener('blur', function () { clearTilt(); clearMag(); });
+    document.addEventListener('pointerleave', function () { clearTilt(); clearGlow(); clearMag(); }, { passive: true });
+    window.addEventListener('blur', function () { clearTilt(); clearGlow(); clearMag(); });
   }
 
   /* ---------------- scroll-reveal (re-armed each render) ---------------------- */

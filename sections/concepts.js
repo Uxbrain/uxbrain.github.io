@@ -45,7 +45,7 @@ function renderDayWiseBrowse(app) {
       const complete = dayDone(app, d);
       return `<button style="height:30px;padding:0 10px;border-radius:99px;border:1px solid ${complete ? 'var(--success)' : 'var(--border)'};background:${complete ? 'var(--mint)' : 'var(--surface-alt)'};color:${complete ? 'var(--success)' : 'var(--ink2)'};font-size:12.5px;cursor:pointer" data-act="${app.act(() => app.nav({ sec: 'library', book: g.n, topic: null }))}">Day ${d.n}${complete ? ' ✓' : ''}</button>`;
     }).join('');
-    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px">
+    return `<div class="dos-card" style="padding:16px 18px">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <span class="dos-eyebrow" style="color:var(--accent)">Chapter ${g.n}</span>
         <span style="font-size:12px;color:var(--ink2)">Days ${firstDay.n}–${lastDay.n} · ${doneDays}/${g.days.length} complete</span>
@@ -76,7 +76,7 @@ function renderConceptIndex(app) {
       const color = tid ? 'var(--accent)' : 'var(--ink2)';
       return `<button style="height:32px;padding:0 12px;border-radius:99px;border:1px solid ${border};background:${bg};color:${color};font-size:13px;cursor:${tid ? 'pointer' : 'default'}" data-act="${app.act(() => { if (tid) app.openTopic(tid); })}">${esc(name)}${tid ? ' →' : ''}</button>`;
     }).join('')}</div>` : '';
-    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+    return `<div class="dos-card" style="padding:0;overflow:hidden">
       <button style="width:100%;display:flex;align-items:center;gap:12px;padding:16px 20px;background:transparent;border:none;cursor:pointer;text-align:left" data-act="${app.act(() => app.setState({ conceptOpen: Object.assign({}, s.conceptOpen, { [cat.id]: !isOpen }) }))}">
         <span style="width:30px;height:30px;flex:none;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:13px">${ci + 1}</span>
         <span style="flex:1;font-size:15px;font-weight:600">${esc(cat.title)}</span>
