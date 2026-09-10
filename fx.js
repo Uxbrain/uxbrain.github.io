@@ -12,7 +12,7 @@
     // LEAF = a single actionable tile (the whole thing is one click target) → 3D tilt.
     // CONTAINER = a content card that holds its own controls → calm glow, never tilt
     // (tilting a container makes its buttons feel like they shift under the cursor).
-    var LEAF = '[data-dos-cardlink], .stat-tile.clickable, .dos-flip-card, .dos-lesson-row';
+    var LEAF = '[data-dos-cardlink], .stat-tile.clickable, .dos-flip-card, .dos-lesson-row, .dos-continue';
     var CONTAINER = '.dos-card, .dos-card-16, .stat-tile';
     var MAG = '.dos-btn-primary';
     var last = null, ticking = false, tiltEl = null, glowEl = null, magEl = null;

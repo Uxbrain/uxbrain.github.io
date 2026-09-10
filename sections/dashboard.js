@@ -1,6 +1,6 @@
 import { esc, localDateStr } from '../app.js';
 import { quizStats } from './progress.js';
-import { dayDone } from './library.js';
+import { dayDone, isReadTask, taskDone } from './library.js';
 
 const DYK = [
   'Users find about 85% of usability problems with just 5 test participants — research doesn’t need a big budget.',
@@ -62,13 +62,25 @@ export function renderDashboard(app) {
   const questionsPracticedCount = Object.values(s.igPracticed).filter(Boolean).length;
 
   const { planPct, focus } = renderFocus(app);
+  const focusChapter = focus ? Math.floor((focus.n - 1) / 7) + 1 : 1;
+  // Focus items OPEN their lesson/section — they never toggle a checkbox on the
+  // dashboard (marking done is a deliberate action inside the lesson).
   const focusTasksHtml = focus ? focus.tasks.map((tk) => {
-    const key = 'd' + focus.n + '-' + tk.id;
-    const checked = !!s.dayChecks[key];
-    return `<label style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:14px;line-height:1.5;cursor:pointer">
-      <input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ dayChecks: Object.assign({}, s.dayChecks, { [key]: !checked }) }))}" style="width:18px;height:18px;flex:none;margin-top:2px">
-      <span style="color:var(--ink)">${esc(tk.label)}</span>
-    </label>`;
+    const done = taskDone(app, focus.n, tk);
+    let label = tk.label, hint = 'Open', act;
+    if (isReadTask(tk)) {
+      label = tk.label.replace(/^Learn: /, '');
+      const tid = app.findTopicByName(label);
+      hint = done ? 'Read again' : 'Read';
+      act = tid ? () => app.nav({ sec: 'library', book: focusChapter, topic: tid }, { lastTopicId: tid }) : () => app.goSection('library');
+    } else if (/flashcard/i.test(tk.label)) { hint = 'Practice'; act = () => app.goSection('cards'); }
+    else if (/quiz/i.test(tk.label)) { hint = 'Quiz'; act = () => app.nav({ sec: 'library', book: focusChapter, topic: null }); }
+    else { hint = 'Open'; act = () => app.nav({ sec: 'library', book: focusChapter, topic: null }); }
+    return `<button class="dos-lesson-row${done ? ' is-done' : ''}" data-act="${app.act(act)}">
+      <span class="dos-lesson-check" aria-hidden="true">${done ? '✓' : ''}</span>
+      <span class="dos-lesson-name">${esc(label)}</span>
+      <span class="dos-lesson-go">${hint} →</span>
+    </button>`;
   }).join('') : '';
 
   const dayIdx = Math.floor(Date.now() / 86400000);
@@ -156,11 +168,21 @@ export function renderDashboard(app) {
       </button>
     </div>
 
+    <button class="dos-continue" data-act="${app.act(() => last ? app.openTopic(s.lastTopicId) : app.openTopic('t01'))}">
+      <span class="dos-continue-ic"><svg width="18" height="22" viewBox="0 0 14 18" fill="rgba(255,255,255,.12)" stroke="#fff" stroke-width="1.4" style="flex:none"><path d="M1.5 1.5h11v15l-5.5-3.5-5.5 3.5z"></path></svg></span>
+      <span style="flex:1;min-width:180px;text-align:left">
+        <span class="dos-eyebrow" style="color:rgba(255,255,255,.7)">Continue where you left off</span>
+        ${last ? `<span style="display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.3;margin-top:4px;color:#fff">${esc(last.title)}</span><span style="display:block;font-size:13px;color:rgba(255,255,255,.6)">${esc(last.bookLabel)}</span>`
+          : `<span style="display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.3;margin-top:4px;color:#fff">Start with the Fundamentals Primer</span><span style="display:block;font-size:13px;color:rgba(255,255,255,.6)">The Discipline Map — the definitions to use in interviews.</span>`}
+      </span>
+      <span class="dos-continue-cta">${last ? 'Resume' : 'Begin'} <span style="transition:transform .3s cubic-bezier(.2,.9,.3,1);display:inline-block">→</span></span>
+    </button>
+
     <div class="dos-grid-2">
       <div class="dos-card" style="display:flex;flex-direction:column;gap:12px">
         <div class="dos-eyebrow" style="color:var(--accent)">Today’s focus · Day ${focus ? focus.n : 1} · ${esc(focus ? focus.phase : '')}</div>
         <h2 style="font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.25">${esc(focus ? focus.theme : 'All caught up — nice work!')}</h2>
-        <div style="display:flex;flex-direction:column;gap:2px">${focusTasksHtml}</div>
+        <div class="dos-lesson-list" style="margin-top:2px">${focusTasksHtml}</div>
         <button class="dos-btn-soft" style="align-self:flex-start" data-act="${app.act(() => app.goSection('library'))}">Open Chapters →</button>
       </div>
       <div class="dos-card" style="display:flex;flex-direction:column;gap:8px">
@@ -171,16 +193,6 @@ export function renderDashboard(app) {
         <p style="font-size:14px;color:var(--ink2)">${esc(law.ex)}</p>
         <div style="margin-top:auto;padding-top:8px"><button style="height:36px;padding:0 2px;border:none;background:transparent;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.openTopic('t10'))}">All UX laws →</button></div>
       </div>
-    </div>
-
-    <div class="dos-card" style="display:flex;flex-wrap:wrap;align-items:center;gap:16px">
-      <svg width="16" height="20" viewBox="0 0 14 18" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.4" style="flex:none"><path d="M1.5 1.5h11v15l-5.5-3.5-5.5 3.5z"></path></svg>
-      <div style="flex:1;min-width:200px">
-        <div class="dos-eyebrow">Continue where you left off</div>
-        ${last ? `<div style="font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.3;margin-top:4px">${esc(last.title)}</div><div style="font-size:13px;color:var(--ink2)">${esc(last.bookLabel)}</div>`
-          : `<div style="font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.3;margin-top:4px">Start with the Fundamentals Primer</div><div style="font-size:13px;color:var(--ink2)">The Discipline Map — the definitions to use in interviews.</div>`}
-      </div>
-      <button class="dos-btn-primary" data-act="${app.act(() => last ? app.openTopic(s.lastTopicId) : app.openTopic('t01'))}">${last ? 'Resume →' : 'Begin →'}</button>
     </div>
 
     <div class="dos-grid-3-auto">
