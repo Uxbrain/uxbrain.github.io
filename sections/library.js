@@ -106,6 +106,12 @@ function renderTopicPage(app, cur) {
   const rootStyle = `--r-font:${s.readerFontScale}; --r-lh:${s.readerLh}; --r-measure:${s.readerMeasure}px; --r-ls:${s.readerLs}; --r-ws:${s.readerWs}; --r-ps:${s.readerPs}; --r-align:${s.readerAlign}; --r-weight:${weightMap[s.readerWeight] || 400};`;
 
   return `<article class="dos-reader" data-screen-label="Topic page" style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:24px;${rootStyle}">
+    <div class="dos-reader-rail" aria-label="Reading actions">
+      <button class="dos-rail-btn${isDone ? ' is-on' : ''}" data-tip="${isDone ? 'Completed' : 'Mark complete'}" data-act="${app.act(() => { const c = Object.assign({}, s.completed); c[cur.id] = !c[cur.id]; app.persist({ completed: c }); })}"><svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,9.5 7.5,13 14,5"></polyline></svg></button>
+      <button class="dos-rail-btn${isStar ? ' is-on' : ''}" data-tip="${isStar ? 'Saved' : 'Save to flashcards'}" data-act="${app.act(() => { const st = Object.assign({}, s.starred); st[cur.id] = !st[cur.id]; app.persist({ starred: st }); })}"><svg width="17" height="17" viewBox="0 0 18 18" fill="${isStar ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"><polygon points="9,1.8 11.3,6.5 16.5,7.2 12.7,10.9 13.6,16 9,13.6 4.4,16 5.3,10.9 1.5,7.2 6.7,6.5"></polygon></svg></button>
+      <button class="dos-rail-btn" data-tip="${s.ttsSpeaking ? 'Stop' : 'Read aloud'}" data-act="${app.act(() => app.toggleTts())}"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7v4h3l4 3.5V3.5L6 7z"></path><path d="M12.5 6.5a4 4 0 0 1 0 5"></path></svg></button>
+      <button class="dos-rail-btn" data-tip="Back to top" data-act="${app.act(() => window.scrollTo({ top: 0, behavior: 'smooth' }))}"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4,10 9,5 14,10"></polyline></svg></button>
+    </div>
     <div class="dos-topic-progress"><div style="width:${s.readingProgress || 0}%"></div></div>
     <nav aria-label="Breadcrumb" class="dos-breadcrumb">
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">${route.book ? 'Chapter ' + route.book : 'Chapters'}</button>

@@ -373,6 +373,15 @@ body.ux-intro-lock { overflow: hidden; }
 
 /* ---------- cinematic topic reader ---------- */
 .dos-reader .dos-topic-progress { position: sticky; top: 66px; z-index: 12; height: 4px; margin: 0 0 4px; box-shadow: 0 6px 20px -10px rgba(0,0,0,.5); }
+/* floating actions rail */
+.dos-reader-rail { position: fixed; right: 26px; top: 50%; transform: translateY(-50%); z-index: 30; display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 99px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--glass-brd); box-shadow: var(--shadow-lift); animation: dosPop .45s cubic-bezier(.16,.9,.3,1); }
+.dos-rail-btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--ink2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s, color .2s, transform .2s cubic-bezier(.2,.9,.3,1); }
+.dos-rail-btn:hover { background: var(--hover-soft); color: var(--hover-ink); transform: scale(1.12); }
+.dos-rail-btn.is-on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+@media (max-width: 1120px) { .dos-reader-rail { display: none; } }
+/* reader content scroll-reveal (armed by fx.js) */
+.dos-reader > .dos-reveal { opacity: 0; transform: translateY(26px); }
+.dos-reader > .dos-reveal.dos-in { opacity: 1; transform: none; transition: opacity .7s cubic-bezier(.16,.9,.3,1), transform .8s cubic-bezier(.16,.9,.3,1); }
 .dos-reader-head { position: relative; isolation: isolate; }
 .dos-reader-head::before { content: ''; position: absolute; z-index: -1; left: -12%; top: -60%; width: 60%; height: 240%; pointer-events: none;
   background: radial-gradient(closest-side, var(--accent-soft), transparent 70%); opacity: .9; animation: dosReaderGlow 9s ease-in-out infinite alternate; }

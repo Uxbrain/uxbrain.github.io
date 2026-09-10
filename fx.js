@@ -59,6 +59,17 @@
       el.classList.add('dos-reveal');
       io.observe(el);
     });
+    // reader: reveal content blocks below the fold (skip rail/progress/breadcrumb/header)
+    var reader = main.querySelector('.dos-reader');
+    if (reader) {
+      var kids = reader.children;
+      for (var i = 4; i < kids.length; i++) {
+        var k = kids[i];
+        if (k.getBoundingClientRect().top < vh * 0.92) continue;
+        k.classList.add('dos-reveal');
+        io.observe(k);
+      }
+    }
   }
 
   /* ---------------- cinematic section transition ----------------------------- */
