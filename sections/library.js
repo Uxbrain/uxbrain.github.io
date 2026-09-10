@@ -1,4 +1,4 @@
-import { esc } from '../app.js';
+import { esc, backBtn } from '../app.js';
 import { DIAGRAMS } from '../diagrams.js';
 
 function renderBlock(app, cur, b) {
@@ -113,10 +113,7 @@ function renderTopicPage(app, cur) {
       <button class="dos-rail-btn" data-tip="Back to top" data-act="${app.act(() => window.scrollTo({ top: 0, behavior: 'smooth' }))}"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4,10 9,5 14,10"></polyline></svg></button>
     </div>
     <div class="dos-topic-progress"><div style="width:${s.readingProgress || 0}%"></div></div>
-    <button class="dos-back-btn" data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">
-      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><polyline points="10.5,4 5.5,9 10.5,14"></polyline></svg>
-      Back to ${route.book ? 'Chapter ' + route.book : 'Chapters'}
-    </button>
+    ${backBtn(app, `Back to ${route.book ? 'Chapter ' + route.book : 'Chapters'}`, () => app.nav({ sec: 'library', book: route.book || null, topic: null }))}
     <nav aria-label="Breadcrumb" class="dos-breadcrumb">
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">${route.book ? 'Chapter ' + route.book : 'Chapters'}</button>
       <span>/</span><span>${esc(cur.title)}</span>
@@ -288,6 +285,7 @@ function renderChapterView(app, chapterNum) {
   }).join('');
 
   return `<div class="dos-page-narrow">
+    ${backBtn(app, 'Back to Chapters', () => app.nav({ sec: 'library', book: null, topic: null }))}
     <nav class="dos-breadcrumb">
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: null, topic: null }))}">Chapters</button>
       <span>/</span><span>Chapter ${chapterNum}</span>

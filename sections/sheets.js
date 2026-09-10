@@ -1,4 +1,4 @@
-import { esc } from '../app.js';
+import { esc, backBtn } from '../app.js';
 
 export function renderSheets(app) {
   const s = app.state;
@@ -51,8 +51,8 @@ export function renderSheets(app) {
   return `<div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:20px" id="sheet-print-area">
     <div data-no-print="true" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
       <div>
-        <button style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;cursor:pointer;padding:4px 0" data-act="${app.act(() => app.setState({ sheetId: null }))}">← Cheat Sheets</button>
-        <h1 class="dos-h1" style="margin-top:4px">${esc(cur.title)}</h1>
+        ${backBtn(app, 'Back to Cheat Sheets', () => app.setState({ sheetId: null }))}
+        <h1 class="dos-h1" style="margin-top:8px">${esc(cur.title)}</h1>
         <p style="color:var(--ink2);font-size:14px;margin-top:4px">${esc(cur.sub)}</p>
       </div>
       ${cur.printable ? `<button class="dos-btn-primary" data-act="${app.act(() => window.print())}">Print</button>` : ''}

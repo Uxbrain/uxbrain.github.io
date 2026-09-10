@@ -33,6 +33,15 @@ export function localDateStr(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// Shared "back" pill button — every drill-down view (a chapter, a topic, a deck,
+// a sheet) gets the same styled way out, instead of a bare text link.
+export function backBtn(app, label, onClick) {
+  return `<button class="dos-back-btn" data-act="${app.act(onClick)}">
+    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><polyline points="10.5,4 5.5,9 10.5,14"></polyline></svg>
+    ${esc(label)}
+  </button>`;
+}
+
 // Order matches the user's fixed sidebar spec: Search, Dashboard, Chapters, Flashcards,
 // Interview Gym, Cheat Sheets, Progress, Reading List.
 const NAV_ITEMS = [

@@ -1,4 +1,4 @@
-import { esc } from '../app.js';
+import { esc, backBtn } from '../app.js';
 
 export function renderFlashcards(app) {
   const s = app.state;
@@ -65,7 +65,7 @@ export function renderFlashcards(app) {
 
   return `<div style="max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px;align-items:center">
     <div style="width:100%;display:flex;justify-content:space-between;align-items:center">
-      <button style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;cursor:pointer" data-act="${app.act(() => app.setState({ deckId: null }))}">← Decks</button>
+      ${backBtn(app, 'Back to Flashcards', () => app.setState({ deckId: null }))}
       <span style="font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums">${dueCards.length ? idx + 1 : 0} / ${dueCards.length}</span>
     </div>
     ${body}

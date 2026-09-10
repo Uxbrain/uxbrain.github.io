@@ -142,18 +142,30 @@ export function renderDashboard(app) {
   const qz = quizStats(app);
   const name = (s.profileName || '').trim();
 
+  const ringR = 27, ringC = 2 * Math.PI * ringR;
+  const ringOffset = (ringC * (1 - planPct / 100)).toFixed(1);
+
   return `<div class="dos-page">
     <div class="dos-hero">
       <div class="dos-hero-bg" aria-hidden="true"></div>
-      <div class="dos-hero-inner">
-        <div class="dos-eyebrow" style="color:rgba(255,255,255,.68)">Learn &middot; Practice &middot; Grow</div>
-        <h1 class="dos-hero-title">Overview${name ? `<span style="opacity:.5">, ${esc(name)}</span>` : ''}</h1>
-        <p class="dos-hero-sub">You’re <b style="color:#fff;font-weight:600">${planPct}%</b> through your plan${focus ? ' · ' + esc(focus.phase) : ''}.</p>
-        <div class="dos-hero-meta">
-          <label class="dos-hero-date">Start date
-            <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}">
-          </label>
-          <span class="dos-hero-pill">${planPct}% complete</span>
+      <div class="dos-hero-inner dos-hero-inner-sm">
+        <div class="dos-hero-row">
+          <span class="dos-hero-ring" aria-hidden="true">
+            <svg width="64" height="64" viewBox="0 0 64 64" style="transform:rotate(-90deg)">
+              <circle cx="32" cy="32" r="${ringR}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="5"></circle>
+              <circle class="dos-hero-ring-fill" cx="32" cy="32" r="${ringR}" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-dasharray="${ringC.toFixed(1)}" style="--ring-full:${ringC.toFixed(1)}px; --ring-to:${ringOffset}px; stroke-dashoffset:${ringOffset}px"></circle>
+            </svg>
+            <span class="dos-hero-ring-pct">${planPct}%</span>
+          </span>
+          <div style="flex:1;min-width:180px">
+            <p class="dos-hero-sub dos-hero-sub-lg">You’re <b style="color:#fff;font-weight:700">${planPct}%</b> through your plan${focus ? ' · ' + esc(focus.phase) : ''}${name ? ` · ${esc(name)}` : ''}.</p>
+            <div class="dos-hero-meta">
+              <label class="dos-hero-date">Start date
+                <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}">
+              </label>
+              <span class="dos-hero-pill">${planPct}% complete</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
