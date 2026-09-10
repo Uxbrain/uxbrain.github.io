@@ -140,31 +140,38 @@ export function renderDashboard(app) {
   }).join('');
   const badgesEarned = badgeDefs(app).filter((b) => b.val >= b.goal).length;
   const qz = quizStats(app);
+  const hr = new Date().getHours();
+  const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : hr < 21 ? 'Good evening' : 'Good night';
+  const name = (s.profileName || '').trim();
 
   return `<div class="dos-page">
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px;justify-content:space-between">
-      <div>
-        <h1 class="dos-h1-lg">Overview</h1>
-        <p style="color:var(--ink2);font-size:15px;margin-top:6px">You’re ${planPct}% through your plan · ${esc(focus ? focus.phase : '')}</p>
+    <div class="dos-hero">
+      <div class="dos-hero-bg" aria-hidden="true"></div>
+      <div class="dos-hero-inner">
+        <div class="dos-eyebrow" style="color:rgba(255,255,255,.68)">Learn &middot; Practice &middot; Grow</div>
+        <h1 class="dos-hero-title">${greeting}${name ? `<span style="opacity:.5">, ${esc(name)}</span>` : ''}</h1>
+        <p class="dos-hero-sub">You’re <b style="color:#fff;font-weight:600">${planPct}%</b> through your plan${focus ? ' · ' + esc(focus.phase) : ''}.</p>
+        <div class="dos-hero-meta">
+          <label class="dos-hero-date">Start date
+            <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}">
+          </label>
+          <span class="dos-hero-pill">${planPct}% complete</span>
+        </div>
       </div>
-      <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2)">
-        Start date
-        <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}" style="height:40px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:14px">
-      </label>
     </div>
 
     <div class="dos-grid-stats">
       <div class="stat-tile">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M4 3.5h10v11l-5-2.5-5 2.5z"></path></svg></span>
-        <div><div class="num">${done}<span style="color:var(--ink2);font-size:15px;font-weight:500"> / ${total}</span></div><div class="lbl">Topics completed</div></div>
+        <div><div class="num"><span data-count="${done}">${done}</span><span style="color:var(--ink2);font-size:15px;font-weight:500"> / ${total}</span></div><div class="lbl">Topics completed</div></div>
       </div>
       <button class="stat-tile clickable" data-act="${app.act(() => app.goSection('cards'))}">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><rect x="4.5" y="2.5" width="11" height="9" rx="1.5"></rect><rect x="2.5" y="6.5" width="11" height="9" rx="1.5"></rect></svg></span>
-        <div><div class="num">${dueCards}</div><div class="lbl">Flashcards due today</div></div>
+        <div><div class="num"><span data-count="${dueCards}">${dueCards}</span></div><div class="lbl">Flashcards due today</div></div>
       </button>
       <button class="stat-tile clickable" data-act="${app.act(() => app.goSection('gym'))}">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="9" cy="9" r="6.5"></circle><circle cx="9" cy="9" r="2.5"></circle></svg></span>
-        <div><div class="num">${questionsPracticedCount}<span style="color:var(--ink2);font-size:15px;font-weight:500"> / 148</span></div><div class="lbl">Questions practiced</div></div>
+        <div><div class="num"><span data-count="${questionsPracticedCount}">${questionsPracticedCount}</span><span style="color:var(--ink2);font-size:15px;font-weight:500"> / 148</span></div><div class="lbl">Questions practiced</div></div>
       </button>
     </div>
 

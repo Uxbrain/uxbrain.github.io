@@ -76,9 +76,26 @@
     setTimeout(function () { main.classList.remove('dos-sec-enter'); }, 700);
   }
 
+  // count-up animation for [data-count] numbers, on entering a section
+  var countLastSec = null;
+  function runCountUp() {
+    document.querySelectorAll('main [data-count]').forEach(function (el) {
+      var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+      if (target <= 0) { el.textContent = target; return; }
+      var dur = 950, t0 = performance.now();
+      (function step(now) {
+        var p = Math.min(1, (now - t0) / dur);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }
+
   document.addEventListener('dos:rendered', function (e) {
     var d = (e && e.detail) || {};
     sectionTransition(d.sec, d.topic);
+    if (!reduce && d.sec !== countLastSec) { requestAnimationFrame(runCountUp); }
+    countLastSec = d.sec;
     // wait a frame so layout is settled before measuring positions
     requestAnimationFrame(function () { requestAnimationFrame(armReveal); });
   });
