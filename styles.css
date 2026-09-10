@@ -218,7 +218,11 @@ button:not(:disabled):active, [role="button"]:active, [data-act]:active { transf
 .dos-aa-btn:hover { border-color: var(--accent-line); transform: translateY(-1px); box-shadow: var(--shadow1); }
 
 /* ---------- generic card/row primitives ---------- */
-.dos-card, .dos-card-16 { background: var(--card-bg); border: 1px solid var(--card-brd); border-radius: var(--r-card); padding: var(--pad-card); box-shadow: var(--edge), var(--shadow1); }
+.dos-card, .dos-card-16 { position: relative; background-color: var(--card-bg); background-image: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 42%); border: 1px solid var(--card-brd); border-radius: var(--r-card); padding: var(--pad-card); box-shadow: var(--edge), var(--shadow1); }
+/* cursor spotlight + 3D tilt (driven by fx.js via --mx/--my/--rx/--ry) */
+.dos-card::after, .dos-card-16::after, .stat-tile::after, [data-dos-cardlink]::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .35s ease; background: radial-gradient(400px circle at var(--mx,50%) var(--my,50%), rgba(157,176,214,.13), transparent 55%); }
+.fx-tilt { transform: perspective(950px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-3px) !important; transition: transform .12s ease-out, box-shadow .3s, border-color .3s !important; box-shadow: var(--edge), var(--shadow-lift) !important; border-color: var(--accent-line) !important; }
+.fx-tilt::after { opacity: 1; }
 .dos-h1 { font-family: var(--display); font-size: 32px; font-weight: 600; letter-spacing: -0.022em; line-height: 1.12; }
 .dos-h1-lg { font-family: var(--display); font-size: 46px; font-weight: 600; letter-spacing: -0.032em; line-height: 1.06; }
 .dos-sub { color: var(--ink2); font-size: 15px; margin-top: 6px; }
@@ -259,7 +263,8 @@ main.dos-main { position: relative; z-index: 1; flex: 1; padding: 24px 24px 120p
   .dos-grid-2, .dos-grid-2-eq { grid-template-columns: 1fr; }
 }
 
-.stat-tile { background: var(--card-bg); border: 1px solid var(--card-brd); border-radius: var(--r-card); padding: 15px 17px; display: flex; align-items: center; gap: 12px; text-align: left; cursor: default; color: var(--ink); box-shadow: var(--edge), var(--shadow1); transition: transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s, border-color .22s; }
+.stat-tile { position: relative; background-color: var(--card-bg); background-image: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 42%); border: 1px solid var(--card-brd); border-radius: var(--r-card); padding: 15px 17px; display: flex; align-items: center; gap: 12px; text-align: left; cursor: default; color: var(--ink); box-shadow: var(--edge), var(--shadow1); transition: transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s, border-color .22s; }
+[data-dos-cardlink] { position: relative; }
 .stat-tile.clickable { cursor: pointer; }
 .stat-tile.clickable:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: var(--accent-line); }
 .stat-tile .ic { width: 40px; height: 40px; flex: none; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; transition: transform .28s cubic-bezier(.2,.9,.3,1); }
@@ -332,15 +337,16 @@ body.ux-intro-lock { overflow: hidden; }
 #ux-intro.exit { opacity: 0; transform: scale(1.08); pointer-events: none; }
 #ux-intro-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .ux-intro-inner { position: relative; z-index: 2; text-align: center; padding: 24px; max-width: 900px; }
-.ux-intro-eyebrow { color: rgba(200,210,230,.6); font: 600 12px/1 'Inter', system-ui, sans-serif; letter-spacing: .34em; text-transform: uppercase; opacity: 0; transform: translateY(10px); animation: uxIn .9s ease forwards .1s; }
-.ux-intro-title { font: 600 clamp(58px, 13vw, 168px)/.92 'Inter', system-ui, sans-serif; letter-spacing: -.045em; color: #fff; margin: 20px 0 0; display: flex; justify-content: center; }
+.ux-intro-inner::before { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 150%; height: 150%; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(6,7,11,.72), rgba(6,7,11,.35) 55%, transparent 78%); }
+.ux-intro-eyebrow { color: rgba(228,234,247,.85); font: 700 12.5px/1 'Inter', system-ui, sans-serif; letter-spacing: .34em; text-transform: uppercase; opacity: 0; transform: translateY(10px); animation: uxIn .9s ease forwards .1s; text-shadow: 0 1px 20px rgba(0,0,0,.5); }
+.ux-intro-title { font: 700 clamp(58px, 13vw, 172px)/.92 'Inter', system-ui, sans-serif; letter-spacing: -.045em; color: #fff; margin: 20px 0 0; display: flex; justify-content: center; text-shadow: 0 4px 60px rgba(0,0,0,.55); }
 .ux-intro-title span { display: inline-block; transform: translateY(115%) rotate(7deg); opacity: 0; animation: uxLetter 1s cubic-bezier(.16,.9,.3,1) forwards; animation-delay: calc(.28s + var(--i) * .06s); }
-.ux-intro-tag { color: rgba(212,220,236,.72); font: 400 clamp(15px, 2.4vw, 21px)/1.5 'Inter', system-ui, sans-serif; margin-top: 20px; opacity: 0; transform: translateY(12px); animation: uxIn 1s ease forwards .95s; }
+.ux-intro-tag { color: rgba(234,239,250,.94); font: 450 clamp(16px, 2.4vw, 22px)/1.5 'Inter', system-ui, sans-serif; margin-top: 20px; opacity: 0; transform: translateY(12px); animation: uxIn 1s ease forwards .95s; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
 .ux-intro-enter { margin-top: 36px; height: 54px; padding: 0 32px; border-radius: 99px; border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; font: 600 15px 'Inter', system-ui, sans-serif; cursor: pointer; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); display: inline-flex; align-items: center; gap: 10px; opacity: 0; transform: translateY(12px); animation: uxIn 1s ease forwards 1.15s; transition: background .25s, transform .25s, border-color .25s, box-shadow .25s; }
 .ux-intro-enter span { transition: transform .3s cubic-bezier(.2,.9,.3,1); }
 .ux-intro-enter:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.42); transform: translateY(-2px); box-shadow: 0 16px 40px -16px rgba(120,140,190,.6); }
 .ux-intro-enter:hover span { transform: translateX(5px); }
-.ux-intro-hint { margin-top: 18px; color: rgba(180,190,210,.4); font: 500 11px 'Inter', system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; opacity: 0; animation: uxIn 1s ease forwards 1.45s; }
+.ux-intro-hint { margin-top: 18px; color: rgba(208,216,234,.62); font: 600 11px 'Inter', system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; opacity: 0; animation: uxIn 1s ease forwards 1.45s; }
 @keyframes uxIn { to { opacity: 1; transform: none; } }
 @keyframes uxLetter { to { transform: translateY(0) rotate(0); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
