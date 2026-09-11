@@ -503,30 +503,30 @@ class App {
     if (!s.readerPanelOpen) return '';
     const seg = (val, cur) => val === cur ? 'var(--accent)' : 'var(--border)';
     return `<div class="dos-modal-scrim" data-act="${this.act(() => this.setState({ readerPanelOpen: false }))}">
-      <div data-stop="1" style="position:absolute;top:64px;right:24px;width:320px;max-width:calc(100vw - 32px);max-height:calc(100vh - 88px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow1);padding:20px;display:flex;flex-direction:column;gap:18px">
+      <div data-stop="1" style="position:absolute;top:64px;right:24px;width:320px;max-width:calc(100vw - 32px);max-height:calc(100vh - 88px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow1);padding:24px;display:flex;flex-direction:column;gap:16px">
         <div class="dos-eyebrow">Reading settings</div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Text size</span><span id="lbl-font-scale">${s.readerFontScale}x</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Text size</span><span id="lbl-font-scale">${s.readerFontScale}x</span></div>
           <input id="range-font-scale" type="range" min="0.8" max="1.6" step="0.05" value="${s.readerFontScale}" data-range="readerFontScale" data-unit="x" style="width:100%">
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Line spacing</span><span id="lbl-line-height">${s.readerLh}x</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Line spacing</span><span id="lbl-line-height">${s.readerLh}x</span></div>
           <input id="range-line-height" type="range" min="0.85" max="1.6" step="0.05" value="${s.readerLh}" data-range="readerLh" data-unit="x" style="width:100%">
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Column width</span><span id="lbl-measure">${s.readerMeasure}px</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Column width</span><span id="lbl-measure">${s.readerMeasure}px</span></div>
           <input id="range-measure" type="range" min="480" max="900" step="10" value="${s.readerMeasure}" data-range="readerMeasure" data-unit="px" style="width:100%">
         </div>
         <div>
           <div style="font-size:13px;color:var(--ink2);margin-bottom:8px">Reading font</div>
-          <div style="display:flex;gap:6px">
+          <div style="display:flex;gap:8px">
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${seg('sans', s.readerFont)};background:${s.readerFont !== 'serif' ? 'var(--accent-soft)' : 'transparent'};color:var(--ink);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ readerFont: 'sans' }))}">Inter</button>
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${seg('serif', s.readerFont)};background:${s.readerFont === 'serif' ? 'var(--accent-soft)' : 'transparent'};color:var(--ink);font-family:'Source Serif 4',Georgia,serif;font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ readerFont: 'serif' }))}">Serif</button>
           </div>
         </div>
         <div>
           <div style="font-size:13px;color:var(--ink2);margin-bottom:8px">Page tone</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${s.theme !== 'dark' && s.theme !== 'sepia' && s.theme !== 'amoled' ? 'var(--accent)' : 'var(--border)'};background:#F4F5F3;color:#1C1C22;font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ theme: 'light' }))}">Light</button>
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${s.theme === 'sepia' ? 'var(--accent)' : 'var(--border)'};background:#F5EFE2;color:#24201A;font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ theme: 'sepia' }))}">Warm</button>
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${s.theme === 'dark' ? 'var(--accent)' : 'var(--border)'};background:#131317;color:#F4F4F8;font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ theme: 'dark' }))}">Dark</button>
@@ -534,42 +534,42 @@ class App {
           </div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Letter spacing</span><span id="lbl-ls">${s.readerLs}px</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Letter spacing</span><span id="lbl-ls">${s.readerLs}px</span></div>
           <input id="range-ls" type="range" min="0" max="3" step="0.25" value="${s.readerLs}" data-range="readerLs" data-unit="px" style="width:100%">
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Word spacing</span><span id="lbl-ws">${s.readerWs}px</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Word spacing</span><span id="lbl-ws">${s.readerWs}px</span></div>
           <input id="range-ws" type="range" min="0" max="8" step="0.5" value="${s.readerWs}" data-range="readerWs" data-unit="px" style="width:100%">
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Paragraph spacing</span><span id="lbl-ps">${s.readerPs}px</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Paragraph spacing</span><span id="lbl-ps">${s.readerPs}px</span></div>
           <input id="range-ps" type="range" min="0" max="24" step="2" value="${s.readerPs}" data-range="readerPs" data-unit="px" style="width:100%">
         </div>
         <div>
           <div style="font-size:13px;color:var(--ink2);margin-bottom:8px">Text alignment</div>
-          <div style="display:flex;gap:6px">
+          <div style="display:flex;gap:8px">
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${s.readerAlign !== 'justify' ? 'var(--accent)' : 'var(--border)'};background:transparent;color:var(--ink);font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ readerAlign: 'left' }))}">Left</button>
             <button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${s.readerAlign === 'justify' ? 'var(--accent)' : 'var(--border)'};background:transparent;color:var(--ink);font-size:13px;cursor:pointer" data-act="${this.act(() => this.persist({ readerAlign: 'justify' }))}">Justified</button>
           </div>
         </div>
         <div>
           <div style="font-size:13px;color:var(--ink2);margin-bottom:8px">Text weight</div>
-          <div style="display:flex;gap:6px">
+          <div style="display:flex;gap:8px">
             ${['light', 'regular', 'bold'].map((w) => `<button style="flex:1;height:36px;border-radius:8px;border:1.5px solid ${s.readerWeight === w ? 'var(--accent)' : 'var(--border)'};background:${s.readerWeight === w ? 'var(--accent-soft)' : 'transparent'};color:var(--ink);font-size:13px;cursor:pointer;text-transform:capitalize" data-act="${this.act(() => this.persist({ readerWeight: w }))}">${w}</button>`).join('')}
           </div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:6px"><span>Warmth (reduce blue light)</span><span id="lbl-warmth">${s.readerWarmth}%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:8px"><span>Warmth (reduce blue light)</span><span id="lbl-warmth">${s.readerWarmth}%</span></div>
           <input id="range-warmth" type="range" min="0" max="60" step="5" value="${s.readerWarmth}" data-range="readerWarmth" data-unit="%" style="width:100%">
         </div>
-        <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--border);padding-top:14px">
+        <div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--border);padding-top:16px">
           <label style="display:flex;align-items:center;justify-content:space-between;font-size:13px;cursor:pointer"><span>High-contrast mode</span><input type="checkbox" ${s.readerContrast === 'on' ? 'checked' : ''} data-act="${this.act(() => this.persist({ readerContrast: s.readerContrast === 'on' ? 'off' : 'on' }))}" style="width:18px;height:18px"></label>
           <label style="display:flex;align-items:center;justify-content:space-between;font-size:13px;cursor:pointer"><span>Line-focus (dim other paragraphs)</span><input type="checkbox" ${s.readerLineFocus ? 'checked' : ''} data-act="${this.act(() => this.persist({ readerLineFocus: !s.readerLineFocus }))}" style="width:18px;height:18px"></label>
           <label style="display:flex;align-items:center;justify-content:space-between;font-size:13px;cursor:pointer"><span>Reduce motion</span><input type="checkbox" ${s.readerReduceMotion ? 'checked' : ''} data-act="${this.act(() => this.persist({ readerReduceMotion: !s.readerReduceMotion }))}" style="width:18px;height:18px"></label>
           <button class="dos-btn-outline" data-act="${this.act(() => this.setState({ readerFocusMode: true, readerPanelOpen: false }))}">Enter distraction-free mode</button>
         </div>
         <p style="font-size:12px;color:var(--ink2);line-height:1.5">These settings apply across every reading page and are remembered on this device. On a topic page, use "Read aloud" and "Highlight page" in the topic toolbar, and the notes field to jot your own thoughts.</p>
-        <div style="display:flex;gap:8px;border-top:1px solid var(--border);padding-top:14px">
+        <div style="display:flex;gap:8px;border-top:1px solid var(--border);padding-top:16px">
           <button class="dos-btn-outline" style="flex:1" data-act="${this.act(() => this.exportJSON())}">Export progress</button>
           <label class="dos-btn-outline" style="flex:1;text-align:center;display:flex;align-items:center;justify-content:center">Import<input type="file" accept="application/json" id="import-json-input" style="display:none"></label>
         </div>
@@ -588,24 +588,24 @@ class App {
       const bg = m.role === 'user' ? 'var(--accent)' : 'var(--surface-alt)';
       const color = m.role === 'user' ? 'var(--on-accent)' : 'var(--ink)';
       const radius = m.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px';
-      const link = m.linkTopicId ? `<button data-act="${this.act(() => { this.setState({ assistantOpen: false }); this.openTopic(m.linkTopicId); })}" style="display:block;margin-top:6px;background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0">Open "${esc(m.linkLabel)}" -></button>` : '';
-      return `<div style="align-self:${align};max-width:85%;background:${bg};color:${color};padding:10px 14px;border-radius:${radius};font-size:14px;line-height:1.5;white-space:pre-wrap">${esc(m.text)}${link}</div>`;
+      const link = m.linkTopicId ? `<button data-act="${this.act(() => { this.setState({ assistantOpen: false }); this.openTopic(m.linkTopicId); })}" style="display:block;margin-top:8px;background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0">Open "${esc(m.linkLabel)}" -></button>` : '';
+      return `<div style="align-self:${align};max-width:85%;background:${bg};color:${color};padding:8px 16px;border-radius:${radius};font-size:14px;line-height:1.5;white-space:pre-wrap">${esc(m.text)}${link}</div>`;
     }).join('');
-    const typing = s.assistantTyping ? `<div class="dos-typing" style="align-self:flex-start;background:var(--surface-alt);padding:12px 14px;border-radius:14px 14px 14px 4px"><span></span><span></span><span></span></div>` : '';
+    const typing = s.assistantTyping ? `<div class="dos-typing" style="align-self:flex-start;background:var(--surface-alt);padding:16px 16px;border-radius:8px 14px 14px 4px"><span></span><span></span><span></span></div>` : '';
     const chips = [
       ['Explain Kano model', 'Kano model'], ['What is RICE?', 'RICE'], ['Define North Star metric', 'North Star'],
     ].map(([label, q]) => `<button class="dos-chip" style="color:var(--ink);background:var(--surface-alt)" data-act="${this.act(() => this.assistantSend(q))}">${esc(label)}</button>`).join('');
     return `${fab}<div class="dos-assistant-panel">
-      <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--accent),var(--accent-2))">
+      <div style="display:flex;align-items:center;gap:8px;padding:16px 16px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--accent),var(--accent-2))">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><rect x="4" y="5" width="16" height="13" rx="5"></rect><circle cx="9" cy="11" r="1.2" fill="#fff" stroke="none"></circle><circle cx="15" cy="11" r="1.2" fill="#fff" stroke="none"></circle></svg>
         <div style="flex:1"><div style="font-family:var(--display);font-weight:600;font-size:15px;color:#fff">Study Buddy</div><div style="font-size:11px;color:rgba(255,255,255,.8)">Ask about any concept, term, or question</div></div>
         <button aria-label="Close" data-act="${this.act(() => this.setState({ assistantOpen: false }))}" style="width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.2);color:#fff;cursor:pointer;font-size:16px">X</button>
       </div>
-      <div id="dos-assistant-scroll" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">${msgs}${typing}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px">${chips}</div>
-      <form id="assistant-form" style="display:flex;gap:8px;padding:12px;border-top:1px solid var(--border)">
-        <input id="assistant-input" value="${esc(s.assistantInput)}" placeholder="Ask me anything..." style="flex:1;height:42px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--ink);font-size:14px">
-        <button type="submit" aria-label="Send" style="width:42px;height:42px;flex:none;border-radius:12px;border:none;background:var(--accent);color:var(--on-accent);cursor:pointer;display:flex;align-items:center;justify-content:center">
+      <div id="dos-assistant-scroll" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px">${msgs}${typing}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 8px">${chips}</div>
+      <form id="assistant-form" style="display:flex;gap:8px;padding:16px;border-top:1px solid var(--border)">
+        <input id="assistant-input" value="${esc(s.assistantInput)}" placeholder="Ask me anything..." style="flex:1;height:42px;padding:0 16px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--ink);font-size:14px">
+        <button type="submit" aria-label="Send" style="width:42px;height:42px;flex:none;border-radius:8px;border:none;background:var(--accent);color:var(--on-accent);cursor:pointer;display:flex;align-items:center;justify-content:center">
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 10l14-6-6 14-2-6z"></path></svg>
         </button>
       </form>
@@ -618,7 +618,7 @@ class App {
     const q = s.q.trim().toLowerCase();
     const pool = q ? ORDER.filter((id) => { const t = TOPICS[id]; return (t.title + ' ' + t.def + ' ' + t.why).toLowerCase().includes(q); }) : ORDER.slice(0, 6);
     const results = pool.slice(0, 8);
-    const rows = results.map((id) => `<button data-dos-row data-act="${this.act(() => { this.setState({ searchOpen: false }); this.openTopic(id); })}" style="display:flex;flex-direction:column;gap:2px;width:100%;padding:10px 12px;border:none;border-radius:8px;background:transparent;cursor:pointer;text-align:left;color:var(--ink)">
+    const rows = results.map((id) => `<button data-dos-row data-act="${this.act(() => { this.setState({ searchOpen: false }); this.openTopic(id); })}" style="display:flex;flex-direction:column;gap:4px;width:100%;padding:8px 16px;border:none;border-radius:8px;background:transparent;cursor:pointer;text-align:left;color:var(--ink)">
       <span style="font-size:15px;font-weight:500">${esc(TOPICS[id].title)}</span>
       <span style="font-size:12px;color:var(--ink2)">${esc(TOPICS[id].bookLabel)} - ${esc(TOPICS[id].chapter)}</span>
     </button>`).join('');
@@ -631,7 +631,7 @@ class App {
     if (!s.searchOpen) return '';
     return `<div class="dos-search-scrim" data-act="${this.act(() => this.setState({ searchOpen: false }))}">
       <div role="dialog" aria-label="Search" data-stop="1" class="dos-search-box">
-        <div style="display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid var(--border)">
           <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--ink2)" stroke-width="1.5" aria-hidden="true" style="flex:none"><circle cx="8" cy="8" r="5.5"></circle><line x1="12.5" y1="12.5" x2="15.5" y2="15.5"></line></svg>
           <input id="dos-search-input" type="text" value="${esc(s.q)}" placeholder="Search topics, laws, concepts..." style="flex:1;height:52px;border:none;outline:none;background:transparent;color:var(--ink);font-size:16px">
           <span class="dos-kbd">esc</span>
@@ -646,9 +646,9 @@ class App {
     if (!s.mobileNavOpen) return '';
     const items = NAV_ITEMS.map(([label, id]) => `<button data-dos-nav data-active="${s.route.sec === id}" data-act="${this.act(() => this.goSection(id))}" style="height:48px;color:var(--ink)">${esc(label)}</button>`).join('');
     return `<div class="dos-mobilenav-scrim" data-act="${this.act(() => this.setState({ mobileNavOpen: false }))}">
-      <div role="dialog" aria-label="Navigation" data-stop="1" style="width:100%;background:var(--surface);border-top-left-radius:16px;border-top-right-radius:16px;padding:12px 16px 32px;max-height:80vh;overflow:auto">
-        <div style="width:32px;height:4px;border-radius:99px;background:var(--border);margin:0 auto 12px"></div>
-        <div style="display:flex;flex-direction:column;gap:2px">${items}</div>
+      <div role="dialog" aria-label="Navigation" data-stop="1" style="width:100%;background:var(--surface);border-top-left-radius:16px;border-top-right-radius:16px;padding:16px 16px 32px;max-height:80vh;overflow:auto">
+        <div style="width:32px;height:4px;border-radius:16px;background:var(--border);margin:0 auto 16px"></div>
+        <div style="display:flex;flex-direction:column;gap:4px">${items}</div>
       </div>
     </div>`;
   }
@@ -690,7 +690,7 @@ class App {
       ${this.renderSearchModal()}
       ${this.renderMobileNav()}
       <div id="dos-warmth-overlay" class="warmth-overlay" style="background:#FF9900;opacity:${(s.readerWarmth / 100 * 0.35).toFixed(2)}"></div>
-      ${s.readerFocusMode ? `<button data-act="${this.act(() => this.setState({ readerFocusMode: false }))}" style="position:fixed;top:16px;right:16px;z-index:60;height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow1)">X Exit distraction-free mode</button>` : ''}
+      ${s.readerFocusMode ? `<button data-act="${this.act(() => this.setState({ readerFocusMode: false }))}" style="position:fixed;top:16px;right:16px;z-index:60;height:40px;padding:0 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--shadow1)">X Exit distraction-free mode</button>` : ''}
     `;
 
     const write = () => {

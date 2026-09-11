@@ -6,7 +6,7 @@ const WB_CRITERIA_LABELS = ['Framing', 'User specificity', 'Prioritization', 'Fl
 function renderTabs(app) {
   const s = app.state;
   return `<div role="tablist" style="display:flex;gap:4px;overflow:auto;border-bottom:1px solid var(--border);padding-bottom:0">
-    ${TABS.map(([id, label]) => `<button role="tab" style="white-space:nowrap;padding:10px 14px;background:transparent;border:none;border-bottom:2px solid ${s.gymTab === id ? 'var(--accent)' : 'transparent'};color:${s.gymTab === id ? 'var(--accent)' : 'var(--ink2)'};font-size:14px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.setState({ gymTab: id }))}">${label}</button>`).join('')}
+    ${TABS.map(([id, label]) => `<button role="tab" style="white-space:nowrap;padding:8px 16px;background:transparent;border:none;border-bottom:2px solid ${s.gymTab === id ? 'var(--accent)' : 'transparent'};color:${s.gymTab === id ? 'var(--accent)' : 'var(--ink2)'};font-size:14px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.setState({ gymTab: id }))}">${label}</button>`).join('')}
   </div>`;
 }
 
@@ -22,26 +22,26 @@ function renderBank(app) {
     const starred = !!s.igStarred[q.n];
     const practiced = !!s.igPracticed[q.n];
     return `<div class="dos-card">
-      <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+      <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start">
         <div style="font-size:15px;font-weight:600;line-height:1.4">${q.n}. ${esc(q.q)}</div>
         <button aria-label="Star" style="background:none;border:none;font-size:18px;cursor:pointer;color:${starred ? 'var(--accent)' : 'var(--border)'};flex:none" data-act="${app.act(() => app.persist({ igStarred: Object.assign({}, s.igStarred, { [q.n]: !starred }) }))}">★</button>
       </div>
-      ${revealed ? `<p style="font-size:14px;color:var(--ink2);line-height:1.6;margin-top:10px">${esc(q.a)}</p>` : ''}
-      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px">
+      ${revealed ? `<p style="font-size:14px;color:var(--ink2);line-height:1.6;margin-top:8px">${esc(q.a)}</p>` : ''}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px">
         <button class="dos-pill-btn" style="--pill-bg:var(--accent-soft);--pill-brd:var(--accent-line)" data-act="${app.act(() => app.setState({ igRevealed: Object.assign({}, s.igRevealed, { [q.n]: !revealed }) }))}">${revealed ? 'Hide answer' : 'Reveal'}</button>
-        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2)"><input type="checkbox" ${practiced ? 'checked' : ''} data-act="${app.act(() => app.persist({ igPracticed: Object.assign({}, s.igPracticed, { [q.n]: !practiced }) }))}">Practiced</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2)"><input type="checkbox" ${practiced ? 'checked' : ''} data-act="${app.act(() => app.persist({ igPracticed: Object.assign({}, s.igPracticed, { [q.n]: !practiced }) }))}">Practiced</label>
       </div>
     </div>`;
   }).join('');
   return `<div style="display:flex;flex-direction:column;gap:16px">
     <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
-      <select style="height:40px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13px" data-act="${app.act((e) => app.setState({ bankSection: e.target.value }))}">
+      <select style="height:40px;padding:0 8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13px" data-act="${app.act((e) => app.setState({ bankSection: e.target.value }))}">
         <option value="all" ${s.bankSection === 'all' ? 'selected' : ''}>All sections</option>${options}
       </select>
-      <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2)"><input type="checkbox" ${s.bankStarOnly ? 'checked' : ''} data-act="${app.act(() => app.setState({ bankStarOnly: !s.bankStarOnly }))}">★ starred only</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2)"><input type="checkbox" ${s.bankStarOnly ? 'checked' : ''} data-act="${app.act(() => app.setState({ bankStarOnly: !s.bankStarOnly }))}">★ starred only</label>
       <span style="font-size:13px;color:var(--ink2);margin-left:auto">${bankQ.length} questions</span>
     </div>
-    <div style="display:flex;flex-direction:column;gap:12px">${rows}</div>
+    <div style="display:flex;flex-direction:column;gap:16px">${rows}</div>
   </div>`;
 }
 
@@ -57,9 +57,9 @@ function renderDrill(app) {
     <div class="dos-card" style="width:100%;text-align:center">
       <div class="dos-eyebrow">${esc(sectionTitle)}</div>
       <div style="font-family:var(--serif);font-size:20px;font-weight:600;margin-top:8px;line-height:1.4">${esc(q ? q.q : '')}</div>
-      ${s.drillRevealed ? `<p style="font-size:14px;color:var(--ink2);line-height:1.6;margin-top:14px;text-align:left">${esc(q ? q.a : '')}</p>` : ''}
+      ${s.drillRevealed ? `<p style="font-size:14px;color:var(--ink2);line-height:1.6;margin-top:16px;text-align:left">${esc(q ? q.a : '')}</p>` : ''}
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
       <button class="dos-btn-primary" data-act="${app.act(() => app.setState({ drillRunning: !s.drillRunning, drillSeconds: s.drillRunning ? s.drillSeconds : (s.drillSeconds || 120) }))}">${s.drillRunning ? 'Pause' : 'Start 2:00'}</button>
       <button class="dos-btn-outline" data-act="${app.act(() => app.setState({ drillRevealed: true }))}">Reveal</button>
       <button class="dos-btn-outline" data-act="${app.act(() => app.setState({ drillQIndex: s.drillQIndex + 1, drillSeconds: 120, drillRunning: false, drillRevealed: false }))}">Next question →</button>
@@ -80,15 +80,15 @@ function renderCritique(app) {
   return `<div style="display:flex;flex-direction:column;gap:16px">
     <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
       <span style="font-size:13px;color:var(--ink2)">App:</span>
-      <select style="height:40px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13px" data-act="${app.act((e) => app.setState({ critiqueApp: e.target.value }))}">${appsOpts}</select>
+      <select style="height:40px;padding:0 8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13px" data-act="${app.act((e) => app.setState({ critiqueApp: e.target.value }))}">${appsOpts}</select>
       <button class="dos-pill-btn" data-act="${app.act(() => app.setState({ critiqueApp: IG.CRITIQUE_APPS[Math.floor(Math.random() * IG.CRITIQUE_APPS.length)] }))}">Shuffle</button>
     </div>
-    <div style="display:flex;gap:6px;overflow:auto">${phasesHtml}</div>
+    <div style="display:flex;gap:8px;overflow:auto">${phasesHtml}</div>
     <div class="dos-card" style="text-align:center">
       <div style="font-size:31px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent)">${app.fmtTime(s.critiqueSeconds)}</div>
       <div class="dos-eyebrow" style="color:var(--accent);margin-top:8px">${esc(cur.phase || '')}</div>
-      <p style="font-size:15px;margin-top:6px">${esc(cur.prompt || '')}</p>
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <p style="font-size:15px;margin-top:8px">${esc(cur.prompt || '')}</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">
         <button class="dos-btn-primary" data-act="${app.act(() => app.setState({ critiqueRunning: !s.critiqueRunning, critiqueSeconds: s.critiqueSeconds || (cur.min || 2) * 60 }))}">${s.critiqueRunning ? 'Pause' : 'Start phase'}</button>
         <button class="dos-btn-outline" data-act="${app.act(() => {
           const next = (s.critiquePhase + 1) % phases.length;
@@ -96,7 +96,7 @@ function renderCritique(app) {
         })}">Next phase →</button>
       </div>
     </div>
-    <textarea placeholder="Notes for this session…" data-act="${app.act((e) => app.persist({ critiqueNotes: e.target.value }))}" style="min-height:120px;padding:14px 16px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:14px;resize:vertical">${esc(s.critiqueNotes)}</textarea>
+    <textarea placeholder="Notes for this session…" data-act="${app.act((e) => app.persist({ critiqueNotes: e.target.value }))}" style="min-height:120px;padding:16px 16px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:14px;resize:vertical">${esc(s.critiqueNotes)}</textarea>
   </div>`;
 }
 
@@ -113,24 +113,24 @@ function renderWhiteboard(app) {
   </div>`).join('');
   const criteriaHtml = WB_CRITERIA_LABELS.map((label) => {
     const val = s.wbScores[label] || 3;
-    return `<div class="dos-card" style="padding:10px 12px">
+    return `<div class="dos-card" style="padding:8px 16px">
       <div style="font-size:12px;font-weight:600">${esc(label)}</div>
-      <input type="range" min="1" max="5" step="1" value="${val}" data-range="wbScore-${label}" data-unit="" style="width:100%;margin-top:6px">
+      <input type="range" min="1" max="5" step="1" value="${val}" data-range="wbScore-${label}" data-unit="" style="width:100%;margin-top:8px">
       <div style="font-size:12px;color:var(--ink2);text-align:right;font-variant-numeric:tabular-nums" id="lbl-wbScore-${label.replace(/\s/g, '')}">${val} / 5</div>
     </div>`;
   }).join('');
   return `<div style="display:flex;flex-direction:column;gap:16px">
     <div class="dos-card">
       <div class="dos-eyebrow">Prompt</div>
-      <p style="font-family:var(--serif);font-size:20px;font-weight:600;margin-top:6px">${esc(prompt)}</p>
+      <p style="font-family:var(--serif);font-size:20px;font-weight:600;margin-top:8px">${esc(prompt)}</p>
       <button class="dos-pill-btn" style="margin-top:8px" data-act="${app.act(() => app.setState({ wbPromptIndex: Math.floor(Math.random() * prompts.length), wbPhase: 0, wbSeconds: phases[0].min * 60, wbRunning: false }))}">New prompt</button>
     </div>
-    <div style="display:flex;gap:6px;overflow:auto">${phasesHtml}</div>
+    <div style="display:flex;gap:8px;overflow:auto">${phasesHtml}</div>
     <div class="dos-card" style="text-align:center">
       <div style="font-size:31px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent)">${app.fmtTime(s.wbSeconds)}</div>
       <div class="dos-eyebrow" style="color:var(--accent);margin-top:8px">${esc(cur.phase || '')}</div>
-      <p style="font-size:15px;margin-top:6px">${esc(cur.prompt || '')}</p>
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <p style="font-size:15px;margin-top:8px">${esc(cur.prompt || '')}</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap">
         <button class="dos-btn-primary" data-act="${app.act(() => app.setState({ wbRunning: !s.wbRunning, wbSeconds: s.wbSeconds || (cur.min || 2) * 60 }))}">${s.wbRunning ? 'Pause' : 'Start phase'}</button>
         <button class="dos-btn-outline" data-act="${app.act(() => {
           const next = (s.wbPhase + 1) % phases.length;
@@ -140,7 +140,7 @@ function renderWhiteboard(app) {
     </div>
     <div>
       <div class="dos-eyebrow" style="margin-bottom:8px">Wrap-up self-score (1–5)</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">${criteriaHtml}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px">${criteriaHtml}</div>
     </div>
   </div>`;
 }
@@ -153,11 +153,11 @@ function renderRubrics(app) {
   const companyCard = (c) => `<div class="dos-card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
       <div style="font-family:var(--serif);font-size:20px;font-weight:600">${esc(c.name)}</div>
-      <span style="font-size:11px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:2px 8px">${esc(c.tag)}</span>
+      <span style="font-size:11px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:16px;padding:4px 8px">${esc(c.tag)}</span>
     </div>
-    <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:10px">${c.loop.map((st) => `<li style="font-size:13px;color:var(--ink2)">→ ${esc(st)}</li>`).join('')}</ul>
-    <p style="font-size:13px;margin-top:10px;line-height:1.5">${esc(c.weights)}</p>
-    <p style="font-size:13px;color:var(--ink2);margin-top:6px">${esc(c.levels)}</p>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:8px">${c.loop.map((st) => `<li style="font-size:13px;color:var(--ink2)">→ ${esc(st)}</li>`).join('')}</ul>
+    <p style="font-size:13px;margin-top:8px;line-height:1.5">${esc(c.weights)}</p>
+    <p style="font-size:13px;color:var(--ink2);margin-top:8px">${esc(c.levels)}</p>
   </div>`;
   return `<div style="display:flex;flex-direction:column;gap:16px">
     <p style="font-size:14px;color:var(--ink2)">The interview loop is standardized across the industry; the named rounds are the differentiators. Six global bars and five Indian product leaders — the exact structure and what each one actually weights.</p>
@@ -165,37 +165,37 @@ function renderRubrics(app) {
       ${R.companies.map(companyCard).join('')}
     </div>
 
-    <div style="border:1px solid var(--accent);background:var(--accent-soft,rgba(0,0,0,.02));border-radius:12px;padding:20px">
+    <div style="border:1px solid var(--accent);background:var(--accent-soft,rgba(0,0,0,.02));border-radius:8px;padding:24px">
       <div class="dos-callout-label" style="color:var(--accent)">How the bar shifted in 2026</div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px">${bar.shifted.map((x) => `<li style="font-size:14px;color:var(--ink);line-height:1.5">• ${esc(x)}</li>`).join('')}</ul>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:4px">${bar.shifted.map((x) => `<li style="font-size:14px;color:var(--ink);line-height:1.5">• ${esc(x)}</li>`).join('')}</ul>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
-      <div style="border:1px solid var(--error);background:var(--warn-soft);border-radius:12px;padding:20px">
+      <div style="border:1px solid var(--error);background:var(--warn-soft);border-radius:8px;padding:24px">
         <div class="dos-callout-label" style="color:var(--error)">Portfolio red flags to avoid</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px">${bar.redFlags.map((x) => `<li style="font-size:13px;color:var(--ink);line-height:1.5">✕ ${esc(x)}</li>`).join('')}</ul>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:4px">${bar.redFlags.map((x) => `<li style="font-size:13px;color:var(--ink);line-height:1.5">✕ ${esc(x)}</li>`).join('')}</ul>
       </div>
       <div class="dos-card">
         <div class="dos-callout-label" style="color:var(--accent)">Seniority signals interviewers look for</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:4px">${bar.signals.map((x) => `<li style="font-size:13px;color:var(--ink);line-height:1.5">✓ ${esc(x)}</li>`).join('')}</ul>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:4px">${bar.signals.map((x) => `<li style="font-size:13px;color:var(--ink);line-height:1.5">✓ ${esc(x)}</li>`).join('')}</ul>
       </div>
     </div>
 
     <div class="dos-card">
       <div class="dos-callout-label" style="color:var(--accent)">Salary — Bengaluru senior (levels.fyi / 6figr, ranges not guarantees)</div>
       <div style="display:flex;flex-direction:column;gap:0;margin-top:8px">
-        ${sal.rows.map((r) => `<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid var(--border)">
+        ${sal.rows.map((r) => `<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--border)">
           <div style="font-size:14px;font-weight:600;color:var(--ink);flex:1 1 160px">${esc(r.label)}</div>
           <div style="font-size:14px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap">${esc(r.comp)}</div>
           <div style="font-size:12px;color:var(--ink2);flex:1 1 100%;text-align:left">${esc(r.note)}</div>
         </div>`).join('')}
       </div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:12px">${sal.notes.map((n) => `<li style="font-size:13px;color:var(--ink2);line-height:1.5">— ${esc(n)}</li>`).join('')}</ul>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;margin-top:16px">${sal.notes.map((n) => `<li style="font-size:13px;color:var(--ink2);line-height:1.5">— ${esc(n)}</li>`).join('')}</ul>
     </div>
 
-    <div style="border:1px solid var(--error);background:var(--warn-soft);border-radius:12px;padding:20px">
+    <div style="border:1px solid var(--error);background:var(--warn-soft);border-radius:8px;padding:24px">
       <div class="dos-callout-label" style="color:var(--error)">Fail signals — their debrief language</div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${R.failSignals.map((f) => `<li style="font-size:14px;color:var(--ink)">${esc(f)}</li>`).join('')}</ul>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">${R.failSignals.map((f) => `<li style="font-size:14px;color:var(--ink)">${esc(f)}</li>`).join('')}</ul>
     </div>
   </div>`;
 }
@@ -205,15 +205,15 @@ function renderAnchors(app) {
   const IG = app.ig;
   return `<div style="display:flex;flex-direction:column;gap:16px">
     ${IG.ANCHOR_STORIES.map((an) => `<div class="dos-card">
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:flex-start">
         <div>
           <div class="dos-eyebrow" style="color:var(--accent)">${esc(an.tag)}</div>
           <div style="font-family:var(--serif);font-size:22px;font-weight:600;margin-top:4px">${esc(an.name)}</div>
-          <div style="font-size:13px;color:var(--ink2);margin-top:2px">${esc(an.outcome)}</div>
+          <div style="font-size:13px;color:var(--ink2);margin-top:4px">${esc(an.outcome)}</div>
         </div>
         <button class="dos-btn-primary" style="height:40px;padding:0 16px" data-act="${app.act(() => app.setState({ anchorTimerRunning: !s.anchorTimerRunning, anchorTimerSeconds: s.anchorTimerSeconds || 120 }))}">${s.anchorTimerRunning ? app.fmtTime(s.anchorTimerSeconds) + ' ⏸' : 'Practice aloud (2 min)'}</button>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
         ${an.star.map((beat) => `<div><span style="font-size:12px;font-weight:600;color:var(--accent)">${esc(beat[0])}: </span><span style="font-size:14px;color:var(--ink);line-height:1.55">${esc(beat[1])}</span></div>`).join('')}
       </div>
     </div>`).join('')}
@@ -230,8 +230,8 @@ function renderPortfolio(app) {
       const itemsHtml = ar.items.map((text, i) => {
         const key = ar.id + '-' + i;
         const checked = !!s.portfolioChecks[key];
-        return `<label style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:14px;line-height:1.5;cursor:pointer">
-          <input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ portfolioChecks: Object.assign({}, s.portfolioChecks, { [key]: !checked }) }))}" style="width:18px;height:18px;flex:none;margin-top:2px">
+        return `<label style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;font-size:14px;line-height:1.5;cursor:pointer">
+          <input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ portfolioChecks: Object.assign({}, s.portfolioChecks, { [key]: !checked }) }))}" style="width:18px;height:18px;flex:none;margin-top:4px">
           <span>${esc(text)}</span>
         </label>`;
       }).join('');
@@ -240,8 +240,8 @@ function renderPortfolio(app) {
           <div><div class="dos-eyebrow">${esc(ar.tag)}</div><h2 style="font-family:var(--serif);font-size:20px;font-weight:600;margin-top:4px">${esc(ar.title)}</h2></div>
           <span style="font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums">${doneCount}/${ar.items.length}</span>
         </div>
-        <div class="dos-progress" style="height:5px;margin-top:10px"><div style="width:${pct}%"></div></div>
-        <div style="display:flex;flex-direction:column;gap:2px;margin-top:12px">${itemsHtml}</div>
+        <div class="dos-progress" style="height:5px;margin-top:8px"><div style="width:${pct}%"></div></div>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-top:16px">${itemsHtml}</div>
       </div>`;
     }).join('')}
   </div>`;
@@ -260,7 +260,7 @@ export function renderGym(app) {
     default: body = renderBank(app); break;
   }
   return `<div class="dos-page-gym">
-    <div><h1 class="dos-h1">Interview Gym</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">148 questions, drilled with a timer, critiqued live, whiteboarded against the clock.</p></div>
+    <div><h1 class="dos-h1">Interview Gym</h1><p style="color:var(--ink2);font-size:15px;margin-top:8px">148 questions, drilled with a timer, critiqued live, whiteboarded against the clock.</p></div>
     ${renderTabs(app)}
     ${body}
   </div>`;

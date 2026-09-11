@@ -5,7 +5,7 @@ function renderBlock(app, cur, b) {
   if (b.t === 'h') return `<h2 style="font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.3">${esc(b.text)}</h2>`;
   if (b.t === 'p') return `<p class="dos-prose" style="font-size:calc(17px * var(--r-font,1));line-height:calc(1.65 * var(--r-lh,1));max-width:var(--r-measure,720px);color:var(--ink)">${esc(b.text)}</p>`;
   if (b.t === 'ul') {
-    return `<ul style="list-style:none;display:flex;flex-direction:column;gap:10px">${b.items.map((it) => `<li class="dos-prose" style="display:flex;gap:12px;font-size:calc(16px * var(--r-font,1));line-height:calc(1.6 * var(--r-lh,1));max-width:var(--r-measure,720px)"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:9px"></span><span>${esc(it)}</span></li>`).join('')}</ul>`;
+    return `<ul style="list-style:none;display:flex;flex-direction:column;gap:8px">${b.items.map((it) => `<li class="dos-prose" style="display:flex;gap:16px;font-size:calc(16px * var(--r-font,1));line-height:calc(1.6 * var(--r-lh,1));max-width:var(--r-measure,720px)"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:8px"></span><span>${esc(it)}</span></li>`).join('')}</ul>`;
   }
   if (b.t === 'table') {
     return `<div class="dos-table-wrap"><table class="dos-table">
@@ -14,16 +14,16 @@ function renderBlock(app, cur, b) {
     </table></div>`;
   }
   if (b.t === 'cards') {
-    return `<div style="display:flex;flex-direction:column;gap:12px">${b.cards.map((c) => `<div class="dos-card">
+    return `<div style="display:flex;flex-direction:column;gap:16px">${b.cards.map((c) => `<div class="dos-card">
       <div style="font-size:16px;font-weight:600">${esc(c.name)}</div>
       <p style="font-size:14px;color:var(--ink);margin-top:4px;font-weight:500">${esc(c.one)}</p>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px">${c.ex.map((e) => `<li style="display:flex;gap:10px;font-size:14px;line-height:1.55;color:var(--ink2)"><span style="flex:none;width:5px;height:5px;border-radius:50%;background:var(--ink2);margin-top:8px"></span><span>${esc(e)}</span></li>`).join('')}</ul>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:8px">${c.ex.map((e) => `<li style="display:flex;gap:8px;font-size:14px;line-height:1.55;color:var(--ink2)"><span style="flex:none;width:5px;height:5px;border-radius:50%;background:var(--ink2);margin-top:8px"></span><span>${esc(e)}</span></li>`).join('')}</ul>
     </div>`).join('')}</div>`;
   }
   if (b.t === 'diagram') {
     const fn = DIAGRAMS[b.id];
     if (!fn) return '';
-    return `<figure class="dos-card" style="display:flex;flex-direction:column;gap:12px">
+    return `<figure class="dos-card" style="display:flex;flex-direction:column;gap:16px">
       ${fn()}
       <figcaption style="font-size:13px;color:var(--ink2);text-align:center">${esc(b.caption)}</figcaption>
     </figure>`;
@@ -52,12 +52,12 @@ function renderQuiz(app, cur) {
         if (submitted) return;
         const next = Object.assign({}, s.quizAnswers, { [answersKey]: Object.assign({}, answers, { [qi]: oi }) });
         app.setState({ quizAnswers: next });
-      })}" style="text-align:left;padding:10px 14px;border-radius:8px;border:1.5px solid ${border};background:${bg};color:${color};font-size:14px;cursor:pointer">${esc(opt)}</button>`;
+      })}" style="text-align:left;padding:8px 16px;border-radius:8px;border:1.5px solid ${border};background:${bg};color:${color};font-size:14px;cursor:pointer">${esc(opt)}</button>`;
     }).join('');
     const explain = submitted ? `<p style="font-size:calc(13px * var(--r-font,1));color:var(--ink2);margin-top:8px;font-style:italic">${(answers[qi] === q.correctIndex ? '✓ Correct — ' : '✗ Not quite — ') + esc(q.explain)}</p>` : '';
     return `<div style="margin-bottom:16px">
       <p class="dos-prose" style="font-size:calc(15px * var(--r-font,1));font-weight:600;margin-bottom:8px">${qi + 1}. ${esc(q.prompt)}</p>
-      <div style="display:flex;flex-direction:column;gap:6px">${optsHtml}</div>
+      <div style="display:flex;flex-direction:column;gap:8px">${optsHtml}</div>
       ${explain}
     </div>`;
   }).join('');
@@ -77,7 +77,7 @@ function renderQuiz(app, cur) {
   })}">Submit answers</button>` : '';
 
   return `<div class="dos-card" style="background:var(--surface-alt)">
-    <div class="dos-eyebrow" style="margin-bottom:10px">Check your recall</div>
+    <div class="dos-eyebrow" style="margin-bottom:8px">Check your recall</div>
     ${qHtml}${submitBtn}${scoreHtml}
   </div>`;
 }
@@ -118,25 +118,25 @@ function renderTopicPage(app, cur) {
       <button data-act="${app.act(() => app.nav({ sec: 'library', book: route.book || null, topic: null }))}">${route.book ? 'Chapter ' + route.book : 'Chapters'}</button>
       <span>/</span><span>${esc(cur.title)}</span>
       <span style="flex:1"></span>
-      <button style="height:32px;padding:0 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" data-act="${app.act(() => app.toggleTts())}">
+      <button style="height:32px;padding:0 16px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px" data-act="${app.act(() => app.toggleTts())}">
         <svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7v4h3l4 3.5V3.5L6 7z"></path><path d="M12.5 6.5a4 4 0 0 1 0 5"></path></svg>
         ${s.ttsSpeaking ? 'Stop reading' : 'Read aloud'}
       </button>
-      <button style="height:32px;padding:0 12px;border-radius:99px;border:1px solid ${isHighlighted ? 'var(--accent)' : 'var(--border)'};background:${isHighlighted ? 'var(--accent-soft)' : 'transparent'};color:${isHighlighted ? 'var(--accent)' : 'var(--ink2)'};font-size:12px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.persist({ topicHighlighted: Object.assign({}, s.topicHighlighted, { [cur.id]: !isHighlighted }) }))}">✎ Highlight page</button>
+      <button style="height:32px;padding:0 16px;border-radius:16px;border:1px solid ${isHighlighted ? 'var(--accent)' : 'var(--border)'};background:${isHighlighted ? 'var(--accent-soft)' : 'transparent'};color:${isHighlighted ? 'var(--accent)' : 'var(--ink2)'};font-size:12px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.persist({ topicHighlighted: Object.assign({}, s.topicHighlighted, { [cur.id]: !isHighlighted }) }))}">✎ Highlight page</button>
     </nav>
 
-    <header class="dos-reader-head" style="${isHighlighted ? 'background:var(--accent-soft);border-radius:12px;padding:16px;margin:-16px' : ''}">
+    <header class="dos-reader-head" style="${isHighlighted ? 'background:var(--accent-soft);border-radius:8px;padding:16px;margin:-16px' : ''}">
       <div class="dos-callout-label" style="color:var(--accent)">${esc(cur.bookLabel)}</div>
       <h1 class="dos-reader-title" style="font-family:var(--serif);font-size:33px;font-weight:700;letter-spacing:-0.02em;line-height:1.15">${esc(cur.title)}</h1>
-      <p style="font-family:var(--serif);font-size:20px;line-height:1.5;margin-top:12px"><span style="float:left;font-size:52px;line-height:0.78;font-weight:700;padding:4px 6px 0 0;color:var(--accent)">${esc(cur.def.charAt(0))}</span>${esc(cur.def.slice(1))}</p>
+      <p style="font-family:var(--serif);font-size:20px;line-height:1.5;margin-top:16px"><span style="float:left;font-size:52px;line-height:0.78;font-weight:700;padding:4px 8px 0 0;color:var(--accent)">${esc(cur.def.charAt(0))}</span>${esc(cur.def.slice(1))}</p>
     </header>
 
     <div style="border-top:1px solid var(--border);padding-top:16px">
-      <div class="dos-eyebrow" style="margin-bottom:6px">Why it matters</div>
+      <div class="dos-eyebrow" style="margin-bottom:8px">Why it matters</div>
       <p class="dos-prose" style="font-size:calc(17px * var(--r-font,1));line-height:calc(1.6 * var(--r-lh,1));max-width:var(--r-measure,720px);color:var(--ink2);font-style:italic">${esc(cur.why)}</p>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:20px">${blocksHtml}</div>
+    <div style="display:flex;flex-direction:column;gap:24px">${blocksHtml}</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">${examplesHtml}</div>
 
     <div class="dos-callout-warn">
@@ -152,19 +152,19 @@ function renderTopicPage(app, cur) {
 
     <div>
       <div class="dos-eyebrow" style="margin-bottom:8px">Your notes</div>
-      <textarea id="note-${cur.id}" placeholder="Jot a thought, a link to your own project, a question to revisit…" data-act="${app.act((e) => app.persist({ topicNotes: Object.assign({}, s.topicNotes, { [cur.id]: e.target.value }) }))}" style="width:100%;min-height:90px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:calc(14px * var(--r-font,1));resize:vertical">${esc(noteVal)}</textarea>
+      <textarea id="note-${cur.id}" placeholder="Jot a thought, a link to your own project, a question to revisit…" data-act="${app.act((e) => app.persist({ topicNotes: Object.assign({}, s.topicNotes, { [cur.id]: e.target.value }) }))}" style="width:100%;min-height:90px;padding:16px 16px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:calc(14px * var(--r-font,1));resize:vertical">${esc(noteVal)}</textarea>
     </div>
 
-    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;border-top:1px solid var(--border);padding-top:20px">
-      <button style="height:44px;padding:0 20px;border-radius:8px;border:1px solid ${isDone ? 'var(--accent)' : 'var(--accent-line)'};background:${isDone ? 'var(--accent)' : 'transparent'};color:${isDone ? 'var(--on-accent)' : 'var(--accent)'};font-size:14px;font-weight:600;cursor:pointer" data-act="${app.act(() => { const completed = Object.assign({}, s.completed); completed[cur.id] = !completed[cur.id]; app.persist({ completed }); })}">${isDone ? '✓ Completed' : 'Mark complete'}</button>
-      <button style="height:44px;padding:0 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:${isStar ? 'var(--accent)' : 'var(--ink2)'};font-size:14px;font-weight:500;cursor:pointer" data-act="${app.act(() => { const starred = Object.assign({}, s.starred); starred[cur.id] = !starred[cur.id]; app.persist({ starred }); })}">${isStar ? 'Saved to flashcards' : 'Save to flashcards'}</button>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;border-top:1px solid var(--border);padding-top:24px">
+      <button style="height:44px;padding:0 24px;border-radius:8px;border:1px solid ${isDone ? 'var(--accent)' : 'var(--accent-line)'};background:${isDone ? 'var(--accent)' : 'transparent'};color:${isDone ? 'var(--on-accent)' : 'var(--accent)'};font-size:14px;font-weight:600;cursor:pointer" data-act="${app.act(() => { const completed = Object.assign({}, s.completed); completed[cur.id] = !completed[cur.id]; app.persist({ completed }); })}">${isDone ? '✓ Completed' : 'Mark complete'}</button>
+      <button style="height:44px;padding:0 24px;border-radius:8px;border:1px solid var(--border);background:transparent;color:${isStar ? 'var(--accent)' : 'var(--ink2)'};font-size:14px;font-weight:500;cursor:pointer" data-act="${app.act(() => { const starred = Object.assign({}, s.starred); starred[cur.id] = !starred[cur.id]; app.persist({ starred }); })}">${isStar ? 'Saved to flashcards' : 'Save to flashcards'}</button>
     </div>
 
     <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
       <span style="font-size:13px;color:var(--ink2)">Related:</span>${relatedHtml}
     </div>
 
-    <div style="display:flex;gap:12px;justify-content:space-between;border-top:1px solid var(--border);padding-top:20px">
+    <div style="display:flex;gap:16px;justify-content:space-between;border-top:1px solid var(--border);padding-top:24px">
       ${prevId ? `<button style="min-height:44px;padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:14px;cursor:pointer;text-align:left" data-act="${app.act(() => app.openTopic(prevId))}"><span style="color:var(--ink2);font-size:12px;display:block">← Previous</span>${esc(TOPICS[prevId].title)}</button>` : '<span></span>'}
       ${nextId ? `<button style="min-height:44px;padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:14px;cursor:pointer;text-align:right;margin-left:auto" data-act="${app.act(() => app.openTopic(nextId))}"><span style="color:var(--ink2);font-size:12px;display:block">Next →</span>${esc(TOPICS[nextId].title)}</button>` : ''}
     </div>
@@ -272,15 +272,15 @@ function renderChapterView(app, chapterNum) {
     });
     const complete = dayDone(app, day);
     return `<div class="dos-card" style="border-color:${complete ? 'var(--success)' : 'var(--card-brd)'}">
-      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
         <span class="dos-eyebrow">Day ${day.n}</span>
         <span style="font-size:11px;color:var(--ink2)">${esc(day.phase)}</span>
-        ${complete ? '<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--mint);color:var(--success)">✓ Complete</span>' : ''}
+        ${complete ? '<span style="font-size:11px;font-weight:600;padding:4px 8px;border-radius:16px;background:var(--mint);color:var(--success)">✓ Complete</span>' : ''}
         <span style="font-size:12px;color:var(--ink2);margin-left:auto">~${day.estMins} min</span>
       </div>
-      <h2 style="font-family:var(--serif);font-size:19px;font-weight:600;margin-top:6px">${esc(day.theme)}</h2>
+      <h2 style="font-family:var(--serif);font-size:19px;font-weight:600;margin-top:8px">${esc(day.theme)}</h2>
       ${lessonRows.length ? `<div class="dos-lesson-list">${lessonRows.join('')}</div>` : ''}
-      ${practiceRows.length ? `<div class="dos-task-list"><div class="dos-eyebrow" style="font-size:10.5px;margin-bottom:2px">Practice &amp; recall</div>${practiceRows.join('')}</div>` : ''}
+      ${practiceRows.length ? `<div class="dos-task-list"><div class="dos-eyebrow" style="font-size:10.5px;margin-bottom:4px">Practice &amp; recall</div>${practiceRows.join('')}</div>` : ''}
     </div>`;
   }).join('');
 
@@ -292,9 +292,9 @@ function renderChapterView(app, chapterNum) {
     </nav>
     <div class="dos-sticky-head">
       <h1 class="dos-h1">Chapter ${chapterNum}</h1>
-      <p style="color:var(--ink2);font-size:15px;margin-top:6px">Days ${firstDay.n}–${lastDay.n} · ${esc(firstDay.phase)}${firstDay.phase !== lastDay.phase ? ' → ' + esc(lastDay.phase) : ''}</p>
+      <p style="color:var(--ink2);font-size:15px;margin-top:8px">Days ${firstDay.n}–${lastDay.n} · ${esc(firstDay.phase)}${firstDay.phase !== lastDay.phase ? ' → ' + esc(lastDay.phase) : ''}</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:14px">${daysHtml}</div>
+    <div style="display:flex;flex-direction:column;gap:16px">${daysHtml}</div>
   </div>`;
 }
 
@@ -328,7 +328,7 @@ function renderChaptersHome(app) {
     </button>`;
   }).join('');
   return `<div class="dos-page">
-    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">${groups.length} chapters · ${totalDone} of ${totalDays} days complete. Each chapter is a focused week — open one to begin.</p></div>
+    <div class="dos-sticky-head"><h1 class="dos-h1">Chapters</h1><p style="color:var(--ink2);font-size:15px;margin-top:8px">${groups.length} chapters · ${totalDone} of ${totalDays} days complete. Each chapter is a focused week — open one to begin.</p></div>
     <div class="dos-grid-cards">${cards}</div>
   </div>`;
 }

@@ -101,8 +101,8 @@ export function renderDashboard(app) {
   recs.push({ icon: '📝', title: 'Take a topic quiz', sub: 'Test your recall in the Library', go: () => app.goSection('library') });
   recs.push({ icon: '🥊', title: 'Drill an interview question', sub: 'Two-minute timed practice', go: () => { app.state.gymTab = 'drill'; app.goSection('gym'); } });
   if (Object.keys(s.missedTopics || {}).length) recs.push({ icon: '🎯', title: 'Reinforce missed concepts', sub: Object.keys(s.missedTopics).length + ' to revisit', go: () => app.goSection('cards') });
-  const recsHtml = recs.map((rc) => `<button data-dos-row data-act="${app.act(rc.go)}" style="display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:12px;--row-bg:var(--surface);color:var(--ink);cursor:pointer">
-    <span style="width:34px;height:34px;flex:none;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:16px">${rc.icon}</span>
+  const recsHtml = recs.map((rc) => `<button data-dos-row data-act="${app.act(rc.go)}" style="display:flex;align-items:center;gap:16px;text-align:left;padding:16px 16px;border:1px solid var(--border);border-radius:8px;--row-bg:var(--surface);color:var(--ink);cursor:pointer">
+    <span style="width:34px;height:34px;flex:none;border-radius:8px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:16px">${rc.icon}</span>
     <span style="flex:1"><span style="display:block;font-size:14px;font-weight:600">${esc(rc.title)}</span><span style="font-size:12px;color:var(--ink2)">${esc(rc.sub)}</span></span>
     <span style="color:var(--accent);font-size:16px">→</span>
   </button>`).join('');
@@ -128,14 +128,14 @@ export function renderDashboard(app) {
   const badges = badgeDefs(app).map((b) => {
     const earned = b.val >= b.goal;
     const pct = Math.min(100, Math.round((b.val / b.goal) * 100));
-    return `<div style="border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;opacity:${earned ? '1' : '.62'};background:${earned ? 'var(--mint)' : 'var(--surface)'}">
+    return `<div style="border:1px solid var(--border);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px;opacity:${earned ? '1' : '.62'};background:${earned ? 'var(--mint)' : 'var(--surface)'}">
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-size:22px;filter:${earned ? 'none' : 'grayscale(1)'}">${b.icon}</span>
         ${earned ? '<span style="font-size:11px;font-weight:600;color:var(--success)">✓ Earned</span>' : ''}
       </div>
       <div style="font-size:13px;font-weight:600">${esc(b.title)}</div>
       <div style="font-size:12px;color:var(--ink2);line-height:1.4">${esc(b.desc)}</div>
-      ${!earned ? `<div style="height:5px;border-radius:99px;background:var(--border);overflow:hidden;margin-top:2px"><div style="height:100%;width:${pct}%;background:var(--accent)"></div></div>` : ''}
+      ${!earned ? `<div style="height:5px;border-radius:16px;background:var(--border);overflow:hidden;margin-top:4px"><div style="height:100%;width:${pct}%;background:var(--accent)"></div></div>` : ''}
     </div>`;
   }).join('');
   const badgesEarned = badgeDefs(app).filter((b) => b.val >= b.goal).length;
@@ -143,14 +143,9 @@ export function renderDashboard(app) {
 
   return `<div class="dos-page">
     <div class="dos-grid-stats">
-      <div class="stat-tile" style="flex-direction:column;align-items:stretch;gap:12px">
-        <div style="display:flex;align-items:center;gap:12px">
-          <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="9" cy="9" r="6.5" stroke-opacity=".3"></circle><path d="M9 2.5A6.5 6.5 0 0 1 15.5 9" stroke-width="2" stroke-linecap="round"></path></svg></span>
-          <div><div class="num">${planPct}<span style="color:var(--ink2);font-size:15px;font-weight:500">%</span></div><div class="lbl">Through your plan</div></div>
-        </div>
-        <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink2);white-space:nowrap">Start date
-          <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}" style="flex:1;min-width:0;height:28px;padding:0 8px;border:1px solid var(--border);border-radius:7px;background:var(--surface-alt);color:var(--ink);font-size:12.5px">
-        </label>
+      <div class="stat-tile">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="9" cy="9" r="6.5" stroke-opacity=".3"></circle><path d="M9 2.5A6.5 6.5 0 0 1 15.5 9" stroke-width="2" stroke-linecap="round"></path></svg></span>
+        <div><div class="num">${planPct}<span style="color:var(--ink2);font-size:15px;font-weight:500">%</span></div><div class="lbl">Through your plan</div></div>
       </div>
       <div class="stat-tile">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M4 3.5h10v11l-5-2.5-5 2.5z"></path></svg></span>
@@ -177,10 +172,10 @@ export function renderDashboard(app) {
     </button>
 
     <div class="dos-grid-2">
-      <div class="dos-card" style="display:flex;flex-direction:column;gap:12px">
+      <div class="dos-card" style="display:flex;flex-direction:column;gap:16px">
         <div class="dos-eyebrow" style="color:var(--accent)">Today’s focus · Day ${focus ? focus.n : 1} · ${esc(focus ? focus.phase : '')}</div>
         <h2 style="font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.25">${esc(focus ? focus.theme : 'All caught up — nice work!')}</h2>
-        <div class="dos-lesson-list" style="margin-top:2px">${focusTasksHtml}</div>
+        <div class="dos-lesson-list" style="margin-top:4px">${focusTasksHtml}</div>
         <button class="dos-btn-soft" style="align-self:flex-start" data-act="${app.act(() => app.goSection('library'))}">Open Chapters →</button>
       </div>
       <div class="dos-card" style="display:flex;flex-direction:column;gap:8px">
@@ -189,15 +184,15 @@ export function renderDashboard(app) {
         <div style="font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.3">${esc(law.name)}</div>
         <p style="font-size:14px;font-weight:500">${esc(law.one)}</p>
         <p style="font-size:14px;color:var(--ink2)">${esc(law.ex)}</p>
-        <div style="margin-top:auto;padding-top:8px"><button style="height:36px;padding:0 2px;border:none;background:transparent;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.openTopic('t10'))}">All UX laws →</button></div>
+        <div style="margin-top:auto;padding-top:8px"><button style="height:36px;padding:0 4px;border:none;background:transparent;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.openTopic('t10'))}">All UX laws →</button></div>
       </div>
     </div>
 
     <div class="dos-grid-3-auto">
       <div class="dos-card-16" style="background:var(--peach)">
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:22px">🔥</span><span class="dos-eyebrow" style="color:var(--warn)">Streak</span></div>
-        <div style="font-family:var(--display);font-size:31px;font-weight:700;margin-top:6px">${s.streak} <span style="font-size:16px;color:var(--ink2);font-weight:500">days</span></div>
-        <div style="display:flex;gap:5px;margin-top:10px">${streakDots.map((bg) => `<div style="flex:1;height:8px;border-radius:99px;background:${bg}"></div>`).join('')}</div>
+        <div style="font-family:var(--display);font-size:31px;font-weight:700;margin-top:8px">${s.streak} <span style="font-size:16px;color:var(--ink2);font-weight:500">days</span></div>
+        <div style="display:flex;gap:4px;margin-top:8px">${streakDots.map((bg) => `<div style="flex:1;height:8px;border-radius:16px;background:${bg}"></div>`).join('')}</div>
         <p style="font-size:13px;color:var(--ink2);margin-top:8px">${streakMsg}</p>
       </div>
       <div class="dos-card-16" style="background:var(--lav)">
@@ -213,30 +208,30 @@ export function renderDashboard(app) {
     <div class="dos-grid-2-eq">
       <div class="dos-card-16">
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">⚡</span><span class="dos-eyebrow">Recommended next</span></div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">${recsHtml}</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">${recsHtml}</div>
       </div>
       <div class="dos-card-16">
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">📅</span><span class="dos-eyebrow">${now.toLocaleString('default', { month: 'long', year: 'numeric' })}</span></div>
           <span style="font-size:12px;color:var(--ink2)">${activeThisMonth} active days</span>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:16px">
           ${['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((wd) => `<div style="text-align:center;font-size:10px;color:var(--ink2);font-weight:600">${wd}</div>`).join('')}
           ${calCells}
         </div>
-        <div style="display:flex;gap:14px;margin-top:12px;font-size:11px;color:var(--ink2)">
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:var(--accent)"></span>Studied</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;border:1.5px solid var(--accent)"></span>Today</span>
+        <div style="display:flex;gap:16px;margin-top:16px;font-size:11px;color:var(--ink2)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:4px;background:var(--accent)"></span>Studied</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:4px;border:1.5px solid var(--accent)"></span>Today</span>
         </div>
       </div>
     </div>
 
     <div class="dos-card-16">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">📊</span><span class="dos-eyebrow">Quiz performance</span></div>
         <button style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer" data-act="${app.act(() => app.goSection('progress'))}">Full history →</button>
       </div>
-      ${qz.hasData ? `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:14px">
+      ${qz.hasData ? `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:16px">
         <div><div style="font-family:var(--display);font-size:26px;font-weight:700">${qz.avgPct}%</div><div style="font-size:12px;color:var(--ink2)">Average score</div></div>
         <div><div style="font-family:var(--display);font-size:26px;font-weight:700">${qz.taken}</div><div style="font-size:12px;color:var(--ink2)">Quizzes taken</div></div>
         <div><div style="font-family:var(--display);font-size:26px;font-weight:700">${qz.perfect}</div><div style="font-size:12px;color:var(--ink2)">Perfect scores</div></div>
@@ -245,7 +240,7 @@ export function renderDashboard(app) {
     </div>
 
     <div class="dos-card-16">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🏆</span><span class="dos-eyebrow">Achievements</span></div>
         <span style="font-size:12px;color:var(--ink2)">${badgesEarned} of 10 earned</span>
       </div>

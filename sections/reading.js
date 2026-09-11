@@ -6,15 +6,15 @@ export function renderReadingList(app) {
   if (!s.readingRead) s.readingRead = {};
   const rows = READING_LIST.map((rb) => {
     const read = !!s.readingRead[rb.id];
-    return `<div class="dos-card" style="display:flex;gap:16px;align-items:flex-start;padding:18px 20px">
-      <button aria-label="Mark as read" data-act="${app.act(() => app.persist({ readingRead: Object.assign({}, s.readingRead, { [rb.id]: !read }) }))}" style="flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid ${read ? 'var(--success)' : 'var(--accent-line)'};background:${read ? 'var(--success)' : 'transparent'};color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;margin-top:2px;transition:transform .2s cubic-bezier(.2,.9,.3,1)">${read ? '✓' : ''}</button>
+    return `<div class="dos-card" style="display:flex;gap:16px;align-items:flex-start;padding:16px 24px">
+      <button aria-label="Mark as read" data-act="${app.act(() => app.persist({ readingRead: Object.assign({}, s.readingRead, { [rb.id]: !read }) }))}" style="flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid ${read ? 'var(--success)' : 'var(--accent-line)'};background:${read ? 'var(--success)' : 'transparent'};color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;margin-top:4px;transition:transform .2s cubic-bezier(.2,.9,.3,1)">${read ? '✓' : ''}</button>
       <div style="flex:1">
         <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
           <span class="dos-eyebrow">#${rb.priority}</span>
           <h2 style="font-family:var(--serif);font-size:19px;font-weight:600;${read ? 'text-decoration:line-through;color:var(--ink2)' : ''}">${esc(rb.title)}</h2>
         </div>
-        <div style="font-size:13px;color:var(--ink2);margin-top:2px">${esc(rb.author)}</div>
-        <p style="font-size:14px;line-height:1.55;color:var(--ink2);margin-top:6px">${esc(rb.why)}</p>
+        <div style="font-size:13px;color:var(--ink2);margin-top:4px">${esc(rb.author)}</div>
+        <p style="font-size:14px;line-height:1.55;color:var(--ink2);margin-top:8px">${esc(rb.why)}</p>
       </div>
     </div>`;
   }).join('');
@@ -22,8 +22,8 @@ export function renderReadingList(app) {
   return `<div class="dos-page-narrow">
     <div>
       <h1 class="dos-h1">Reading List</h1>
-      <p style="color:var(--ink2);font-size:15px;margin-top:6px">Seventeen books, in reading-priority order. Mark them off as you go — ${readCount} of ${READING_LIST.length} read.</p>
+      <p style="color:var(--ink2);font-size:15px;margin-top:8px">Seventeen books, in reading-priority order. Mark them off as you go — ${readCount} of ${READING_LIST.length} read.</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:10px">${rows}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">${rows}</div>
   </div>`;
 }

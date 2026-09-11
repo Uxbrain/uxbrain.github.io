@@ -31,16 +31,16 @@ function renderQuizPerf(app) {
     const color = pct >= 80 ? 'var(--success)' : (pct >= 50 ? 'var(--warn)' : 'var(--error)');
     return { title: TOPICS[e.id] ? TOPICS[e.id].title : e.id, pct, label: e.sc.correct + '/' + e.sc.total, color, id: e.id };
   }).sort((a, b) => a.pct - b.pct);
-  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px">
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:16px">
     <div><div style="font-family:var(--display);font-size:28px;font-weight:700">${Math.round(totalPct * 100)}%</div><div style="font-size:12px;color:var(--ink2)">Average score</div></div>
     <div><div style="font-family:var(--display);font-size:28px;font-weight:700">${entries.length}</div><div style="font-size:12px;color:var(--ink2)">Quizzes taken</div></div>
     <div><div style="font-family:var(--display);font-size:28px;font-weight:700">${perfect}</div><div style="font-size:12px;color:var(--ink2)">Perfect scores</div></div>
     <div><div style="font-family:var(--display);font-size:28px;font-weight:700;color:var(--warn)">${review}</div><div style="font-size:12px;color:var(--ink2)">To reinforce</div></div>
   </div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
-    ${rows.map((r) => `<button data-dos-row style="display:flex;align-items:center;gap:12px;text-align:left;padding:8px 10px;border-radius:10px;border:none;cursor:pointer;color:var(--ink)" data-act="${app.act(() => app.openTopic(r.id))}">
+    ${rows.map((r) => `<button data-dos-row style="display:flex;align-items:center;gap:16px;text-align:left;padding:8px 8px;border-radius:8px;border:none;cursor:pointer;color:var(--ink)" data-act="${app.act(() => app.openTopic(r.id))}">
       <span style="flex:1;font-size:14px">${esc(r.title)}</span>
-      <div style="width:90px;height:6px;border-radius:99px;background:var(--border);overflow:hidden"><div style="height:100%;width:${r.pct}%;background:${r.color}"></div></div>
+      <div style="width:90px;height:6px;border-radius:16px;background:var(--border);overflow:hidden"><div style="height:100%;width:${r.pct}%;background:${r.color}"></div></div>
       <span style="font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums;width:38px;text-align:right">${r.label}</span>
     </button>`).join('')}
   </div>`;
@@ -56,16 +56,16 @@ export function renderProgress(app) {
     const pct = dm.items.length ? Math.round((done / dm.items.length) * 100) : 0;
     const isOpen = !!s.checklistOpen[dm.id];
     const dotColor = DOT_COLORS[dm.priority] || 'var(--ink2)';
-    const itemsHtml = isOpen ? `<div style="padding:8px 20px 16px;display:flex;flex-direction:column;gap:2px">${dm.items.map((text, i) => {
+    const itemsHtml = isOpen ? `<div style="padding:8px 24px 16px;display:flex;flex-direction:column;gap:4px">${dm.items.map((text, i) => {
       const key = dm.id + '-' + i;
       const checked = !!s.checklistChecked[key];
-      return `<label style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:14px;line-height:1.5;cursor:pointer">
-        <input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ checklistChecked: Object.assign({}, s.checklistChecked, { [key]: !checked }) }))}" style="width:18px;height:18px;flex:none;margin-top:2px">
+      return `<label style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;font-size:14px;line-height:1.5;cursor:pointer">
+        <input type="checkbox" ${checked ? 'checked' : ''} data-act="${app.act(() => app.persist({ checklistChecked: Object.assign({}, s.checklistChecked, { [key]: !checked }) }))}" style="width:18px;height:18px;flex:none;margin-top:4px">
         <span>${esc(text)}</span>
       </label>`;
     }).join('')}</div>` : '';
-    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-      <button style="width:100%;display:flex;align-items:center;gap:12px;padding:16px 20px;background:transparent;border:none;cursor:pointer;text-align:left" data-act="${app.act(() => app.setState({ checklistOpen: Object.assign({}, s.checklistOpen, { [dm.id]: !isOpen }) }))}">
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <button style="width:100%;display:flex;align-items:center;gap:16px;padding:16px 24px;background:transparent;border:none;cursor:pointer;text-align:left" data-act="${app.act(() => app.setState({ checklistOpen: Object.assign({}, s.checklistOpen, { [dm.id]: !isOpen }) }))}">
         <span style="flex:none;width:10px;height:10px;border-radius:50%;background:${dotColor}"></span>
         <span style="flex:1;font-size:15px;font-weight:600">${dm.n}. ${esc(dm.title)}</span>
         <span style="font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums">${done}/${dm.items.length}</span>
@@ -82,7 +82,7 @@ export function renderProgress(app) {
   const doneTopics = ORDER.filter((id) => s.completed[id]).length;
 
   return `<div class="dos-page-narrow">
-    <div><h1 class="dos-h1">My Progress</h1><p style="color:var(--ink2);font-size:15px;margin-top:6px">Book 2’s full 15-domain checklist, priority-coded to your gaps.</p></div>
+    <div><h1 class="dos-h1">My Progress</h1><p style="color:var(--ink2);font-size:15px;margin-top:8px">Book 2’s full 15-domain checklist, priority-coded to your gaps.</p></div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
       <div class="dos-card" style="display:flex;align-items:center;gap:16px">
@@ -102,10 +102,10 @@ export function renderProgress(app) {
     </div>
 
     <div class="dos-card-16">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="font-size:18px">📊</span><span class="dos-eyebrow">Quiz performance</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span style="font-size:18px">📊</span><span class="dos-eyebrow">Quiz performance</span></div>
       ${renderQuizPerf(app)}
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:12px">${domainsHtml}</div>
+    <div style="display:flex;flex-direction:column;gap:16px">${domainsHtml}</div>
   </div>`;
 }

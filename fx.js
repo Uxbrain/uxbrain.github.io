@@ -9,32 +9,27 @@
 
   /* ---------------- cursor 3D tilt + spotlight + magnetic buttons ------------- */
   if (fine && !reduce) {
-    // LEAF = a single actionable tile (the whole thing is one click target) → 3D tilt.
-    // CONTAINER = a content card that holds its own controls → calm glow, never tilt
-    // (tilting a container makes its buttons feel like they shift under the cursor).
-    var LEAF = '[data-dos-cardlink], .stat-tile.clickable, .dos-flip-card, .dos-lesson-row, .dos-continue';
-    var CONTAINER = '.dos-card, .dos-card-16, .stat-tile';
+    // Only a genuine, single-click-target element gets any hover feedback (tilt +
+    // spotlight). A card that merely *contains* controls stays inert — its buttons/
+    // rows already carry their own hover state, so the ambient wrapper must not.
+    var LEAF = '[data-dos-cardlink], .stat-tile.clickable, .dos-flip-card, .dos-lesson-row, .dos-continue, .dos-chapter-card';
     var MAG = '.dos-btn-primary';
-    var last = null, ticking = false, tiltEl = null, glowEl = null, magEl = null;
+    var last = null, ticking = false, tiltEl = null, magEl = null;
     var setVars = function (el, e) { var r = el.getBoundingClientRect(); el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%'); return r; };
     var clearTilt = function () { if (tiltEl) { tiltEl.classList.remove('fx-tilt'); tiltEl.style.removeProperty('--rx'); tiltEl.style.removeProperty('--ry'); tiltEl = null; } };
-    var clearGlow = function () { if (glowEl) { glowEl.classList.remove('fx-glow'); glowEl = null; } };
     var clearMag = function () { if (magEl) { magEl.style.transform = ''; magEl = null; } };
     var proc = function () {
       ticking = false; var e = last; if (!e || !e.target.closest) return;
       var leaf = e.target.closest(LEAF);
-      var glow = leaf ? null : e.target.closest(CONTAINER);   // tilt the tile, else glow the container
       var btn = e.target.closest(MAG);
       if (leaf !== tiltEl) { clearTilt(); tiltEl = leaf; if (leaf) leaf.classList.add('fx-tilt'); }
       if (leaf) { var r = setVars(leaf, e); leaf.style.setProperty('--rx', ((0.5 - (e.clientY - r.top) / r.height) * 5).toFixed(2) + 'deg'); leaf.style.setProperty('--ry', (((e.clientX - r.left) / r.width - 0.5) * 5).toFixed(2) + 'deg'); }
-      if (glow !== glowEl) { clearGlow(); glowEl = glow; if (glow) glow.classList.add('fx-glow'); }
-      if (glow) setVars(glow, e);
       if (btn !== magEl) { clearMag(); magEl = btn; }
       if (btn) { var b = btn.getBoundingClientRect(); btn.style.transform = 'translate(' + ((e.clientX - (b.left + b.width / 2)) / b.width * 6).toFixed(1) + 'px,' + ((e.clientY - (b.top + b.height / 2)) / b.height * 6 - 2).toFixed(1) + 'px)'; }
     };
     document.addEventListener('pointermove', function (e) { last = e; if (!ticking) { ticking = true; requestAnimationFrame(proc); } }, { passive: true });
-    document.addEventListener('pointerleave', function () { clearTilt(); clearGlow(); clearMag(); }, { passive: true });
-    window.addEventListener('blur', function () { clearTilt(); clearGlow(); clearMag(); });
+    document.addEventListener('pointerleave', function () { clearTilt(); clearMag(); }, { passive: true });
+    window.addEventListener('blur', function () { clearTilt(); clearMag(); });
   }
 
   /* ---------------- scroll-reveal (re-armed each render) ---------------------- */
