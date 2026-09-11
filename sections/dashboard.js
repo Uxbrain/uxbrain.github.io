@@ -140,37 +140,18 @@ export function renderDashboard(app) {
   }).join('');
   const badgesEarned = badgeDefs(app).filter((b) => b.val >= b.goal).length;
   const qz = quizStats(app);
-  const name = (s.profileName || '').trim();
-
-  const ringR = 27, ringC = 2 * Math.PI * ringR;
-  const ringOffset = (ringC * (1 - planPct / 100)).toFixed(1);
 
   return `<div class="dos-page">
-    <div class="dos-hero">
-      <div class="dos-hero-bg" aria-hidden="true"></div>
-      <div class="dos-hero-inner dos-hero-inner-sm">
-        <div class="dos-hero-row">
-          <span class="dos-hero-ring" aria-hidden="true">
-            <svg width="64" height="64" viewBox="0 0 64 64" style="transform:rotate(-90deg)">
-              <circle cx="32" cy="32" r="${ringR}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="5"></circle>
-              <circle class="dos-hero-ring-fill" cx="32" cy="32" r="${ringR}" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-dasharray="${ringC.toFixed(1)}" style="--ring-full:${ringC.toFixed(1)}px; --ring-to:${ringOffset}px; stroke-dashoffset:${ringOffset}px"></circle>
-            </svg>
-            <span class="dos-hero-ring-pct">${planPct}%</span>
-          </span>
-          <div style="flex:1;min-width:180px">
-            <p class="dos-hero-sub dos-hero-sub-lg">You’re <b style="color:#fff;font-weight:700">${planPct}%</b> through your plan${focus ? ' · ' + esc(focus.phase) : ''}${name ? ` · ${esc(name)}` : ''}.</p>
-            <div class="dos-hero-meta">
-              <label class="dos-hero-date">Start date
-                <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}">
-              </label>
-              <span class="dos-hero-pill">${planPct}% complete</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="dos-grid-stats">
+      <div class="stat-tile" style="flex-direction:column;align-items:stretch;gap:12px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="9" cy="9" r="6.5" stroke-opacity=".3"></circle><path d="M9 2.5A6.5 6.5 0 0 1 15.5 9" stroke-width="2" stroke-linecap="round"></path></svg></span>
+          <div><div class="num">${planPct}<span style="color:var(--ink2);font-size:15px;font-weight:500">%</span></div><div class="lbl">Through your plan</div></div>
+        </div>
+        <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink2);white-space:nowrap">Start date
+          <input type="date" value="${esc(s.startDate || '')}" data-act="${app.act((e) => app.persist({ startDate: e.target.value || null }))}" style="flex:1;min-width:0;height:28px;padding:0 8px;border:1px solid var(--border);border-radius:7px;background:var(--surface-alt);color:var(--ink);font-size:12.5px">
+        </label>
+      </div>
       <div class="stat-tile">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M4 3.5h10v11l-5-2.5-5 2.5z"></path></svg></span>
         <div><div class="num"><span data-count="${done}">${done}</span><span style="color:var(--ink2);font-size:15px;font-weight:500"> / ${total}</span></div><div class="lbl">Topics completed</div></div>
